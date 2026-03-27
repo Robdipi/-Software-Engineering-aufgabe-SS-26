@@ -2,7 +2,7 @@ import scala.io.StdIn.readLine
 
 object main {
   def main(args: Array[String]): Unit = {
-    println("Hello, World!")
+    println("Tmp, World!")
     val greeting = "hello " + signup(args)
     print(greeting)
   }
