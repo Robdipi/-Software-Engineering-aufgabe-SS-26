@@ -7,7 +7,6 @@ enum Type {
 }
 /*
   Colors decide when the effect of a card is activated and other Rules
-
     Blue - No matter who roled that number the effect gets activated and the owner gets the associated money
     Green - If the owner roles that number
     Red - Anybody else than the owner roles the number the effect gets activated and that person has to pay

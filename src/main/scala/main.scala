@@ -1,5 +1,4 @@
 import scala.io.StdIn.readLine
-
 object main {
   def main(args: Array[String]): Unit = {
     println("Goodbye, World!")
