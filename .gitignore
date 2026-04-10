@@ -2,6 +2,8 @@ target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
+!**/src/main/**/project/
+
 
 ### IntelliJ IDEA ###
 .idea/modules.xml
@@ -15,6 +17,7 @@ out/
 !**/src/main/**/out/
 !**/src/test/**/out/
 
+
 ### Eclipse ###
 .apt_generated
 .classpath
@@ -23,7 +26,7 @@ out/
 .settings
 .springBeans
 .sts4-cache
-bin/
+bin/a
 !**/src/main/**/bin/
 !**/src/test/**/bin/
 
