@@ -20,7 +20,7 @@ class card (val cardName : String = "Weizenfeld"
             ,val color : Color  = Color.Blue
             ,val description : String = "erhalte 1 Münze aus der Bank"
             ,val texturePath : String = " "
-            ,val effect: () => Unit) {
+            ,val effect: () => Unit = ) {
 
   def activate(): Unit = {
     println(s"$cardName is activated!")
