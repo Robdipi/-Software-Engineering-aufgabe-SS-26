@@ -28,7 +28,18 @@ enum Color {
     texturePath - where the texture is saved
     effect      - function which happens when the card needs to be executed
  */
-class card (cardName : String ,price : Int, cardType : Type, roleNumbers : Array[Int] , color : Color, description : String, texturePath : String,val effect: () => Unit) {
+class card (val cardName : String = "Weizenfeld"
+            ,val price : Int = 0
+            ,val cardType : Type = Type.Farm
+            ,val roleNumbers : Array[Int] = Array(1)
+            ,val color : Color  = Color.Blue
+            ,val description : String = "erhalte 1 Münze aus der Bank"
+            ,val texturePath : String
+            ,val effect: () => Unit) {
+  /*
+      When activate is called the coresponding function "effect" gets called.
+      When a card is called depends on the Cardcolor
+   */
   def activate(): Unit = {
     println(s"$cardName is activated!")
     effect()
