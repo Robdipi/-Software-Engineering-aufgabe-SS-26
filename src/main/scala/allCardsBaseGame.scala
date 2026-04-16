@@ -1,8 +1,6 @@
 package de.htwg.se.machikoro.remake
 
 object allCardsBaseGame {
-
-
   val starterweizenfeld = card(
     cardName = "Weizenfeld",
     price = 0,
