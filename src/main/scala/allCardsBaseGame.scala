@@ -7,7 +7,7 @@ object allCardsBaseGame {
     cardType = Type.Farm,
     roleNumbers = Array(1),
     color = Color.Blue,
-    description = "erhalte 1 Münze aus der Bank",
+    description = "erhalte 1 Münze aus der Bank.",
     texturePath = "",
     cardOwnerID = -1,
     effect = (gamestate, OwnerID) => {
@@ -20,7 +20,7 @@ object allCardsBaseGame {
     cardType = Type.Farm,
     roleNumbers = Array(1),
     color = Color.Blue,
-    description =  "erhalte 1 Münze aus der Bank",
+    description =  "erhalte 1 Münze aus der Bank.",
     texturePath = "",
     cardOwnerID = -1,
       effect = (gamestate, OwnerID) => {
@@ -33,7 +33,7 @@ object allCardsBaseGame {
     cardType = Type.Dairy,
     roleNumbers = Array(2),
     color = Color.Blue,
-    description = "erhalte 1 Münze aus der Bank",
+    description = "erhalte 1 Münze aus der Bank.",
     texturePath = "",
     cardOwnerID = -1,
     effect = (gamestate, OwnerID) => {
@@ -46,7 +46,7 @@ object allCardsBaseGame {
     cardType = Type.Store,
     roleNumbers = Array(2,3),
     color = Color.Green,
-    description = "erhalte 1 Münze aus der Bank",
+    description = "erhalte 1 Münze aus der Bank.",
     texturePath = "",
     cardOwnerID = -1,
     effect = (gamestate, OwnerID) => {
@@ -59,7 +59,7 @@ object allCardsBaseGame {
     cardType = Type.Store,
     roleNumbers = Array(2, 3),
     color = Color.Green,
-    description = "erhalte 1 Münze aus der Bank",
+    description = "erhalte 1 Münze aus der Bank.",
     texturePath = "",
     cardOwnerID = -1,
     effect = (gamestate, OwnerID) => {

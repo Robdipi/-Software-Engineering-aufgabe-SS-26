@@ -48,6 +48,6 @@ case class card (val cardName : String = "Weizenfeld"
     return 0
   }
   */
-   
-  def cardToString(): String = cardName + "\n" + price + "\n" + description
+
+  def cardToString(): String = "|" + cardName + "|costs: " + price + "|" + description  + "|"
 }
