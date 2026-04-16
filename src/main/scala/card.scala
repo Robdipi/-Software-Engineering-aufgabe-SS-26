@@ -1,3 +1,5 @@
+package de.htwg.se.machikoro.remake;
+
 /*
   The Type of Industry the card is corresponding to the symbol in the grey circle. In the original game there is one Type more which is redundant so
   I merged it with the Industry Type. Types often get used for card effects
@@ -27,21 +29,25 @@ enum Color {
     texturePath - where the texture is saved
     effect      - function which happens when the card needs to be executed
  */
-class card (val cardName : String = "Weizenfeld"
+case class card (val cardName : String = "Weizenfeld"
             ,val price : Int = 0
             ,val cardType : Type = Type.Farm
             ,val roleNumbers : Array[Int] = Array(1)
             ,val color : Color  = Color.Blue
             ,val description : String = "erhalte 1 Münze aus der Bank"
-            ,val texturePath : String
-            ,val effect: () => Unit) {
+            ,val texturePath : String = ""
+            ,val effect: (Gamestate, Int) => Gamestate
+            ,val cardOwnerID: Int = -1) {
   /*
       When activate is called the coresponding function "effect" gets called.
       When a card is called depends on the Cardcolor
    */
-  def activate(): Unit = {
+  /*
+  def activate(): Int = {
     println(s"$cardName is activated!")
-    effect()
+    return 0
   }
+  */
+   
   def cardToString(): String = cardName + "\n" + price + "\n" + description
 }

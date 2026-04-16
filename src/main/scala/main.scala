@@ -1,4 +1,5 @@
-import scala.io.StdIn.readLine
+package de.htwg.se.machikoro.remake;
+import scala.io.StdIn.readLine;
 object main {
   def main(args: Array[String]): Unit = {
     println("bye, World!")
