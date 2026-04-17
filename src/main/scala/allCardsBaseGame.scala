@@ -1,5 +1,7 @@
 package de.htwg.se.machikoro.remake
 
+import de.htwg.se.machikoro.remake.Type.Industry
+
 //cardType:
 //Major_Establishment => Fernsehturn-Symbol
 //Landmark => Fernsehturm-Symbol
@@ -129,8 +131,8 @@ object allCardsBaseGame {
     }
   )
   
-  val restaurant = card(
-    cardname = "Bürohaus",
+  val buerohaus = card(
+    cardName = "Bürohaus",
     price = 6,
     cardType = Type.Major_Establishment,
     roleNumbers = Array(6),
@@ -139,37 +141,11 @@ object allCardsBaseGame {
     texturePath = "",
     cardOwnerID = -1,
     effect = (gamestate, OwnerID) => {
-      gamestate.changeCardOfPlayer(*) //changeCardOfPlayer ergänzen
+      gamestate//TODO
     }
   )
-
-  val restaurant = card(
-    cardname = "Fernsehsender",
-    price = 7,
-    cardType = Type.Major_Establishment,
-    roleNumbers = Array(6),
-    color = Color.Purple,
-    description = "Erhalte von einem Mitspieler deiner Wahl 5 Münzen.",
-    texturePath = "",
-    cardOwnerID = -1,
-    effect = (gamestate, OwnerID) => {
-      gamestate.changeMoneyOfPlayer(OwnerID, 1)
-    }
-  )val restaurant = card(
-    cardname = "Fernsehsender",
-    price = 7,
-    cardType = Type.Major_Establishment,
-    roleNumbers = Array(6),
-    color = Color.Purple,
-    description = "Erhalte von einem Mitspieler deiner Wahl 5 Münzen.",
-    texturePath = "",
-    cardOwnerID = -1,
-    effect = (gamestate, OwnerID) => {
-      gamestate.changeMoneyOfPlayer(OwnerID, 1)
-    }
-  )
-  val restaurant = card(
-    cardname = "Fernsehsender",
+  val fernsehsender = card(
+    cardName = "Fernsehsender",
     price = 7,
     cardType = Type.Major_Establishment,
     roleNumbers = Array(6),
@@ -182,8 +158,8 @@ object allCardsBaseGame {
     }
   )
 
-  val restaurant = card(
-    cardname = "Molkerei",
+  val molkerei = card(
+    cardName = "Molkerei",
     price = 7,
     cardType = Type.Secondary_Industry, 
     roleNumbers = Array(7),
@@ -192,12 +168,12 @@ object allCardsBaseGame {
     texturePath = "",
     cardOwnerID = -1,
     effect = (gamestate, OwnerID) => {
-      gamestate.changeMoneyOfPlayer(OwnerID, Dairy, 3)
+      gamestate.changeMoneyOfPlayerScaleByType(OwnerID, Type.Dairy, 3)
     }
   )
 
-  val restaurant = card(
-    cardname = "Möbelfabrik",
+  val möbelfabrik = card(
+    cardName = "Möbelfabrik",
     price = 3,
     cardType = Type.Secondary_Industry,
     roleNumbers = Array(8),
@@ -206,12 +182,12 @@ object allCardsBaseGame {
     texturePath = "",
     cardOwnerID = -1,
     effect = (gamestate, OwnerID) => {
-      gamestate.changeMoneyOfPlayer(OwnerID, Industry, 3)
+      gamestate.changeMoneyOfPlayerScaleByType(OwnerID,Type.Industry,3)
     }
   )
 
-  val restaurant = card(
-    cardname = "Bergwerk",
+  val bergwerk = card(
+    cardName = "Bergwerk",
     price = 6,
     cardType = Type.Industry,
     roleNumbers = Array(9),
@@ -224,8 +200,8 @@ object allCardsBaseGame {
     }
   )
 
-  val restaurant = card(
-    cardname = "Familien-Restaurant",
+  val familienRestaurant = card(
+    cardName = "Familien-Restaurant",
     price = 3,
     cardType = Type.Restaurants,
     roleNumbers = Array(9, 10),
@@ -234,12 +210,12 @@ object allCardsBaseGame {
     texturePath = "",
     cardOwnerID = -1,
     effect = (gamestate, OwnerID) => {
-      gamestate.changeMoneyOfPlayer(OwnerID, 2)
+      gamestate.transferMoneyBetweenPlayers(gamestate.CurrentTurnPlayerID, OwnerID, 2)   
     }
   )
 
-  val restaurant = card(
-    cardname = "Markthalle",
+  val markthalle = card(
+    cardName = "Markthalle",
     price = 2,
     cardType = Type.Secondary_Industry,
     roleNumbers = Array(11,12),
@@ -248,7 +224,7 @@ object allCardsBaseGame {
     texturePath = "",
     cardOwnerID = -1,
     effect = (gamestate, OwnerID) => {
-      gamestate.changeMoneyOfPlayer(OwnerID, Farm, 2)
+      gamestate.changeMoneyOfPlayerScaleByType(OwnerID, Type.Farm, 2)
     }
   )
   

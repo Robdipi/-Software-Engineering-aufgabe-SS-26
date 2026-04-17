@@ -1,7 +1,6 @@
 package de.htwg.se.machikoro.remake
 
 import de.htwg.se.machikoro.remake.Turnstate.*
-import org.scalatest.OptionValues.convertOptionToValuable
 
 
 enum Turnstate {
@@ -13,12 +12,11 @@ case class Gamestate (val curentTurn : Int = 0,
                  val CurrentTurnPlayerID: Int = 0,
                  val DyeResult: Int = -1,
                       turnstate: Turnstate = ChoosingDyeAmount) {
-  def changeMoneyOfPlayer(playerId: Int, amount: Int, cardtype: Type): Gamestate = {
+  def changeMoneyOfPlayer(playerId: Int, amount: Int, cardtype: Type = Type.Secondary_Industry): Gamestate = {
     val updatedPlayers = Players.map { player =>
       if (player.playerId == playerId) {
-        if(player.getExtraMoney() && cardtype = Type.Store){
+        if(player.getExtraMoney() && cardtype == Type.Store){
           player.copy(money = player.money + amount + 1)
-
         }else{
           player.copy(money = player.money + amount)
         }
@@ -27,11 +25,11 @@ case class Gamestate (val curentTurn : Int = 0,
     this.copy(Players = updatedPlayers)
   }
 
-  def transferMoneyBetweenPlayers(GiverPlayerId: Int,TakerPlayerId: Int, amount: Int, cardtype: Type): Gamestate = {
+  def transferMoneyBetweenPlayers(GiverPlayerId: Int,TakerPlayerId: Int, amount: Int, cardtype: Type = Type.Secondary_Industry): Gamestate = {
     if(TakerPlayerId == GiverPlayerId) return this.copy()//Cant steal money from yourself
-    val getExtraMoney = Players.find(_.playerId == 1).exists(_.getExtraMoney())    
+    val getExtraMoney = Players.find(_.playerId == 1).exists(_.getExtraMoney())
     val updatedPlayers = Players.map { player =>
-      if(getExtraMoney && cardtype = Type.Restaurants){
+      if(getExtraMoney && cardtype == Type.Restaurants){
         if (player.playerId == TakerPlayerId) player.copy(money = player.money + amount + 1)
         else if (player.playerId == GiverPlayerId) player.copy(money = player.money - amount -1)
         else player
@@ -52,7 +50,9 @@ case class Gamestate (val curentTurn : Int = 0,
   }
   def changeMoneyOfPlayerScaleByType(ownerId: Int, cardtype: Type,amount: Int): Gamestate = {
     val updatedPlayers = Players.map { player =>
-      if (player.playerId == ownerId) player.copy(money = player.money + amount /** player.*/) // find cound with type
+      if (player.playerId == ownerId) {
+        player.copy(money = player.money + amount * player.properties.count(_.cardType == cardtype))
+      } // find cound with type
       else player
     }
     this.copy(Players = updatedPlayers)
