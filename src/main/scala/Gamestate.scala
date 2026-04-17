@@ -15,7 +15,7 @@ case class Gamestate (val curentTurn : Int = 0,
   def changeMoneyOfPlayer(playerId: Int, amount: Int, cardtype: Type = Type.Secondary_Industry): Gamestate = {
     val updatedPlayers = Players.map { player =>
       if (player.playerId == playerId) {
-        if(player.getExtraMoney() && cardtype == Type.Store){
+        if(/*player.getExtraMoney() && */cardtype == Type.Store){
           player.copy(money = player.money + amount + 1)
         }else{
           player.copy(money = player.money + amount)
@@ -27,9 +27,9 @@ case class Gamestate (val curentTurn : Int = 0,
 
   def transferMoneyBetweenPlayers(GiverPlayerId: Int,TakerPlayerId: Int, amount: Int, cardtype: Type = Type.Secondary_Industry): Gamestate = {
     if(TakerPlayerId == GiverPlayerId) return this.copy()//Cant steal money from yourself
-    val getExtraMoney = Players.find(_.playerId == 1).exists(_.getExtraMoney())
+   /* val getExtraMoney = Players.find(_.playerId == 1).exists(_.getExtraMoney())*/
     val updatedPlayers = Players.map { player =>
-      if(getExtraMoney && cardtype == Type.Restaurants){
+      if(/*getExtraMoney &&*/ cardtype == Type.Restaurants){
         if (player.playerId == TakerPlayerId) player.copy(money = player.money + amount + 1)
         else if (player.playerId == GiverPlayerId) player.copy(money = player.money - amount -1)
         else player
@@ -57,6 +57,18 @@ case class Gamestate (val curentTurn : Int = 0,
     }
     this.copy(Players = updatedPlayers)
   }
+  /*
+  def giveCard(ownerId: Int, newCard: card): Gamestate = {
+    val updatedPlayers = Players.map { player =>
+      if (player.playerId == ownerId) {
+        player.copy(properties = newCard.copy(cardOwnerID = ownerId) :: player.properties)
+      }
+      else player
+    }
+    this.copy(Players = updatedPlayers)
+  }
+  */
+   
 }
 
 

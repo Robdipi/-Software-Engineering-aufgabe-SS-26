@@ -255,7 +255,7 @@ object allCardsBaseGame {
     }
   )
 
-  val Bahnhof = card(
+  val bahnhof = card(
     cardName = "Bahnhof",
     price = 4,
     cardType = Type.Landmark,
@@ -269,7 +269,7 @@ object allCardsBaseGame {
     }
   )
 
-  val Einkaufszentrum = card(
+  val einkaufszentrum = card(
     cardName = "Einkaufszentrum",
     price = 10,
     cardType = Type.Landmark,
