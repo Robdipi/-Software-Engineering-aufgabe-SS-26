@@ -7,8 +7,9 @@ class CardTest extends AnyWordSpec with Matchers {
     "return the expected string" in {
       val c1 = weizenfeld.copy(cardOwnerID = 0)
       c1.cardToString() shouldEqual "|Weizenfeld|costs: 1|erhalte 1 Münze aus der Bank.|"
-      //"|" + cardName + "|costs: " + price + "|" + description  + "|"
     }
-    ""
+    "have a working method activate" in {
+
+    }
   }
 }

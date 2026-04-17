@@ -4,7 +4,7 @@ import allCardsBaseGame.*
 
 case class Player (val playerId : Int = -1,
               val money: Int = 0,
-              val properties: List[card],
+              val properties: List[card] = List(),
               val GetsAnotherTurn: Boolean = false) {
   def canChooseDyeAmount(): Boolean = {return properties.contains(weizenfeld.copy(cardOwnerID = playerId))}
   def canGetAnotherTurn(): Boolean = {return properties.contains(weizenfeld.copy(cardOwnerID = playerId))}

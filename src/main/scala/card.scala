@@ -39,7 +39,7 @@ case class card (val cardName : String = "Weizenfeld"
             ,val effect: (Gamestate, Int) => Gamestate
             ,val cardOwnerID: Int = -1) {
   /*
-      When activate is called the coresponding function "effect" gets called.
+      When activate is called the corresponding function "effect" gets called.
       When a card is called depends on the Cardcolor
    */
   /*
