@@ -210,7 +210,7 @@ object allCardsBaseGame {
     texturePath = "",
     cardOwnerID = -1,
     effect = (gamestate, OwnerID) => {
-      gamestate.transferMoneyBetweenPlayers(gamestate.CurrentTurnPlayerID, OwnerID, 2)   
+      gamestate.transferMoneyBetweenPlayers(gamestate.CurrentTurnPlayerID, OwnerID, 2)
     }
   )
 
@@ -227,5 +227,33 @@ object allCardsBaseGame {
       gamestate.changeMoneyOfPlayerScaleByType(OwnerID, Type.Farm, 2)
     }
   )
+  val funkturm = card(
+    cardName = "Funkturm",
+    price = 22,
+    cardType = Type.Landmark,
+    roleNumbers = Array(11, 12),
+    color = Color.Yellow,
+    description = "Einmal pro Zug darfst du erneut würfeln.",
+    texturePath = "",
+    cardOwnerID = -1,
+    effect = (gamestate, OwnerID) => {
+      gamestate
+    }
+  )
+ 
+  val freizeitpark = card(
+    cardName = "Freizeitpark",
+    price = 16,
+    cardType = Type.Landmark,
+    roleNumbers = Array(),
+    color = Color.Yellow,
+    description = "Würfelst du zwei gleiche Zahlen, hast du einen weiteren Zug.",
+    texturePath = "",
+    cardOwnerID = -1,
+    effect = (gamestate, OwnerID) => {
+      gamestate
+    }
+  )
+  
   
 }
