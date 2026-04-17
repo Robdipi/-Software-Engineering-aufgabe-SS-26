@@ -12,7 +12,7 @@ class GamestateTest extends AnyWordSpec with Matchers {
   "Gamestate" should {
     "have a working Method changeMoneyOfPlayer" in {
       val start = new Gamestate(Players = List(new Player(playerId = 0),new Player(playerId = 1)))
-      val end = start.changeMoneyOfPlayer(1,1,Type.Dairy)
+      val end = start.changeMoneyOfPlayer(1,1)
       end.Players.find(_.playerId==1).value.money should be (1)
     }
     "have a working Method changeMoneyOfPlayerScaleByType" in {
@@ -33,6 +33,13 @@ class GamestateTest extends AnyWordSpec with Matchers {
       end.Players.find(_.playerId == 0).value.money should be(-1)
       end.Players.find(_.playerId == 2).value.money should be(-1)
     }
+    "have a working Method giveCard" in {
+      val start = new Gamestate(Players = List(new Player(playerId = 0)))
+      val changed = start.giveCard(1,weizenfeld.copy(0))
+      changed.find(_.playerId == 1).value.properties.contains(weizenfeld.copy(playerId)) should be (true)
+      changed.find(_.playerId == 1).value.properties.count() should be(1)
+    }
+
   }
 
 }
