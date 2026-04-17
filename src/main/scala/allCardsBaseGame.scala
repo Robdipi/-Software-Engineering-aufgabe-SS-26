@@ -254,6 +254,33 @@ object allCardsBaseGame {
       gamestate
     }
   )
-  
-  
+
+  val Bahnhof = card(
+    cardName = "Bahnhof",
+    price = 4,
+    cardType = Type.Landmark,
+    roleNumbers = Array(),
+    color = Color.Yellow,
+    description = "Würfle mit 1 oder 2 Würfeln.",
+    texturePath = "",
+    cardOwnerID = -1,
+    effect = (gamestate, OwnerID) => {
+      gamestate
+    }
+  )
+
+  val Einkaufszentrum = card(
+    cardName = "Einkaufszentrum",
+    price = 10,
+    cardType = Type.Landmark,
+    roleNumbers = Array(),
+    color = Color.Yellow,
+    description = "Erhalte 1 Münze mehr für jedes deiner >☕️< und >🛍️< Unternehmen.",
+    texturePath = "",
+    cardOwnerID = -1,
+    effect = (gamestate, OwnerID) => {
+      gamestate
+    }
+  )
+
 }
