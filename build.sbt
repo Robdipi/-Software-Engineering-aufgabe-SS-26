@@ -9,4 +9,3 @@ lazy val root = (project in file("."))
   .settings(
     name := "SoftwareEngineering"
   )
-coverageEnabled := true
