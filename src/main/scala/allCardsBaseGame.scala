@@ -21,9 +21,9 @@ object allCardsBaseGame {
     color = Color.Blue,
     description = "erhalte 1 Münze aus der Bank.",
     texturePath = "",
-    cardOwnerID = -1,
-    effect = (gamestate, OwnerID) => {
-      gamestate.changeMoneyOfPlayer(OwnerID, 1)
+    cardOwnerId = -1,
+    effect = (gamestate, Owner) => {
+      gamestate.changeMoneyOfPlayer(Owner, 1)
     }
   )
   val weizenfeld = card(
@@ -34,9 +34,9 @@ object allCardsBaseGame {
     color = Color.Blue,
     description =  "erhalte 1 Münze aus der Bank.",
     texturePath = "",
-    cardOwnerID = -1,
-      effect = (gamestate, OwnerID) => {
-        gamestate.changeMoneyOfPlayer(OwnerID,1)
+    cardOwnerId = -1,
+      effect = (gamestate, Owner) => {
+        gamestate.changeMoneyOfPlayer(Owner,1)
     }
   )
   val bauernhof = card(
@@ -47,9 +47,9 @@ object allCardsBaseGame {
     color = Color.Blue,
     description = "erhalte 1 Münze aus der Bank.",
     texturePath = "",
-    cardOwnerID = -1,
-    effect = (gamestate, OwnerID) => {
-      gamestate.changeMoneyOfPlayer(OwnerID, 1)
+    cardOwnerId = -1,
+    effect = (gamestate, Owner) => {
+      gamestate.changeMoneyOfPlayer(Owner, 1)
     }
   )
   val baeckerei = card(
@@ -60,9 +60,9 @@ object allCardsBaseGame {
     color = Color.Green,
     description = "erhalte 1 Münze aus der Bank.",
     texturePath = "",
-    cardOwnerID = -1,
-    effect = (gamestate, OwnerID) => {
-      gamestate.changeMoneyOfPlayer(OwnerID, 1)
+    cardOwnerId = -1,
+    effect = (gamestate, Owner) => {
+      gamestate.changeMoneyOfPlayer(Owner, 1)
     }
   )
   val starterbaeckerei = card(
@@ -73,9 +73,9 @@ object allCardsBaseGame {
     color = Color.Green,
     description = "erhalte 1 Münze aus der Bank.",
     texturePath = "",
-    cardOwnerID = -1,
-    effect = (gamestate, OwnerID) => {
-      gamestate.changeMoneyOfPlayer(OwnerID, 1)
+    cardOwnerId = -1,
+    effect = (gamestate, Owner) => {
+      gamestate.changeMoneyOfPlayer(Owner, 1)
     }
   )
   val cafe = card(
@@ -86,9 +86,9 @@ object allCardsBaseGame {
     color = Color.Red,
     description = "erhalte 1 Münze von dem Mitspieler der eine '3' gewürfelt hat.",
     texturePath = "",
-    cardOwnerID = -1,
-    effect = (gamestate, OwnerID) => {
-      gamestate.transferMoneyBetweenPlayers(gamestate.CurrentTurnPlayerID,OwnerID,1)//Transfer Money from the Player who has gotten the number to the player who owns this card
+    cardOwnerId = -1,
+    effect = (gamestate, Owner) => {
+      gamestate.transferMoneyBetweenPlayers(gamestate.CurrentTurnPlayerId,Owner,1)//Transfer Money from the Player who has gotten the number to the player who owns this card
     }
   )
   val minimarkt = card(
@@ -99,9 +99,9 @@ object allCardsBaseGame {
     color = Color.Green,
     description = "Erhalte 3 Münzen aus der Bank.",
     texturePath = "",
-    cardOwnerID = -1,
-    effect = (gamestate, OwnerID) => {
-      gamestate.changeMoneyOfPlayer(OwnerID, 3)
+    cardOwnerId = -1,
+    effect = (gamestate, Owner) => {
+      gamestate.changeMoneyOfPlayer(Owner, 3)
     }
   )
   val wald = card(
@@ -112,9 +112,9 @@ object allCardsBaseGame {
     color = Color.Blue,
     description = "Erhalte 1 Münze aus der Bank.",
     texturePath = "",
-    cardOwnerID = -1,
-    effect = (gamestate, OwnerID) => {
-      gamestate.changeMoneyOfPlayer(OwnerID, 1)
+    cardOwnerId = -1,
+    effect = (gamestate, Owner) => {
+      gamestate.changeMoneyOfPlayer(Owner, 1)
     }
   )
   val stadion = card(
@@ -125,9 +125,9 @@ object allCardsBaseGame {
     color = Color.Purple,
     description = "Erhalte von jedem Mitspieler 2 Münzen.",
     texturePath = "",
-    cardOwnerID = -1,
-    effect = (gamestate, OwnerID) => {
-      gamestate.changeMoneyOfPlayer(OwnerID, 1)
+    cardOwnerId = -1,
+    effect = (gamestate, Owner) => {
+      gamestate.changeMoneyOfPlayer(Owner, 1)
     }
   )
   
@@ -139,8 +139,8 @@ object allCardsBaseGame {
     color = Color.Purple,
     description = "Tausche 1 karte mit einem Mitspieler deiner Wahl. Kein >🗼< Unternehmen.",
     texturePath = "",
-    cardOwnerID = -1,
-    effect = (gamestate, OwnerID) => {
+    cardOwnerId = -1,
+    effect = (gamestate, Owner) => {
       gamestate//TODO
     }
   )
@@ -152,9 +152,9 @@ object allCardsBaseGame {
     color = Color.Purple,
     description = "Erhalte von einem Mitspieler deiner Wahl 5 Münzen.",
     texturePath = "",
-    cardOwnerID = -1,
-    effect = (gamestate, OwnerID) => {
-      gamestate.changeMoneyOfPlayer(OwnerID, 1)
+    cardOwnerId = -1,
+    effect = (gamestate, Owner) => {
+      gamestate.changeMoneyOfPlayer(Owner, 1)
     }
   )
 
@@ -166,9 +166,9 @@ object allCardsBaseGame {
     color = Color.Green,
     description = "Erhalte 3 Münzen aus der Bank für jedes deiner >🐄< Unternehmen",
     texturePath = "",
-    cardOwnerID = -1,
-    effect = (gamestate, OwnerID) => {
-      gamestate.changeMoneyOfPlayerScaleByType(OwnerID, Type.Dairy, 3)
+    cardOwnerId = -1,
+    effect = (gamestate, Owner) => {
+      gamestate.changeMoneyOfPlayerScaleByType(Owner, Type.Dairy, 3)
     }
   )
 
@@ -180,9 +180,9 @@ object allCardsBaseGame {
     color = Color.Green,
     description = "Erhalte 3 Münzen aus der Bank für jedes deiner >⚙️< Unternehmen.",
     texturePath = "",
-    cardOwnerID = -1,
-    effect = (gamestate, OwnerID) => {
-      gamestate.changeMoneyOfPlayerScaleByType(OwnerID,Type.Industry,3)
+    cardOwnerId = -1,
+    effect = (gamestate, Owner) => {
+      gamestate.changeMoneyOfPlayerScaleByType(Owner,Type.Industry,3)
     }
   )
 
@@ -194,9 +194,9 @@ object allCardsBaseGame {
     color = Color.Blue,
     description = "Erhalte 5 Münzen aus der Bank.",
     texturePath = "",
-    cardOwnerID = -1,
-    effect = (gamestate, OwnerID) => {
-      gamestate.changeMoneyOfPlayer(OwnerID, 5)
+    cardOwnerId = -1,
+    effect = (gamestate, Owner) => {
+      gamestate.changeMoneyOfPlayer(Owner, 5)
     }
   )
 
@@ -208,9 +208,9 @@ object allCardsBaseGame {
     color = Color.Red,
     description = "Erhalte 2 Münzen von dem Mitspieler, der eine 9 oder 10 gewürfelt hat.",
     texturePath = "",
-    cardOwnerID = -1,
-    effect = (gamestate, OwnerID) => {
-      gamestate.transferMoneyBetweenPlayers(gamestate.CurrentTurnPlayerID, OwnerID, 2)
+    cardOwnerId = -1,
+    effect = (gamestate, Owner) => {
+      gamestate.transferMoneyBetweenPlayers(gamestate.CurrentTurnPlayerId, Owner, 2)
     }
   )
 
@@ -222,7 +222,7 @@ object allCardsBaseGame {
     color = Color.Green,
     description = "Erhalte 2 Münzen aus der Bank für jedes deiner >🌾< Unternehmen.",
     texturePath = "",
-    cardOwnerID = -1,
+    cardOwnerId = -1,
     effect = (gamestate, OwnerID) => {
       gamestate.changeMoneyOfPlayerScaleByType(OwnerID, Type.Farm, 2)
     }
@@ -235,7 +235,7 @@ object allCardsBaseGame {
     color = Color.Yellow,
     description = "Einmal pro Zug darfst du erneut würfeln.",
     texturePath = "",
-    cardOwnerID = -1,
+    cardOwnerId = -1,
     effect = (gamestate, OwnerID) => {
       gamestate
     }
@@ -249,7 +249,7 @@ object allCardsBaseGame {
     color = Color.Yellow,
     description = "Würfelst du zwei gleiche Zahlen, hast du einen weiteren Zug.",
     texturePath = "",
-    cardOwnerID = -1,
+    cardOwnerId = -1,
     effect = (gamestate, OwnerID) => {
       gamestate
     }
@@ -263,7 +263,7 @@ object allCardsBaseGame {
     color = Color.Yellow,
     description = "Würfle mit 1 oder 2 Würfeln.",
     texturePath = "",
-    cardOwnerID = -1,
+    cardOwnerId = -1,
     effect = (gamestate, OwnerID) => {
       gamestate
     }
@@ -277,7 +277,7 @@ object allCardsBaseGame {
     color = Color.Yellow,
     description = "Erhalte 1 Münze mehr für jedes deiner >☕️< und >🛍️< Unternehmen.",
     texturePath = "",
-    cardOwnerID = -1,
+    cardOwnerId = -1,
     effect = (gamestate, OwnerID) => {
       gamestate
     }

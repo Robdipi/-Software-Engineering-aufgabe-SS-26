@@ -9,66 +9,64 @@ enum Turnstate {
 
 case class Gamestate (val curentTurn : Int = 0,
                  val Players: List[Player],
-                 val CurrentTurnPlayerID: Int = 0,
+                 val CurrentTurnPlayerId: Int = 0,
                  val DyeResult: Int = -1,
                       turnstate: Turnstate = ChoosingDyeAmount) {
   def changeMoneyOfPlayer(playerId: Int, amount: Int, cardtype: Type = Type.Secondary_Industry): Gamestate = {
-    val updatedPlayers = Players.map { player =>
-      if (player.playerId == playerId) {
+    val updatedPlayers = Players.map { currentplayer =>
+      if (currentplayer.playerId == playerId) {
         if(/*player.getExtraMoney() && */cardtype == Type.Store){
-          player.copy(money = player.money + amount + 1)
+          currentplayer.copy(money = currentplayer.money + amount + 1)
         }else{
-          player.copy(money = player.money + amount)
+          currentplayer.copy(money = currentplayer.money + amount)
         }
-      } else player
+      } else currentplayer
     }
     this.copy(Players = updatedPlayers)
   }
 
   def transferMoneyBetweenPlayers(GiverPlayerId: Int,TakerPlayerId: Int, amount: Int, cardtype: Type = Type.Secondary_Industry): Gamestate = {
     if(TakerPlayerId == GiverPlayerId) return this.copy()//Cant steal money from yourself
-   /* val getExtraMoney = Players.find(_.playerId == 1).exists(_.getExtraMoney())*/
-    val updatedPlayers = Players.map { player =>
+   
+    val updatedPlayers = Players.map { currentplayer =>
       if(/*getExtraMoney &&*/ cardtype == Type.Restaurants){
-        if (player.playerId == TakerPlayerId) player.copy(money = player.money + amount + 1)
-        else if (player.playerId == GiverPlayerId) player.copy(money = player.money - amount -1)
-        else player
+        if (currentplayer.playerId == TakerPlayerId) currentplayer.copy(money = currentplayer.money + amount + 1)
+        else if (currentplayer.playerId == GiverPlayerId) currentplayer.copy(money = currentplayer.money - amount -1)
+        else currentplayer
       }else{
-        if (player.playerId == TakerPlayerId) player.copy(money = player.money + amount)
-        else if (player.playerId == GiverPlayerId) player.copy(money = player.money - amount)
-        else player
+        if (currentplayer.playerId == TakerPlayerId) currentplayer.copy(money = currentplayer.money + amount)
+        else if (currentplayer.playerId == GiverPlayerId) currentplayer.copy(money = currentplayer.money - amount)
+        else currentplayer
       }
     }
     this.copy(Players = updatedPlayers)
   }
   def stealFromEveryone(ownerId: Int, amount: Int): Gamestate = {
-    val updatedPlayers = Players.map { player =>
-      if (player.playerId == ownerId) player.copy(money = player.money + amount * (Players.size-1))
-      else  player.copy(money = player.money - amount)
+    val updatedPlayers = Players.map { currentplayer =>
+      if (currentplayer.playerId == ownerId) currentplayer.copy(money = currentplayer.money + amount * (Players.size-1))
+      else currentplayer.copy(money = currentplayer.money - amount)
     }
     this.copy(Players = updatedPlayers)
   }
   def changeMoneyOfPlayerScaleByType(ownerId: Int, cardtype: Type,amount: Int): Gamestate = {
-    val updatedPlayers = Players.map { player =>
-      if (player.playerId == ownerId) {
-        player.copy(money = player.money + amount * player.properties.count(_.cardType == cardtype))
+    val updatedPlayers = Players.map { currentplayer =>
+      if (currentplayer.playerId == ownerId) {
+        currentplayer.copy(money = currentplayer.money + amount * currentplayer.properties.count(_.cardType == cardtype))
       } // find cound with type
-      else player
+      else currentplayer
     }
     this.copy(Players = updatedPlayers)
   }
-  /*
+  
   def giveCard(ownerId: Int, newCard: card): Gamestate = {
-    val updatedPlayers = Players.map { player =>
-      if (player.playerId == ownerId) {
-        player.copy(properties = newCard.copy(cardOwnerID = ownerId) :: player.properties)
+    val updatedPlayers = Players.map { currentplayer =>
+      if (currentplayer.playerId == ownerId) {
+        currentplayer.copy(properties = newCard.copy(cardOwnerId = ownerId) :: currentplayer.properties)
       }
-      else player
+      else currentplayer
     }
     this.copy(Players = updatedPlayers)
   }
-  */
-   
 }
 
 

@@ -12,17 +12,24 @@ class GamestateTest extends AnyWordSpec with Matchers {
 
   "Gamestate" should {
     "have a working Method changeMoneyOfPlayer" in {
-      val start = new Gamestate(Players = List(new Player(playerId = 0), new Player(playerId = 1)))
-      val end = start.changeMoneyOfPlayer(1, 1)
-      end.Players.find(_.playerId == 1).value.money should be(1)
+      val start = new Gamestate(Players = List(new Player(playerId = 0)))
+      start.Players.find(_.playerId == 0).value.money should be(0)
+      val end = start.changeMoneyOfPlayer(0, 1)
+      end.Players.find(_.playerId == 0).value.money should be(1)
     }
     "have a working Method changeMoneyOfPlayerScaleByType" in {
-      val start = new Gamestate(Players = List(new Player(playerId = 0), new Player(playerId = 1, properties = List(bauernhof.copy(cardOwnerID = 1), bauernhof.copy(cardOwnerID = 1), bauernhof.copy(cardOwnerID = 1)))))
-      val end = start.changeMoneyOfPlayerScaleByType(1, Type.Dairy, 2) // 2X3
-      end.Players.find(_.playerId == 1).value.money should be(6)
+      val gamestate = new Gamestate(Players = List(new Player(playerId = 0)))
+      gamestate.Players.find(_.playerId == 0).value.money should be(0)
+      val gamestate2 = gamestate.giveCard(0, bauernhof)
+      val gamestate3 = gamestate2.giveCard(0, bauernhof)
+      val gamestate4 = gamestate3.giveCard(0, bauernhof)
+      val gamestate5  = gamestate4.changeMoneyOfPlayerScaleByType(0, Type.Dairy, 2) // 2X3
+      gamestate5.Players.find(_.playerId == 0).value.money should be(6)
     }
     "have a working Method transferMoneyBetweenPlayers" in {
       val start = new Gamestate(Players = List(new Player(playerId = 0), new Player(playerId = 1)))
+      start.Players.find(_.playerId == 1).value.money should be(0)
+      start.Players.find(_.playerId == 0).value.money should be(0)
       val end = start.transferMoneyBetweenPlayers(0, 1, 1)
       end.Players.find(_.playerId == 1).value.money should be(1)
       end.Players.find(_.playerId == 0).value.money should be(-1)

@@ -37,7 +37,7 @@ case class card (val cardName : String = "Weizenfeld"
             ,val description : String = "erhalte 1 Münze aus der Bank"
             ,val texturePath : String = ""
             ,val effect: (Gamestate, Int) => Gamestate
-            ,val cardOwnerID: Int = -1) {
+            ,val cardOwnerId: Int) {
   /*
       When activate is called the corresponding function "effect" gets called.
       When a card is called depends on the Cardcolor
@@ -49,5 +49,6 @@ case class card (val cardName : String = "Weizenfeld"
   }
   */
 
-  def cardToString(): String = "|" + cardName + "|costs: " + price + "|" + description  + "|"
+  def cardToString(): String = "|" + cardName + "|costs: " + price + "|" + description + "|"
+
 }
