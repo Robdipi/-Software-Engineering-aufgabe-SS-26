@@ -15,7 +15,7 @@ case class Gamestate (val curentTurn : Int = 0,
   def changeMoneyOfPlayer(playerId: Int, amount: Int, cardtype: Type = Type.Secondary_Industry): Gamestate = {
     val updatedPlayers = Players.map { currentplayer =>
       if (currentplayer.playerId == playerId) {
-        if(/*player.getExtraMoney() && */cardtype == Type.Store){
+        if(currentplayer.getExtraMoney() && cardtype == Type.Store){
           currentplayer.copy(money = currentplayer.money + amount + 1)
         }else{
           currentplayer.copy(money = currentplayer.money + amount)

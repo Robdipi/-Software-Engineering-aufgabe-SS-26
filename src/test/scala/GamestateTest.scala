@@ -1,24 +1,30 @@
-import de.htwg.se.machikoro.remake.{Gamestate, Player}
+import de.htwg.se.machikoro.remake.{Gamestate, Player, Type}
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import de.htwg.se.machikoro.remake.allCardsBaseGame.*
 import de.htwg.se.machikoro.remake.Gamestate.*
 import de.htwg.se.machikoro.remake.Turnstate.*
-import de.htwg.se.machikoro.remake.Type
-
+import de.htwg.se.machikoro.remake.Type.{Restaurants, Store}
 import org.scalatest.OptionValues.convertOptionToValuable
 
 class GamestateTest extends AnyWordSpec with Matchers {
 
   "Gamestate" should {
     "have a working Method changeMoneyOfPlayer" in {
-      val start = new Gamestate(Players = List(new Player(playerId = 0)))
+      val start = new Gamestate(Players = List(new Player(playerId = 0),new Player(playerId = 1)))
       start.Players.find(_.playerId == 0).value.money should be(0)
       val end = start.changeMoneyOfPlayer(0, 1)
       end.Players.find(_.playerId == 0).value.money should be(1)
     }
+    "have a working Method changeMoneyOfPlayer with extra money" in {
+      val state1 = new Gamestate(Players = List(new Player(playerId = 0),new Player(playerId = 1)))
+      state1.Players.find(_.playerId == 0).value.money should be(0)
+      val state2 = state1.giveCard(0, einkaufszentrum)
+      val state3 = state2.changeMoneyOfPlayer(0, 1, Store)
+      state3.Players.find(_.playerId == 0).value.money should be(2)
+    }
     "have a working Method changeMoneyOfPlayerScaleByType" in {
-      val gamestate = new Gamestate(Players = List(new Player(playerId = 0)))
+      val gamestate = new Gamestate(Players = List(new Player(playerId = 0),new Player(playerId = 1)))
       gamestate.Players.find(_.playerId == 0).value.money should be(0)
       val gamestate2 = gamestate.giveCard(0, bauernhof)
       val gamestate3 = gamestate2.giveCard(0, bauernhof)
@@ -27,12 +33,26 @@ class GamestateTest extends AnyWordSpec with Matchers {
       gamestate5.Players.find(_.playerId == 0).value.money should be(6)
     }
     "have a working Method transferMoneyBetweenPlayers" in {
-      val start = new Gamestate(Players = List(new Player(playerId = 0), new Player(playerId = 1)))
+      val start = new Gamestate(Players = List(new Player(playerId = 0), new Player(playerId = 1), new Player(playerId = 2)))
       start.Players.find(_.playerId == 1).value.money should be(0)
       start.Players.find(_.playerId == 0).value.money should be(0)
       val end = start.transferMoneyBetweenPlayers(0, 1, 1)
       end.Players.find(_.playerId == 1).value.money should be(1)
       end.Players.find(_.playerId == 0).value.money should be(-1)
+    }
+    "have a working exeption for same values" in {
+      val state1 = new Gamestate(Players = List(new Player(playerId = 0), new Player(playerId = 1), new Player(playerId = 2)))
+      val state2 = state1.transferMoneyBetweenPlayers(0,0,1)
+      state1 == state2 should be(true)
+    }
+    "have a working Method transferMoneyBetweenPlayers with extra Money" in {
+      val state1 = new Gamestate(Players = List(new Player(playerId = 0), new Player(playerId = 1)))
+      state1.Players.find(_.playerId == 1).value.money should be(0)
+      state1.Players.find(_.playerId == 0).value.money should be(0)
+      val state2 = state1.giveCard(0, einkaufszentrum)
+      val state3 = state2.transferMoneyBetweenPlayers(0, 1, 1, Restaurants)
+      state3.Players.find(_.playerId == 1).value.money should be(2)
+      state3.Players.find(_.playerId == 0).value.money should be(-2)
     }
     "have a working Method stealFromEveryone" in {
       val start = new Gamestate(Players = List(new Player(playerId = 0), new Player(playerId = 1), new Player(playerId = 2)))
