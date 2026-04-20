@@ -29,7 +29,7 @@ case class Gamestate (val curentTurn : Int = 0,
     if(TakerPlayerId == GiverPlayerId) return this.copy()//Cant steal money from yourself
    
     val updatedPlayers = Players.map { currentplayer =>
-      if(/*getExtraMoney &&*/ cardtype == Type.Restaurants){
+      if(Players.find(_.playerId == TakerPlayerId).exists(_.getExtraMoney()) && cardtype == Type.Restaurants){
         if (currentplayer.playerId == TakerPlayerId) currentplayer.copy(money = currentplayer.money + amount + 1)
         else if (currentplayer.playerId == GiverPlayerId) currentplayer.copy(money = currentplayer.money - amount -1)
         else currentplayer
@@ -66,6 +66,27 @@ case class Gamestate (val curentTurn : Int = 0,
       else currentplayer
     }
     this.copy(Players = updatedPlayers)
+  }
+  def activateCards(rollNum: Int,rollerId: Int) : Gamestate = {
+    var tmpGamestate = this
+    for (p <- Players) {
+      tmpGamestate = p.activateCards(rollNum, rollerId, tmpGamestate)
+    }
+    return tmpGamestate
+  }
+  def iterateTurn(): Gamestate = {
+    //curentTurn += 1
+    if(Players.find(_.playerId == CurrentTurnPlayerId).exists(_.GetsAnotherTurn)){
+      val updatedPlayers = Players.map { currentplayer =>
+        if (currentplayer.playerId == CurrentTurnPlayerId) {
+          currentplayer.copy(GetsAnotherTurn = false)
+        }
+        else currentplayer
+      }
+      return this.copy(Players = updatedPlayers, curentTurn = (curentTurn + 1),turnstate = ChoosingDyeAmount)
+    } else {
+      return this.copy( curentTurn = (curentTurn + 1), CurrentTurnPlayerId = ((CurrentTurnPlayerId + 1) % Players.size),turnstate = ChoosingDyeAmount)
+    }
   }
 }
 

@@ -1,6 +1,6 @@
 package de.htwg.se.machikoro.remake
 
-import de.htwg.se.machikoro.remake.Type.Industry
+import de.htwg.se.machikoro.remake.Type.{Industry, Restaurants}
 
 //cardType:
 //Major_Establishment => Fernsehturn-Symbol
@@ -88,7 +88,7 @@ object allCardsBaseGame {
     texturePath = "",
     cardOwnerId = -1,
     effect = (gamestate, Owner) => {
-      gamestate.transferMoneyBetweenPlayers(gamestate.CurrentTurnPlayerId,Owner,1)//Transfer Money from the Player who has gotten the number to the player who owns this card
+      gamestate.transferMoneyBetweenPlayers(gamestate.CurrentTurnPlayerId,Owner,1,Restaurants)//Transfer Money from the Player who has gotten the number to the player who owns this card
     }
   )
   val minimarkt = card(
@@ -127,7 +127,7 @@ object allCardsBaseGame {
     texturePath = "",
     cardOwnerId = -1,
     effect = (gamestate, Owner) => {
-      gamestate.changeMoneyOfPlayer(Owner, 1)
+      gamestate.stealFromEveryone(Owner, 2)
     }
   )
   
@@ -210,10 +210,22 @@ object allCardsBaseGame {
     texturePath = "",
     cardOwnerId = -1,
     effect = (gamestate, Owner) => {
-      gamestate.transferMoneyBetweenPlayers(gamestate.CurrentTurnPlayerId, Owner, 2)
+      gamestate.transferMoneyBetweenPlayers(gamestate.CurrentTurnPlayerId, Owner, 2, Restaurants)
     }
   )
-
+  val apfelgarten = card(
+    cardName = "apfelgarten",
+    price = 3,
+    cardType = Type.Farm,
+    roleNumbers = Array(10),
+    color = Color.Blue,
+    description = "Erhalte 3 Münzen aus der Bank.",
+    texturePath = "",
+    cardOwnerId = -1,
+    effect = (gamestate, Owner) => {
+      gamestate.changeMoneyOfPlayer(Owner,3)
+    }
+  )
   val markthalle = card(
     cardName = "Markthalle",
     price = 2,

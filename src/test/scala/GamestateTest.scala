@@ -46,13 +46,16 @@ class GamestateTest extends AnyWordSpec with Matchers {
       state1 == state2 should be(true)
     }
     "have a working Method transferMoneyBetweenPlayers with extra Money" in {
-      val state1 = new Gamestate(Players = List(new Player(playerId = 0), new Player(playerId = 1)))
+      val state1 = new Gamestate(Players = List(new Player(playerId = 0), new Player(playerId = 1), new Player(playerId = 2)))
       state1.Players.find(_.playerId == 1).value.money should be(0)
       state1.Players.find(_.playerId == 0).value.money should be(0)
-      val state2 = state1.giveCard(0, einkaufszentrum)
+      state1.Players.find(_.playerId == 2).value.money should be(0)
+
+      val state2 = state1.giveCard(1, einkaufszentrum)
       val state3 = state2.transferMoneyBetweenPlayers(0, 1, 1, Restaurants)
       state3.Players.find(_.playerId == 1).value.money should be(2)
       state3.Players.find(_.playerId == 0).value.money should be(-2)
+      state1.Players.find(_.playerId == 2).value.money should be(0)
     }
     "have a working Method stealFromEveryone" in {
       val start = new Gamestate(Players = List(new Player(playerId = 0), new Player(playerId = 1), new Player(playerId = 2)))
@@ -60,6 +63,40 @@ class GamestateTest extends AnyWordSpec with Matchers {
       end.Players.find(_.playerId == 1).value.money should be(2)
       end.Players.find(_.playerId == 0).value.money should be(-1)
       end.Players.find(_.playerId == 2).value.money should be(-1)
+    }
+    "have a working Method activateCards" in {
+      var state = new Gamestate(Players = List(new Player(playerId = 0), new Player(playerId = 1),new Player(playerId = 2)))
+      state.Players.find(_.playerId == 1).value.money should be(0)
+      state.Players.find(_.playerId == 0).value.money should be(0)
+      state.Players.find(_.playerId == 2).value.money should be(0)
+      state = state.giveCard(0, bauernhof)
+      state = state.giveCard(0, baeckerei)
+
+      state = state.giveCard(1, bauernhof)
+      state = state.giveCard(1, baeckerei)
+
+      state = state.giveCard(2, bauernhof)
+      state = state.giveCard(2, baeckerei)
+
+      state = state.activateCards(2,0)
+
+      state.Players.find(_.playerId == 0).value.money should be(2)
+      state.Players.find(_.playerId == 1).value.money should be(1)
+      state.Players.find(_.playerId == 2).value.money should be(1)
+    }
+    "have a working Method iterateTurn" in {
+      var state = new Gamestate(Players = List(new Player(playerId = 0), new Player(playerId = 1, GetsAnotherTurn = true), new Player(playerId = 2)))
+      state = state.iterateTurn()
+      state.curentTurn should be (1)
+      state.CurrentTurnPlayerId should be(1)
+
+      state = state.iterateTurn()
+      state.curentTurn should be(2)
+      state.CurrentTurnPlayerId should be(1)
+
+      state = state.iterateTurn()
+      state.curentTurn should be(3)
+      state.CurrentTurnPlayerId should be(2)
     }
   }
 }

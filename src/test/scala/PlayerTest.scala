@@ -34,7 +34,8 @@ class PlayerTest extends AnyWordSpec with Matchers {
       val end = start.giveCard(0, einkaufszentrum.copy(cardOwnerId = 0))
       end.Players.find(_.playerId == 0).exists(_.getExtraMoney()) should be(true)
     }
- 
+    
+  
   }
 
 

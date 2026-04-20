@@ -42,12 +42,11 @@ case class card (val cardName : String = "Weizenfeld"
       When activate is called the corresponding function "effect" gets called.
       When a card is called depends on the Cardcolor
    */
-  /*
-  def activate(): Int = {
+
+  def activate(gamestate : Gamestate): Gamestate = {
     println(s"$cardName is activated!")
-    return 0
+    return effect(gamestate,cardOwnerId)
   }
-  */
 
   def cardToString(): String = "|" + cardName + "|costs: " + price + "|" + description + "|"
 
