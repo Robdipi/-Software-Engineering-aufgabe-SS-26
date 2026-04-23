@@ -1,17 +1,19 @@
 package de.htwg.se.machikoro.remake
 
-import de.htwg.se.machikoro.remake.Turnstate.*
+import scala.io.StdIn.readLine
+import scala.util.Random
 
 
+/*
 enum Turnstate {
   case ChoosingDyeAmount, CheckingResult, BuyPhase, choosePlayerToPunish, choosePlayerToSwitchCardWith
-}
+}*/
 
 case class Gamestate (val curentTurn : Int = 0,
                  val Players: List[Player],
                  val CurrentTurnPlayerId: Int = 0,
-                 val DyeResult: Int = -1,
-                      turnstate: Turnstate = ChoosingDyeAmount) {
+                 val DiceResult: Int = -1, 
+                      val diceChoosen: Int = 1) {
   def changeMoneyOfPlayer(playerId: Int, amount: Int, cardtype: Type = Type.Secondary_Industry): Gamestate = {
     val updatedPlayers = Players.map { currentplayer =>
       if (currentplayer.playerId == playerId) {
@@ -83,17 +85,69 @@ case class Gamestate (val curentTurn : Int = 0,
         }
         else currentplayer
       }
-      return this.copy(Players = updatedPlayers, curentTurn = (curentTurn + 1),turnstate = ChoosingDyeAmount)
+      return this.copy(Players = updatedPlayers, curentTurn = (curentTurn + 1))
     } else {
-      return this.copy( curentTurn = (curentTurn + 1), CurrentTurnPlayerId = ((CurrentTurnPlayerId + 1) % Players.size),turnstate = ChoosingDyeAmount)
+      return this.copy( curentTurn = (curentTurn + 1), CurrentTurnPlayerId = ((CurrentTurnPlayerId + 1) % Players.size))
     }
   }
-  def changeTurnstate(): Gamestate = {}
+  /*
+  def changeTurnstate(newTurnstate: Turnstate): Gamestate = {
+    return this.copy(turnstate = newTurnstate)
+  }
+  */
+  def choseDiceamount(): Gamestate = {
+    val random = new Random()
+    val dicethrowA = random.nextInt(6) + 1
+    val dicethrowB = random.nextInt(6) + 1
+    if(Players.find(_.playerId == curentTurn).exists(_.canChooseDyeAmount())){
+      val diceAmount = getDiceAmount()
+      if(diceAmount == 2){
+        if(dicethrowA == dicethrowB && Players.find(_.playerId == curentTurn).exists(_.canGetAnotherTurn())){ //Pasch und die Karte die einem einem Weiter Zug gibt
+          val updatedPlayers = Players.map { currentplayer =>
+            if (currentplayer.playerId == CurrentTurnPlayerId) {
+              currentplayer.copy(GetsAnotherTurn = true)
+            }
+            else currentplayer
+          }
+          return this.copy(diceChoosen = diceAmount,Players = updatedPlayers,DiceResult = dicethrowA + dicethrowB)
+        }else{
+          return this.copy(diceChoosen = diceAmount, DiceResult = dicethrowA + dicethrowB)
+        }
+      }else{
+        return this.copy(diceChoosen = diceAmount, DiceResult = dicethrowA)
+      }
+    } else {
+      return this.copy(diceChoosen = 1, DiceResult = dicethrowA)
+    }
+  }
+  def getDiceAmount(): Int = {
+    val input = readLine("How many Dice do you want to use?(1/2)")
+    if(input.equals('1')){
+      return 1
+    }else if(input.equals('2')){
+      return 2
+    }else{
+      print("BadInput type again")
+      return getDiceAmount()
+    }
+  }/*
+  def checkingResult(): Gamestate = {
+    if (Players.find(_.playerId == curentTurn).exists(_.canRejectDyeTrow())) {
+      
+    }else {
+      
+    }
+  }
+
+  def choosePlayerToPunish(): Gamestate = {}
+
+  def choosePlayerToSwitchCardWith(): Gamestate = {}
   
-  def choseDyeamount(): Gamestate = {}
+  def BuyPhase(): Gamestate = {}
 
-  def choseDyeamount(): Gamestate = {}
+*/
 
+  //ChoosingDyeAmount, CheckingResult, BuyPhase, choosePlayerToPunish, choosePlayerToSwitchCardWith
 }
 
 

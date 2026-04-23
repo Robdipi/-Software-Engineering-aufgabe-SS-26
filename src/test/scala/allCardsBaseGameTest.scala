@@ -5,7 +5,6 @@ import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import de.htwg.se.machikoro.remake.allCardsBaseGame.*
 import de.htwg.se.machikoro.remake.Gamestate.*
-import de.htwg.se.machikoro.remake.Turnstate.*
 import de.htwg.se.machikoro.remake.Type.{Restaurants, Store}
 import org.scalatest.OptionValues.convertOptionToValuable
 
@@ -229,6 +228,7 @@ class allCardsBaseGameTest extends AnyWordSpec with Matchers {
       state.Players.find(_.playerId == 0).value.money should be(5)
       state.Players.find(_.playerId == 1).value.money should be(-2)
       state.Players.find(_.playerId == 2).value.money should be(-3)
+      print(state.Players.find(_.playerId == 0).value.printAllCards())
     }
     "markthalle" in {
       var state = new Gamestate(Players = List(new Player(playerId = 0), new Player(playerId = 1), new Player(playerId = 2)))

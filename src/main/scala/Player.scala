@@ -25,8 +25,8 @@ case class Player (val money: Int = 0,
   def printAllCards():String = {
     println("Your Current cards:")
     println(properties)
-    
-    
+    return properties.toString()
+  }
     
     /*println(
     """
@@ -51,6 +51,6 @@ case class Player (val money: Int = 0,
       |   10 Einkaufszentrum      
       |   """.stripMargin)
     */
-    return:""}
+   
   
 }
