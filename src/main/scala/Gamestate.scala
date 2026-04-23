@@ -88,6 +88,12 @@ case class Gamestate (val curentTurn : Int = 0,
       return this.copy( curentTurn = (curentTurn + 1), CurrentTurnPlayerId = ((CurrentTurnPlayerId + 1) % Players.size),turnstate = ChoosingDyeAmount)
     }
   }
+  def changeTurnstate(): Gamestate = {}
+  
+  def choseDyeamount(): Gamestate = {}
+
+  def choseDyeamount(): Gamestate = {}
+
 }
 
 

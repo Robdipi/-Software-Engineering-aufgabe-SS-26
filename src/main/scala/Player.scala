@@ -22,4 +22,5 @@ case class Player (val money: Int = 0,
     }
     return tmpGamestate
   }
+  def printAllCards():String = {return ""}
 }
