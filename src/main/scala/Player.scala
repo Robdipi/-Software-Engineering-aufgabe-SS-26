@@ -22,5 +22,35 @@ case class Player (val money: Int = 0,
     }
     return tmpGamestate
   }
-  def printAllCards():String = {return ""}
+  def printAllCards():String = {
+    println("Your Current cards:")
+    println(properties)
+    
+    
+    
+    /*println(
+    """
+      |Cost:  Cards:            Dice number:
+      |   1   Weizenfeld          1
+      |   1   Bauernhof           2
+      |   1   Bäckerei            2,3
+      |   2   Cafe                3
+      |   3   Wald                5
+      |   6   Stadion             6
+      |   6   Bürohaus            6
+      |   7   Fernsehsender       6
+      |   7   Molkerei            7
+      |   3   Möbelfabrik         8
+      |   6   Bergwerk            9
+      |   3   Familien Restaurant 9,10
+      |   3   Apfelgarten         10
+      |   2   Markthalle          11,12
+      |   22  Funkturm            
+      |   16  Freizeitpark        
+      |   4   Bahnhof             
+      |   10 Einkaufszentrum      
+      |   """.stripMargin)
+    */
+    return:""}
+  
 }

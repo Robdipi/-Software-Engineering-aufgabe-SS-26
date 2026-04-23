@@ -243,7 +243,7 @@ object allCardsBaseGame {
     cardName = "Funkturm",
     price = 22,
     cardType = Type.Landmark,
-    roleNumbers = Array(11, 12),
+    roleNumbers = Array(),
     color = Color.Yellow,
     description = "Einmal pro Zug darfst du erneut würfeln.",
     texturePath = "",
