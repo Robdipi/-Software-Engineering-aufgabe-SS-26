@@ -12,6 +12,11 @@ case class Player (val money: Int = 0,
   def canRejectDyeTrow(): Boolean = {return properties.find(_.cardName == funkturm.cardName).isDefined}
   def getExtraMoney(): Boolean = {return properties.find(_.cardName == einkaufszentrum.cardName).isDefined}
 
+  def hasWonTheGame(): Boolean = {
+    return canChooseDyeAmount() && canGetAnotherTurn() && canRejectDyeTrow() && getExtraMoney()
+  }
+
+
   def activateCards(rollNum: Int,rollerId: Int, state: Gamestate) : Gamestate = {
     var tmpGamestate = state  //changes a lot so var
     for (p <- properties) {
