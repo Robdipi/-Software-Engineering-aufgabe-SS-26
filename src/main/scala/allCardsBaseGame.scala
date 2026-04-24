@@ -19,7 +19,7 @@ object allCardsBaseGame {
     cardType = Type.Farm,
     roleNumbers = Array(1),
     color = Color.Blue,
-    description = "erhalte 1 Münze aus der Bank.",
+    description = "Erhalte 1 Münze aus der Bank.",
     texturePath = "",
     cardOwnerId = -1,
     effect = (gamestate, Owner) => {
@@ -32,7 +32,7 @@ object allCardsBaseGame {
     cardType = Type.Farm,
     roleNumbers = Array(1),
     color = Color.Blue,
-    description =  "erhalte 1 Münze aus der Bank.",
+    description =  "Erhalte 1 Münze aus der Bank.",
     texturePath = "",
     cardOwnerId = -1,
       effect = (gamestate, Owner) => {
@@ -45,7 +45,7 @@ object allCardsBaseGame {
     cardType = Type.Dairy,
     roleNumbers = Array(2),
     color = Color.Blue,
-    description = "erhalte 1 Münze aus der Bank.",
+    description = "Erhalte 1 Münze aus der Bank.",
     texturePath = "",
     cardOwnerId = -1,
     effect = (gamestate, Owner) => {
@@ -58,7 +58,7 @@ object allCardsBaseGame {
     cardType = Type.Store,
     roleNumbers = Array(2,3),
     color = Color.Green,
-    description = "erhalte 1 Münze aus der Bank.",
+    description = "Erhalte 1 Münze aus der Bank.",
     texturePath = "",
     cardOwnerId = -1,
     effect = (gamestate, Owner) => {
@@ -71,7 +71,7 @@ object allCardsBaseGame {
     cardType = Type.Store,
     roleNumbers = Array(2, 3),
     color = Color.Green,
-    description = "erhalte 1 Münze aus der Bank.",
+    description = "Erhalte 1 Münze aus der Bank.",
     texturePath = "",
     cardOwnerId = -1,
     effect = (gamestate, Owner) => {
@@ -84,7 +84,7 @@ object allCardsBaseGame {
     cardType = Type.Restaurants,
     roleNumbers = Array(3),
     color = Color.Red,
-    description = "erhalte 1 Münze von dem Mitspieler der eine '3' gewürfelt hat.",
+    description = "Erhalte 1 Münze von dem Mitspieler der eine '3' gewürfelt hat.",
     texturePath = "",
     cardOwnerId = -1,
     effect = (gamestate, Owner) => {
