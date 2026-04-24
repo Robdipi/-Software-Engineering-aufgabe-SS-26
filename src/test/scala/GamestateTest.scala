@@ -162,8 +162,8 @@ class GamestateTest extends AnyWordSpec with Matchers {
 
         val gameState1 = gameState0
           .iterateTurn()
-          .giveCard(3, bahnhof)
-          .giveCard(3, freizeitpark)
+          .giveCard(1, bahnhof)
+          .giveCard(1, freizeitpark)
 
         debugInputManager.writeIntoSimulatedChat("2")
 
@@ -181,21 +181,4 @@ class GamestateTest extends AnyWordSpec with Matchers {
     }
   }
 }
-    /*
-    "have a working Method giveCard" in {
-      val start = new Gamestate(Players = List(new Player(playerId = 0)))
-      start.Players
-        .find(_.playerId == 0)
-        .exists(_.properties.contains(weizenfeld.copy(cardOwnerID = 0))) should be(false)
-
-      val changed = start.giveCard(0,weizenfeld.copy(cardOwnerID = 0))
-
-      changed.Players
-        .find(_.playerId == 0)
-        .exists(_.properties.contains(weizenfeld.copy(cardOwnerID = 0))) should be(true)
-
-      changed.Players.find(_.playerId == 0).value.properties.size should be(1)
-    }
-
-  }
-*/
+   

@@ -13,7 +13,9 @@ object randomNumberManager {
     } else {
       val (element, newQueue) = NumQueue.dequeue
       NumQueue = newQueue
-      return math.max(1, math.min(6, element))
+      val num = math.max(1, math.min(6, element))
+      //println(num)
+      return num
     }
   }
 

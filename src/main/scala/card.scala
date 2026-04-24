@@ -34,7 +34,7 @@ case class card (val cardName : String = "Weizenfeld"
             ,val cardType : Type = Type.Farm
             ,val roleNumbers : Array[Int] = Array(1)
             ,val color : Color  = Color.Blue
-            ,val description : String = "erhalte 1 Münze aus der Bank."
+            ,val description : String = "Erhalte 1 Münze aus der Bank."
             ,val texturePath : String = ""
             ,val effect: (Gamestate, Int) => Gamestate = {(gamestate, OwnerID) =>  gamestate}
             ,val cardOwnerId: Int) {

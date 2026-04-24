@@ -22,7 +22,7 @@ class DebugInputManagerTest extends AnyWordSpec with Matchers {
       debugInputManager.writeIntoSimulatedChat("anything")
 
       debugInputManager.InputQueue.nonEmpty should be(true)
-      debugInputManager.readForTestAndGamePurposes("ignored") should be("hello")
+      debugInputManager.readForTestAndGamePurposes("ignored") should be("anything")
     }
   }
 }

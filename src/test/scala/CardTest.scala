@@ -9,11 +9,11 @@ class CardTest extends AnyWordSpec with Matchers {
   "cardToString" should {
     "return the expected string" in {
       val c1 = weizenfeld.copy(cardOwnerId = 0)
-      c1.cardToString() shouldEqual "|Weizenfeld|costs: 1|erhalte 1 Münze aus der Bank.|"
+      c1.cardToString() shouldEqual "|Weizenfeld|costs: 1|Erhalte 1 Münze aus der Bank.|"
     }
     "have working standart parameters" in {
       val c1 = new card(cardOwnerId = 0)
-      c1.cardToString() shouldEqual "|Weizenfeld|costs: 0|erhalte 1 Münze aus der Bank.|"
+      c1.cardToString() shouldEqual "|Weizenfeld|costs: 0|Erhalte 1 Münze aus der Bank.|"
     }
     "have a working method activate" in {
       /*val state1 = new Gamestate(Players = List(new Player(playerId = 0), new Player(playerId = 1)))

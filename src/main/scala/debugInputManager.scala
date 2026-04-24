@@ -17,7 +17,7 @@ object debugInputManager {
   }
 
   def writeIntoSimulatedChat(message: String): Unit = {
-    InputQueue = InputQueue.enqueue("hello")
+    InputQueue = InputQueue.enqueue(message)
   }
 
 }

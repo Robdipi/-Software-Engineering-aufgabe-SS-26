@@ -10,10 +10,7 @@ import scala.io.StdIn.readLine
 import scala.util.Random
 
 
-/*
-enum Turnstate {
-  case ChoosingDyeAmount, CheckingResult, BuyPhase, choosePlayerToPunish, choosePlayerToSwitchCardWith
-}*/
+val startMoneyPlayers = 100
 case class cardStack(val amount : Int,
                      val stackCard : card)
 case class Gamestate (val curentTurn : Int = 0,
@@ -24,7 +21,7 @@ case class Gamestate (val curentTurn : Int = 0,
                       val cardStacks : List[cardStack] = List()) {
   
   def initializeStandartGame(playerAmount:Int): Gamestate = {
-    val players = (0 until playerAmount).toList.map(i => Player(money = 100, playerId = i, properties = List(starterweizenfeld.copy(cardOwnerId = i), starterbaeckerei.copy(cardOwnerId = i)))) //gives the players their start cards
+    val players = (0 until playerAmount).toList.map(i => Player(money = startMoneyPlayers, playerId = i, properties = List(starterweizenfeld.copy(cardOwnerId = i), starterbaeckerei.copy(cardOwnerId = i)))) //gives the players their start cards
     var gameState = this.copy(Players = players)
     return gameState.copy(cardStacks = List(
       new cardStack(6, weizenfeld.copy()),
@@ -183,7 +180,7 @@ case class Gamestate (val curentTurn : Int = 0,
   }
 
   def checkingResult(): Gamestate = {
-    if (Players.find(_.playerId == CurrentTurnPlayerId).exists(_.canRejectDyeTrow())&&askForRejection()) {
+    if (Players.find(_.playerId == CurrentTurnPlayerId).exists(_.canRejectDyeTrow()) && askForRejection()) {
       val dicethrowA = getNextRandomNumber()
       val dicethrowB = getNextRandomNumber()
       if(this.diceChoosen == 2) {
@@ -216,7 +213,7 @@ case class Gamestate (val curentTurn : Int = 0,
     } else if (input.equals("n")) {
       return true
     } else {
-      print("BadInput!")
+      println("BadInput! " + input)
       return askForRejection()
     }
   }

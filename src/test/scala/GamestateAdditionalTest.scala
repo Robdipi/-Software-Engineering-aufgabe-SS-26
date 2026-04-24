@@ -1,7 +1,5 @@
-import de.htwg.se.machikoro.remake.{Gamestate, Player, Type, cardStack}
+import de.htwg.se.machikoro.remake.{Gamestate, Player, Type, cardStack, debugInputManager, randomNumberManager, startMoneyPlayers}
 import de.htwg.se.machikoro.remake.allCardsBaseGame.*
-import de.htwg.se.machikoro.remake.debugInputManager
-import de.htwg.se.machikoro.remake.randomNumberManager
 import org.scalatest.OptionValues.convertOptionToValuable
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
@@ -15,8 +13,8 @@ class GamestateAdditionalTest extends AnyWordSpec with Matchers {
       val state = new Gamestate().initializeStandartGame(2)
 
       state.Players.size should be(2)
-      state.Players.find(_.playerId == 0).value.money should be(100)
-      state.Players.find(_.playerId == 1).value.money should be(100)
+      state.Players.find(_.playerId == 0).value.money should be(startMoneyPlayers)
+      state.Players.find(_.playerId == 1).value.money should be(startMoneyPlayers)
 
       state.Players.find(_.playerId == 0).value.properties.map(_.cardName) should contain("Weizenfeld")
       state.Players.find(_.playerId == 0).value.properties.map(_.cardName) should contain("Bäckerei")
@@ -24,7 +22,7 @@ class GamestateAdditionalTest extends AnyWordSpec with Matchers {
 
       state.cardStacks.size should be(19)
       state.cardStacks.map(_.stackCard.cardName) should contain("Bahnhof")
-      state.cardStacks.map(_.stackCard.cardName) should contain("FunkturmFunkturm")
+      state.cardStacks.map(_.stackCard.cardName) should contain("Funkturm")
     }
 
     "giveCard should add a copy owned by the target player" in {
@@ -136,12 +134,12 @@ class GamestateAdditionalTest extends AnyWordSpec with Matchers {
 
     "choseDiceamount should grant another turn on double dice with Freizeitpark" in {
       debugInputManager.InputQueue = Queue("2")
-      randomNumberManager.NumQueue = Queue(4, 4)
 
       val state = new Gamestate(Players = List(new Player(playerId = 0)), CurrentTurnPlayerId = 0)
         .giveCard(0, bahnhof)
         .giveCard(0, freizeitpark)
 
+      randomNumberManager.NumQueue = Queue(4, 4)
       val changed = state.choseDiceamount()
 
       changed.DiceResult should be(8)
@@ -149,21 +147,20 @@ class GamestateAdditionalTest extends AnyWordSpec with Matchers {
     }
 
     "checkingResult should keep the result when the player accepts it" in {
-      debugInputManager.InputQueue = Queue("y")
-
+      debugInputManager.writeIntoSimulatedChat("y")
       val state = new Gamestate(
         Players = List(new Player(playerId = 0)),
         CurrentTurnPlayerId = 0,
         DiceResult = 5
       ).giveCard(0, funkturm)
-
+      randomNumberManager.writeIntoSimulatedRandomness(5)
       val changed = state.checkingResult()
 
       changed.DiceResult should be(5)
     }
 
     "checkingResult should reroll one die when rejected" in {
-      debugInputManager.InputQueue = Queue("n")
+      debugInputManager.writeIntoSimulatedChat("n")
       randomNumberManager.NumQueue = Queue(6, 2)
 
       val state = new Gamestate(
@@ -179,8 +176,9 @@ class GamestateAdditionalTest extends AnyWordSpec with Matchers {
     }
 
     "checkingResult should reroll two dice and grant another turn on double with Freizeitpark" in {
-      debugInputManager.InputQueue = Queue("n")
-      randomNumberManager.NumQueue = Queue(2, 2)
+      randomNumberManager.writeIntoSimulatedRandomness(2)
+      randomNumberManager.writeIntoSimulatedRandomness(2)
+      debugInputManager.writeIntoSimulatedChat("n")
 
       val state = new Gamestate(
         Players = List(new Player(playerId = 0)),

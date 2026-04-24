@@ -4,7 +4,7 @@ import de.htwg.se.machikoro.remake.*
 import scala.io.StdIn.readLine
 object main {
   def main(args: Array[String]): Unit = {
-    val gameState = new Gamestate().initializeStandartGame(1)
+    val gameState = new Gamestate().initializeStandartGame(2)
     gameloop(gameState)
   }
   def gameloop(gameState : Gamestate): Unit = {
