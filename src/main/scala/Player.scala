@@ -27,10 +27,12 @@ case class Player (val money: Int = 0,
     }
     return tmpGamestate
   }
-  def printAllCards():String = {
+  def printAllCards(): Unit = {
     println("Your Current cards:")
-    println(properties)
-    return properties.toString()
+
+    properties.foreach { c =>
+      println(s"${c.cardName}:   ${c.description}")
+    }
   }
     
     /*println(
@@ -56,6 +58,6 @@ case class Player (val money: Int = 0,
       |   10 Einkaufszentrum      
       |   """.stripMargin)
     */
-   
+
   
 }

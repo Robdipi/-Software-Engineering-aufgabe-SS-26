@@ -128,6 +128,7 @@ case class Gamestate (val curentTurn : Int = 0,
   def choseDiceamount(): Gamestate = {
     println("---------------------------------------------------------")
     println("Player " + (this.CurrentTurnPlayerId + 1) + "'s Turn")
+    Players.foreach(_.printAllCards())
     println("")
     val random = new Random()
     val dicethrowA = random.nextInt(6) + 1
