@@ -4,7 +4,7 @@ import de.htwg.se.machikoro.remake.allCardsBaseGame.*
 import scala.io.StdIn.readLine
 object main {
   def main(args: Array[String]): Unit = {
-    gameloop(4)
+    gameloop(1)
   }
   def gameloop(playerAmount:Int): Unit = {
     val players = (0 until playerAmount).toList.map(i => Player(money = 100,playerId =  i,

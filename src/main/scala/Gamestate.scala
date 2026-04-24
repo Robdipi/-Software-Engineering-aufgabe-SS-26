@@ -142,6 +142,7 @@ case class Gamestate (val curentTurn : Int = 0,
             else currentplayer
           }
           print("you threw a " + (dicethrowA + dicethrowB))
+          println("This was a Pasch so you get an extra Turn")
           return this.copy(diceChoosen = diceAmount,Players = updatedPlayers,DiceResult = dicethrowA + dicethrowB)
         }else{
           print("you threw a " + (dicethrowA + dicethrowB))
@@ -170,25 +171,26 @@ case class Gamestate (val curentTurn : Int = 0,
   }
 
   def checkingResult(): Gamestate = {
-    if (Players.find(_.playerId == curentTurn).exists(_.canRejectDyeTrow())&&askForRejection()) {
+    if (Players.find(_.playerId == CurrentTurnPlayerId).exists(_.canRejectDyeTrow())&&askForRejection()) {
       val random = new Random()
       val dicethrowA = random.nextInt(6) + 1
       val dicethrowB = random.nextInt(6) + 1
       if(this.diceChoosen == 2) {
-        print("you threw a:" + (dicethrowA + dicethrowB))
-        if (dicethrowA == dicethrowB && Players.find(_.playerId == curentTurn).exists(_.canGetAnotherTurn())) { //Pasch und die Karte die einem einem Weiter Zug gibt
+        println("you threw a:" + (dicethrowA + dicethrowB))
+        if (dicethrowA == dicethrowB && Players.find(_.playerId == CurrentTurnPlayerId).exists(_.canGetAnotherTurn())) { //Pasch und die Karte die einem einem Weiter Zug gibt
           val updatedPlayers = Players.map { currentplayer =>
             if (currentplayer.playerId == CurrentTurnPlayerId) {
               currentplayer.copy(GetsAnotherTurn = true)
             }
             else currentplayer
           }
+          println("This was a Pasch so you get an extra Turn")
           return this.copy(DiceResult = dicethrowA + dicethrowB, Players = updatedPlayers)
         }else{
           return this.copy(DiceResult = dicethrowA + dicethrowB)
         }
       }else{
-        print("you threw a:" + dicethrowA)
+        println("you threw a:" + dicethrowA)
         return this.copy(DiceResult = dicethrowA)
       }
     }else {
@@ -197,10 +199,10 @@ case class Gamestate (val curentTurn : Int = 0,
   }
 
   def askForRejection(): Boolean = {
-    val input = readLine("Are you happy with the number you got?(y/n)")
-    if (input.equals('y')) {
+    val input = readLine(" are you happy with the number you got?(y/n) ")
+    if (input.equals("y")) {
       return false
-    } else if (input.equals('n')) {
+    } else if (input.equals("n")) {
       return true
     } else {
       print("BadInput!")
@@ -232,30 +234,21 @@ case class Gamestate (val curentTurn : Int = 0,
     if (input.equals("next")) {
       return this
     } else if (cardStacks.find(_.stackCard.cardName.equals(input)).isDefined) {
-      val playerOption = Players.find(_.playerId == CurrentTurnPlayerId)
-      val cardStackOption = cardStacks.find(_.stackCard.cardName.equals(input))
-      if (playerOption.exists(player =>
-        cardStackOption.exists(cardStack =>
-          player.money >= cardStack.stackCard.price))) {
 
-        val currentPlayer = this.Players.find(_.playerId == CurrentTurnPlayerId).get
-        val currentCard = cardStackOption.get.stackCard
-        if(currentCard.color == Yellow){
-          if(currentPlayer.properties.find(_.cardName == currentCard.cardName).isDefined){
+      val currentPlayer = Players.find(_.playerId == CurrentTurnPlayerId).get
+      val currentCard = cardStacks.find(_.stackCard.cardName.equals(input)).get.stackCard
+      val cardStack = cardStacks.find(_.stackCard.cardName.equals(input)).get
+
+
+      if (currentPlayer.money >= currentCard.price) {
+        if(currentCard.color == Yellow && currentPlayer.properties.find(_.cardName == currentCard.cardName).isDefined){
             print("you already have this card!")
             return askForCardToBuy()
-          }else{
-            return actuallyBuyCard(currentCard,cardStackOption.get)
-          }
-        }else if(currentCard.color == Purple){
-          if (currentPlayer.properties.find(_.color == Purple).isDefined) {
-            print("you already have a purple Card you can only have own!")
-            return askForCardToBuy()
-          }else{
-            return actuallyBuyCard(currentCard,cardStackOption.get)
-          }
+        }else if(currentCard.color == Purple&&currentPlayer.properties.find(_.color == Purple).isDefined) {
+          print("you already have a purple Card you can only have own!")
+          return askForCardToBuy()
         } else{
-          return actuallyBuyCard(currentCard,cardStackOption.get)
+        return actuallyBuyCard(currentCard,cardStack)
         }
       }else{
         print("you cant afford that!")
@@ -266,8 +259,8 @@ case class Gamestate (val curentTurn : Int = 0,
       return askForCardToBuy()
     }
   }
-  def actuallyBuyCard(currentCard:card,currentStackOpt:cardStack):Gamestate = {
-    if(currentStackOpt.amount >= 1){
+  def actuallyBuyCard(currentCard:card,currentStack:cardStack):Gamestate = {
+    if(currentStack.amount >= 1){
       val tmpState = this.changeMoneyOfPlayer(CurrentTurnPlayerId, -1 * currentCard.price)
       val tmpState2 = tmpState.removeCardFromStack(currentCard)
       return tmpState2.giveCard(CurrentTurnPlayerId, currentCard)
