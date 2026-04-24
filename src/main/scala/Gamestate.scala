@@ -160,7 +160,7 @@ case class Gamestate (val curentTurn : Int = 0,
   }
   def getDiceAmount(): Int = {
 
-    val input = readLine("How many Dice do you want to use?(1/2)")
+    val input = readForTestAndGamePurposes("How many Dice do you want to use?(1/2)")
     if(input.equals("1")){
       return 1
     }else if(input.equals("2")){
@@ -231,7 +231,7 @@ case class Gamestate (val curentTurn : Int = 0,
   }
 
   def askForCardToBuy(): Gamestate = {
-    val input = readLine("Type the name of a card to buy it or type 'next' to buy nothing")
+    val input = readForTestAndGamePurposes("Type the name of a card to buy it or type 'next' to buy nothing")
     if (input.equals("next")) {
       return this
     } else if (cardStacks.find(_.stackCard.cardName.equals(input)).isDefined) {
