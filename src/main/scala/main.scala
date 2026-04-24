@@ -4,27 +4,19 @@ import de.htwg.se.machikoro.remake.*
 import scala.io.StdIn.readLine
 object main {
   def main(args: Array[String]): Unit = {
-    gameloop(1)
+    val gameState = new Gamestate().initializeStandartGame(1)
+    gameloop(gameState)
   }
-  def gameloop(playerAmount:Int): Unit = {
-    var gameState = new Gamestate()
-    gameState = gameState.initializeStandartGame(playerAmount) //all start cards in the middle
-
-    var gameIsRunning = true
-    while (gameIsRunning){
-      gameState = gameState.choseDiceamount()
-      gameState = gameState.checkingResult()
-      gameState = gameState.activateCards(gameState.DiceResult,gameState.CurrentTurnPlayerId)
-      gameState = gameState.BuyPhase()
-      if(gameState.currentPlayerHasWon()){
-        gameIsRunning = false
+  def gameloop(gameState : Gamestate): Unit = {
+    val gameState1 = gameState.choseDiceamount().checkingResult()
+    val gameState2 = gameState1.activateCards(gameState1.DiceResult,gameState1.CurrentTurnPlayerId)
+      .BuyPhase()
+      if(gameState2.currentPlayerHasWon()){
+        println("---------------------------------------------------------")
+        println("Player " + (gameState2.CurrentTurnPlayerId + 1) + " has Won!")
+        println("---------------------------------------------------------")
       }else{
-        gameState = gameState.iterateTurn()
+        gameloop(gameState2.iterateTurn())
       }
     }
-    println("---------------------------------------------------------")
-    println("Player " + (gameState.CurrentTurnPlayerId + 1) + " has Won!")
-    println("---------------------------------------------------------")
-
-  }
 }

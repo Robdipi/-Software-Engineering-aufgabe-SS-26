@@ -24,7 +24,7 @@ class GamestateAdditionalTest extends AnyWordSpec with Matchers {
 
       state.cardStacks.size should be(19)
       state.cardStacks.map(_.stackCard.cardName) should contain("Bahnhof")
-      state.cardStacks.map(_.stackCard.cardName) should contain("Funkturm")
+      state.cardStacks.map(_.stackCard.cardName) should contain("FunkturmFunkturm")
     }
 
     "giveCard should add a copy owned by the target player" in {

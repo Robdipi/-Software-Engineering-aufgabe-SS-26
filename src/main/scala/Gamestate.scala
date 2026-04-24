@@ -103,13 +103,20 @@ case class Gamestate (val curentTurn : Int = 0,
     }
     this.copy(Players = updatedPlayers)
   }
-  def activateCards(rollNum: Int,rollerId: Int) : Gamestate = {
+
+  def activateCards(rollNum: Int, rollerId: Int): Gamestate = {
+    Players.foldLeft(this) { (state, p) =>
+      p.activateCards(rollNum, rollerId, state)
+    }
+  }
+  
+  /*def activateCards(rollNum: Int,rollerId: Int) : Gamestate = {
     var tmpGamestate = this
     for (p <- Players) {
       tmpGamestate = p.activateCards(rollNum, rollerId, tmpGamestate)
     }
     return tmpGamestate
-  }
+  }*/
   def iterateTurn(): Gamestate = {
     //curentTurn += 1
     if(Players.find(_.playerId == CurrentTurnPlayerId).exists(_.GetsAnotherTurn)){
