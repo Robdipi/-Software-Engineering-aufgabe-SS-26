@@ -2,6 +2,7 @@ package de.htwg.se.machikoro.remake
 
 import de.htwg.se.machikoro.remake.Color.*
 import de.htwg.se.machikoro.remake.allCardsBaseGame.*
+import debugInputManager.readForTestAndGamePurposes
 
 import javax.smartcardio.Card
 import scala.io.StdIn.readLine
@@ -199,7 +200,7 @@ case class Gamestate (val curentTurn : Int = 0,
   }
 
   def askForRejection(): Boolean = {
-    val input = readLine(" are you happy with the number you got?(y/n) ")
+    val input = readForTestAndGamePurposes(" are you happy with the number you got?(y/n) ")
     if (input.equals("y")) {
       return false
     } else if (input.equals("n")) {

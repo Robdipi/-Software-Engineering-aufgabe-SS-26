@@ -1,3 +1,4 @@
+package de.htwg.se.machikoro.remake
 import scala.collection.immutable.Queue
 import scala.io.StdIn.readLine
 
