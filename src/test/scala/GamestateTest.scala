@@ -1,4 +1,4 @@
-import de.htwg.se.machikoro.remake.{Gamestate, Player, Type}
+import de.htwg.se.machikoro.remake.{Gamestate, Player, Type, debugInputManager, randomNumberManager}
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import de.htwg.se.machikoro.remake.allCardsBaseGame.*
@@ -84,7 +84,7 @@ class GamestateTest extends AnyWordSpec with Matchers {
       state.Players.find(_.playerId == 2).value.money should be(1)
     }
     "have a working Method iterateTurn" in {
-      var state = new Gamestate(Players = List(new Player(playerId = 0), new Player(playerId = 1, GetsAnotherTurn = true), new Player(playerId = 2)))
+      val state = new Gamestate(Players = List(new Player(playerId = 0), new Player(playerId = 1, GetsAnotherTurn = true), new Player(playerId = 2)))
       state = state.iterateTurn()
       state.curentTurn should be (1)
       state.CurrentTurnPlayerId should be(1)
@@ -96,6 +96,50 @@ class GamestateTest extends AnyWordSpec with Matchers {
       state = state.iterateTurn()
       state.curentTurn should be(3)
       state.CurrentTurnPlayerId should be(2)
+    }
+    "have a working Method choseDiceamount and getDiceAmount" in {
+      val gameState = new Gamestate().initializeStandartGame(4)
+
+      randomNumberManager.writeIntoSimulatedRandomness(1)
+      val gameState2 = gameState.choseDiceamount().DiceResult should be(1)
+      gameState2.diceChoosen should be(1)
+      gameState2.Players.find(_.playerId == gameState.CurrentTurnPlayerId).value.GetsAnotherTurn should be(false)
+    }
+
+      gameState = gameState.iterateTurn()
+      gameState = gameState.giveCard(1,bahnhof)
+      debugInputManager.writeIntoSimulatedChat("dfghjklölkjhgfdfghjk")//Bad Input to test
+      debugInputManager.writeIntoSimulatedChat("2")
+      randomNumberManager.writeIntoSimulatedRandomness(3)
+      randomNumberManager.writeIntoSimulatedRandomness(5)
+      gameState = gameState.choseDiceamount()
+      gameState.DiceResult should be(8)
+      gameState.diceChoosen should be(2)
+      gameState.Players.find(_.playerId == gameState.CurrentTurnPlayerId).value.GetsAnotherTurn should be(false)
+
+
+      gameState = gameState.iterateTurn()
+      gameState = gameState.giveCard(2, bahnhof)
+      debugInputManager.writeIntoSimulatedChat("1")
+      randomNumberManager.writeIntoSimulatedRandomness(3)
+      gameState = gameState.choseDiceamount()
+      gameState.DiceResult should be(3)
+      gameState.diceChoosen should be(1)
+      gameState.Players.find(_.playerId == gameState.CurrentTurnPlayerId).value.GetsAnotherTurn should be(false)
+
+
+      gameState = gameState.iterateTurn()
+      gameState = gameState.giveCard(3, bahnhof)
+      gameState = gameState.giveCard(3, freizeitpark)
+
+      debugInputManager.writeIntoSimulatedChat("2")
+      randomNumberManager.writeIntoSimulatedRandomness(3)
+      randomNumberManager.writeIntoSimulatedRandomness(3)
+      gameState = gameState.choseDiceamount()
+      gameState.DiceResult should be(6)
+      gameState.diceChoosen should be(2)
+      gameState.Players.find(_.playerId == gameState.CurrentTurnPlayerId).value.GetsAnotherTurn should be(true)
+
     }
   }
 }

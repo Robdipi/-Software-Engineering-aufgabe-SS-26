@@ -3,6 +3,7 @@ package de.htwg.se.machikoro.remake
 import de.htwg.se.machikoro.remake.Color.*
 import de.htwg.se.machikoro.remake.allCardsBaseGame.*
 import debugInputManager.readForTestAndGamePurposes
+import randomNumberManager.getNextRandomNumber
 
 import javax.smartcardio.Card
 import scala.io.StdIn.readLine
@@ -16,13 +17,16 @@ enum Turnstate {
 case class cardStack(val amount : Int,
                      val stackCard : card)
 case class Gamestate (val curentTurn : Int = 0,
-                 val Players: List[Player],
+                 val Players: List[Player] = List(),
                  val CurrentTurnPlayerId: Int = 0,
                  val DiceResult: Int = -1,
                       val diceChoosen: Int = 1,
                       val cardStacks : List[cardStack] = List()) {
-  def initializeStandartGame(): Gamestate = {
-    return this.copy(cardStacks = List(
+  
+  def initializeStandartGame(playerAmount:Int): Gamestate = {
+    val players = (0 until playerAmount).toList.map(i => Player(money = 100, playerId = i, properties = List(starterweizenfeld.copy(cardOwnerId = i), starterbaeckerei.copy(cardOwnerId = i)))) //gives the players their start cards
+    var gameState = this.copy(Players = players)
+    return gameState.copy(cardStacks = List(
       new cardStack(6, weizenfeld.copy()),
       new cardStack(6, bauernhof.copy()),
       new cardStack(6, baeckerei.copy()),
@@ -130,9 +134,8 @@ case class Gamestate (val curentTurn : Int = 0,
     println("Player " + (this.CurrentTurnPlayerId + 1) + "'s Turn")
     Players.foreach(_.printAllCards())
     println("")
-    val random = new Random()
-    val dicethrowA = random.nextInt(6) + 1
-    val dicethrowB = random.nextInt(6) + 1
+    val dicethrowA = getNextRandomNumber()
+    val dicethrowB = getNextRandomNumber()
     if(Players.find(_.playerId == CurrentTurnPlayerId).exists(_.canChooseDyeAmount())){
       val diceAmount = getDiceAmount()
       if(diceAmount == 2){
@@ -174,9 +177,8 @@ case class Gamestate (val curentTurn : Int = 0,
 
   def checkingResult(): Gamestate = {
     if (Players.find(_.playerId == CurrentTurnPlayerId).exists(_.canRejectDyeTrow())&&askForRejection()) {
-      val random = new Random()
-      val dicethrowA = random.nextInt(6) + 1
-      val dicethrowB = random.nextInt(6) + 1
+      val dicethrowA = getNextRandomNumber()
+      val dicethrowB = getNextRandomNumber()
       if(this.diceChoosen == 2) {
         println("you threw a:" + (dicethrowA + dicethrowB))
         if (dicethrowA == dicethrowB && Players.find(_.playerId == CurrentTurnPlayerId).exists(_.canGetAnotherTurn())) { //Pasch und die Karte die einem einem Weiter Zug gibt
