@@ -1,13 +1,17 @@
 package de.htwg.se.machikoro.remake
 import scala.util.Random
 
-class RandomnessManager (val Dicethrows : Int = -1){
-    def getNextNum(): Int ={
-      val random = new Random()
-      if(Dicethrows == -1){
-        return (random.nextInt(6) + 1)
-      } else {
-        return Dicethrows;
-      }
+case class RandomnessManager(numbers: List[Int] = Nil, index: Int = 0) {
+
+  def getNextNum: (Int, RandomnessManager) = {
+    if (numbers.isEmpty) {
+      val value = Random.nextInt(6) + 1
+      (value, this)
+    } else {
+      val value = numbers(index)
+      val nextIndex = (index + 1) % numbers.length
+      (value, copy(index = nextIndex))
     }
+  }
+}
 }

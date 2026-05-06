@@ -1,4 +1,4 @@
-import de.htwg.se.machikoro.remake.{Gamestate, Player, Type, debugInputManager}
+import de.htwg.se.machikoro.remake.{Gamestate, InputManager, Player, RandomnessManager, Type, debugInputManager}
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import de.htwg.se.machikoro.remake.allCardsBaseGame.*
@@ -100,10 +100,8 @@ class GamestateTest extends AnyWordSpec with Matchers {
 
       "work for single dice without extra turn" in {
         val gameState0 = new Gamestate().initializeStandartGame(4)
-
-        randomNumberManager.writeIntoSimulatedRandomness(1)
-
-        val gameState1 = gameState0.choseDiceamount()
+        
+        val gameState1 = gameState0.copy(rndManager = new RandomnessManager(1)).choseDiceamount()
 
         gameState1.DiceResult should be(1)
         gameState1.diceChoosen should be(1)
