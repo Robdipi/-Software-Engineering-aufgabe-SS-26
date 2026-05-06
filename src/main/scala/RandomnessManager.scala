@@ -10,8 +10,8 @@ case class RandomnessManager(numbers: List[Int] = Nil, index: Int = 0) {
     } else {
       val value = numbers(index)
       val nextIndex = (index + 1) % numbers.length
-      (value, copy(index = nextIndex))
+      (value, this.copy(index = nextIndex))
     }
   }
 }
-}
+

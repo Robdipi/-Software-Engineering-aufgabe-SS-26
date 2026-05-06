@@ -1,4 +1,4 @@
-import de.htwg.se.machikoro.remake.{Gamestate, InputManager, Player, RandomnessManager, Type, debugInputManager}
+import de.htwg.se.machikoro.remake.{Gamestate, InputManager, Player, RandomnessManager, Type}
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import de.htwg.se.machikoro.remake.allCardsBaseGame.*
@@ -101,7 +101,7 @@ class GamestateTest extends AnyWordSpec with Matchers {
       "work for single dice without extra turn" in {
         val gameState0 = new Gamestate().initializeStandartGame(4)
         
-        val gameState1 = gameState0.copy(rndManager = new RandomnessManager(1)).choseDiceamount()
+        val gameState1 = gameState0.copy(rndManager = new RandomnessManager(numbers = List(1))).choseDiceamount()
 
         gameState1.DiceResult should be(1)
         gameState1.diceChoosen should be(1)
@@ -114,12 +114,10 @@ class GamestateTest extends AnyWordSpec with Matchers {
         val gameState0 = new Gamestate().initializeStandartGame(4)
 
         val gameState1 = gameState0.iterateTurn().giveCard(1, bahnhof)
+          .copy(rndManager = new RandomnessManager(numbers = List(3,5)),inputManager =  new InputManager(inputs = List("dfghjklölkjhgfdfghjk","2")))//bad input  and real one 2 
+        
 
-        debugInputManager.writeIntoSimulatedChat("dfghjklölkjhgfdfghjk") // bad input
-        debugInputManager.writeIntoSimulatedChat("2")
-
-        randomNumberManager.writeIntoSimulatedRandomness(3)
-        randomNumberManager.writeIntoSimulatedRandomness(5)
+       
 
         val gameState2 = gameState1.choseDiceamount()
 
@@ -133,10 +131,8 @@ class GamestateTest extends AnyWordSpec with Matchers {
       "work for single dice after choosing explicitly" in {
         val gameState0 = new Gamestate().initializeStandartGame(4)
 
-        val gameState1 = gameState0.iterateTurn().giveCard(2, bahnhof)
-
-        debugInputManager.writeIntoSimulatedChat("1")
-        randomNumberManager.writeIntoSimulatedRandomness(3)
+        val gameState1 = gameState0.iterateTurn().giveCard(2, bahnhof).copy(rndManager = new RandomnessManager(numbers = List(1,3)))
+        
 
         val gameState2 = gameState1.choseDiceamount()
 
@@ -154,11 +150,9 @@ class GamestateTest extends AnyWordSpec with Matchers {
           .iterateTurn()
           .giveCard(1, bahnhof)
           .giveCard(1, freizeitpark)
+          .copy(rndManager = new RandomnessManager(numbers = List(3,5)), inputManager = new InputManager(inputs = List("2")))
 
-        debugInputManager.writeIntoSimulatedChat("2")
-
-        randomNumberManager.writeIntoSimulatedRandomness(3)
-        randomNumberManager.writeIntoSimulatedRandomness(3)
+        
 
         val gameState2 = gameState1.choseDiceamount()
 

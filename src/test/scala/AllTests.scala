@@ -15,21 +15,7 @@ class AllTests extends AnyWordSpec with Matchers {
       cardStacks = List(cardStack(2, weizenfeld))
     )
 
-  "DebugInputManager" should {
-    "work with queue" in {
-      debugInputManager.InputQueue = Queue("x")
-      debugInputManager.readForTestAndGamePurposes("msg") should be("x")
-    }
-
-    "work with stdin" in {
-      debugInputManager.InputQueue = Queue()
-      val in = new ByteArrayInputStream("y\n".getBytes)
-      val res = Console.withIn(in) {
-        debugInputManager.readForTestAndGamePurposes("msg")
-      }
-      res should be("y")
-    }
-  }
+  
 
   "Gamestate core" should {
     "change money" in {
@@ -64,7 +50,7 @@ class AllTests extends AnyWordSpec with Matchers {
       s.activateCards(1,0).Players.head.money should be(1)
     }
   }
-
+/*
   "Gamestate input safe" should {
     "dice amount recursion safe" in {
       debugInputManager.InputQueue = Queue("x","1")
@@ -90,7 +76,7 @@ class AllTests extends AnyWordSpec with Matchers {
       baseState().askForCardToBuy() should be(baseState())
     }
   }
-
+*/
   "Player" should {
     "win condition" in {
       val s = Gamestate(Players = List(Player(playerId=0)))

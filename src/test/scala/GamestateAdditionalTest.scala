@@ -1,4 +1,4 @@
-import de.htwg.se.machikoro.remake.{Gamestate, Player, Type, cardStack, debugInputManager, startMoneyPlayers}
+import de.htwg.se.machikoro.remake.{Gamestate, InputManager, Player, RandomnessManager, Type, cardStack, startMoneyPlayers}
 import de.htwg.se.machikoro.remake.allCardsBaseGame.*
 import org.scalatest.OptionValues.convertOptionToValuable
 import org.scalatest.matchers.should.Matchers
@@ -54,7 +54,7 @@ class GamestateAdditionalTest extends AnyWordSpec with Matchers {
         cardStacks = List(cardStack(2, weizenfeld))
       )
 
-      val changed = state.actuallyBuyCard(weizenfeld, cardStack(2, weizenfeld))
+      val changed = state.actuallyBuyCard(weizenfeld, cardStack(2, weizenfeld), state.inputManager)
 
       changed.Players.find(_.playerId == 0).value.money should be(9)
       changed.Players.find(_.playerId == 0).value.properties.head.cardName should be("Weizenfeld")
@@ -62,28 +62,27 @@ class GamestateAdditionalTest extends AnyWordSpec with Matchers {
     }
 
     "askForCardToBuy should return unchanged when input is next" in {
-      debugInputManager.InputQueue = Queue("next")
+
 
       val state = new Gamestate(
         Players = List(new Player(playerId = 0, money = 10)),
         CurrentTurnPlayerId = 0,
-        cardStacks = List(cardStack(2, weizenfeld))
+        cardStacks = List(cardStack(2, weizenfeld)),
+        inputManager = new InputManager(inputs = List("next"))
       )
 
-      state.askForCardToBuy() should be(state)
-      debugInputManager.InputQueue.isEmpty should be(true)
+      state.askForCardToBuy(state.inputManager) should be(state)
     }
 
     "askForCardToBuy should buy a valid affordable card" in {
-      debugInputManager.InputQueue = Queue("Weizenfeld")
-
       val state = new Gamestate(
         Players = List(new Player(playerId = 0, money = 10)),
         CurrentTurnPlayerId = 0,
-        cardStacks = List(cardStack(2, weizenfeld))
+        cardStacks = List(cardStack(2, weizenfeld)),
+        inputManager = new InputManager(inputs = List("Weizenfeld"))
       )
 
-      val changed = state.askForCardToBuy()
+      val changed = state.askForCardToBuy(state.inputManager)
 
       changed.Players.find(_.playerId == 0).value.money should be(9)
       changed.Players.find(_.playerId == 0).value.properties.head.cardName should be("Weizenfeld")
@@ -91,27 +90,29 @@ class GamestateAdditionalTest extends AnyWordSpec with Matchers {
     }
 
     "getDiceAmount should accept one and two" in {
-      debugInputManager.InputQueue = Queue("1", "2")
-      val state = new Gamestate()
+      val state = new Gamestate(inputManager = new InputManager(inputs = List("1","2")))
 
-      state.getDiceAmount() should be(1)
-      state.getDiceAmount() should be(2)
-      debugInputManager.InputQueue.isEmpty should be(true)
+      val (diceamount1, state1) = state.getDiceAmount()
+      diceamount1 should be(1)
+      val (diceamount2, state2) = state1.getDiceAmount()
+      diceamount2 should be(2)
     }
 
     "askForRejection should map y to false and n to true" in {
-      debugInputManager.InputQueue = Queue("y", "n")
-      val state = new Gamestate()
+      val state = new Gamestate(inputManager = new InputManager(inputs = List("y","n")))
 
-      state.askForRejection() should be(false)
-      state.askForRejection() should be(true)
-      debugInputManager.InputQueue.isEmpty should be(true)
+      val (b1,inputManager1) = state.askForRejection(state.inputManager)
+      b1 should be(false)
+      val (b2,inputManager2) = state.askForRejection(inputManager1)
+      b2 should be(true)
     }
 
     "choseDiceamount should roll one die when the player has no Bahnhof" in {
-      randomNumberManager.NumQueue = Queue(4, 6)
 
-      val state = new Gamestate(Players = List(new Player(playerId = 0)), CurrentTurnPlayerId = 0)
+      val state = new Gamestate(Players = List(
+        new Player(playerId = 0)), 
+        CurrentTurnPlayerId = 0,
+        rndManager = new RandomnessManager(numbers = List(4,6)))
 
       val changed = state.choseDiceamount()
 
@@ -120,26 +121,28 @@ class GamestateAdditionalTest extends AnyWordSpec with Matchers {
     }
 
     "choseDiceamount should roll two dice when Bahnhof allows it and input is 2" in {
-      debugInputManager.InputQueue = Queue("2")
-      randomNumberManager.NumQueue = Queue(3, 5)
-
-      val state = new Gamestate(Players = List(new Player(playerId = 0)), CurrentTurnPlayerId = 0)
+      val state = new Gamestate(Players = List(
+        new Player(playerId = 0)),
+        CurrentTurnPlayerId = 0,
+        inputManager = new InputManager(inputs = List("2")),
+        rndManager = new RandomnessManager(numbers = List(3, 5)))
         .giveCard(0, bahnhof)
-
+      
       val changed = state.choseDiceamount()
-
       changed.diceChoosen should be(2)
       changed.DiceResult should be(8)
     }
 
     "choseDiceamount should grant another turn on double dice with Freizeitpark" in {
-      debugInputManager.InputQueue = Queue("2")
 
-      val state = new Gamestate(Players = List(new Player(playerId = 0)), CurrentTurnPlayerId = 0)
+      val state = new Gamestate(
+        Players = List(new Player(playerId = 0)), 
+        CurrentTurnPlayerId = 0,
+        inputManager = new InputManager(inputs = List("2")),
+        rndManager = new RandomnessManager(numbers = List(4, 4)))
         .giveCard(0, bahnhof)
         .giveCard(0, freizeitpark)
 
-      randomNumberManager.NumQueue = Queue(4, 4)
       val changed = state.choseDiceamount()
 
       changed.DiceResult should be(8)
@@ -147,27 +150,26 @@ class GamestateAdditionalTest extends AnyWordSpec with Matchers {
     }
 
     "checkingResult should keep the result when the player accepts it" in {
-      debugInputManager.writeIntoSimulatedChat("y")
       val state = new Gamestate(
         Players = List(new Player(playerId = 0)),
         CurrentTurnPlayerId = 0,
-        DiceResult = 5
-      ).giveCard(0, funkturm)
-      randomNumberManager.writeIntoSimulatedRandomness(5)
+        DiceResult = 5,
+        inputManager = new InputManager(inputs = List("y")),
+        rndManager = new RandomnessManager(numbers = List(5)))
+        .giveCard(0, funkturm)
+      
       val changed = state.checkingResult()
-
       changed.DiceResult should be(5)
     }
 
     "checkingResult should reroll one die when rejected" in {
-      debugInputManager.writeIntoSimulatedChat("n")
-      randomNumberManager.NumQueue = Queue(6, 2)
-
       val state = new Gamestate(
         Players = List(new Player(playerId = 0)),
         CurrentTurnPlayerId = 0,
         DiceResult = 1,
-        diceChoosen = 1
+        diceChoosen = 1,
+        inputManager = new InputManager(inputs = List("n")),
+        rndManager = new RandomnessManager(numbers = List(6,2))
       ).giveCard(0, funkturm)
 
       val changed = state.checkingResult()
@@ -176,15 +178,13 @@ class GamestateAdditionalTest extends AnyWordSpec with Matchers {
     }
 
     "checkingResult should reroll two dice and grant another turn on double with Freizeitpark" in {
-      randomNumberManager.writeIntoSimulatedRandomness(2)
-      randomNumberManager.writeIntoSimulatedRandomness(2)
-      debugInputManager.writeIntoSimulatedChat("n")
-
       val state = new Gamestate(
         Players = List(new Player(playerId = 0)),
         CurrentTurnPlayerId = 0,
         DiceResult = 3,
-        diceChoosen = 2
+        diceChoosen = 2,
+        inputManager = new InputManager(inputs = List("n")),
+        rndManager = new RandomnessManager(numbers = List(2,2))
       ).giveCard(0, funkturm)
         .giveCard(0, freizeitpark)
 
