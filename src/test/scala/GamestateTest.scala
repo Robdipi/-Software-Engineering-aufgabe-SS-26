@@ -1,4 +1,4 @@
-import de.htwg.se.machikoro.remake.{Gamestate, Player, Type, debugInputManager, randomNumberManager}
+import de.htwg.se.machikoro.remake.{Gamestate, Player, Type, debugInputManager}
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import de.htwg.se.machikoro.remake.allCardsBaseGame.*

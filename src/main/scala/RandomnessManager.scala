@@ -1,5 +1,4 @@
-import de.htwg.se.machikoro.remake.randomNumberManager.random
-
+package de.htwg.se.machikoro.remake
 import scala.util.Random
 
 class RandomnessManager (val Dicethrows : Int = -1){

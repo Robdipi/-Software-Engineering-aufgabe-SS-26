@@ -2,8 +2,6 @@ package de.htwg.se.machikoro.remake
 
 import de.htwg.se.machikoro.remake.Color.*
 import de.htwg.se.machikoro.remake.allCardsBaseGame.*
-import debugInputManager.readForTestAndGamePurposes
-import randomNumberManager.getNextRandomNumber
 
 import javax.smartcardio.Card
 import scala.io.StdIn.readLine
@@ -18,7 +16,10 @@ case class Gamestate (val curentTurn : Int = 0,
                  val CurrentTurnPlayerId: Int = 0,
                  val DiceResult: Int = -1,
                       val diceChoosen: Int = 1,
-                      val cardStacks : List[cardStack] = List()) {
+                      val cardStacks : List[cardStack] = List(),
+                      val rndManager : RandomnessManager = new RandomnessManager(),
+                      val inputManager : InputManager = new InputManager()) 
+{
   
   def initializeStandartGame(playerAmount:Int): Gamestate = {
     val players = (0 until playerAmount).toList.map(i => Player(money = startMoneyPlayers, playerId = i, properties = List(starterweizenfeld.copy(cardOwnerId = i), starterbaeckerei.copy(cardOwnerId = i)))) //gives the players their start cards
@@ -138,8 +139,8 @@ case class Gamestate (val curentTurn : Int = 0,
     println("Player " + (this.CurrentTurnPlayerId + 1) + "'s Turn")
     Players.foreach(_.printAllCards())
     println("")
-    val dicethrowA = getNextRandomNumber()
-    val dicethrowB = getNextRandomNumber()
+    val dicethrowA = rndManager.getNextNum()
+    val dicethrowB = rndManager.getNextNum()
     if(Players.find(_.playerId == CurrentTurnPlayerId).exists(_.canChooseDyeAmount())){
       val diceAmount = getDiceAmount()
       if(diceAmount == 2){
@@ -168,7 +169,7 @@ case class Gamestate (val curentTurn : Int = 0,
   }
   def getDiceAmount(): Int = {
 
-    val input = readForTestAndGamePurposes("How many Dice do you want to use?(1/2)")
+    val input = inputManager.getNextInput("How many Dice do you want to use?(1/2)")
     if(input.equals("1")){
       return 1
     }else if(input.equals("2")){
@@ -181,8 +182,8 @@ case class Gamestate (val curentTurn : Int = 0,
 
   def checkingResult(): Gamestate = {
     if (Players.find(_.playerId == CurrentTurnPlayerId).exists(_.canRejectDyeTrow()) && askForRejection()) {
-      val dicethrowA = getNextRandomNumber()
-      val dicethrowB = getNextRandomNumber()
+      val dicethrowA = rndManager.getNextNum()
+      val dicethrowB = rndManager.getNextNum()
       if(this.diceChoosen == 2) {
         println("you threw a:" + (dicethrowA + dicethrowB))
         if (dicethrowA == dicethrowB && Players.find(_.playerId == CurrentTurnPlayerId).exists(_.canGetAnotherTurn())) { //Pasch und die Karte die einem einem Weiter Zug gibt
@@ -207,7 +208,7 @@ case class Gamestate (val curentTurn : Int = 0,
   }
 
   def askForRejection(): Boolean = {
-    val input = readForTestAndGamePurposes(" are you happy with the number you got?(y/n) ")
+    val input = inputManager.getNextInput(" are you happy with the number you got?(y/n) ")
     if (input.equals("y")) {
       return false
     } else if (input.equals("n")) {
@@ -238,7 +239,7 @@ case class Gamestate (val curentTurn : Int = 0,
   }
 
   def askForCardToBuy(): Gamestate = {
-    val input = readForTestAndGamePurposes("Type the name of a card to buy it or type 'next' to buy nothing")
+    val input = inputManager.getNextInput("Type the name of a card to buy it or type 'next' to buy nothing")
     if (input.equals("next")) {
       return this
     } else if (cardStacks.find(_.stackCard.cardName.equals(input)).isDefined) {
