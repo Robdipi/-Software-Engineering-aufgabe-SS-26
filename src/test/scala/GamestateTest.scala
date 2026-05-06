@@ -64,24 +64,16 @@ class GamestateTest extends AnyWordSpec with Matchers {
       end.Players.find(_.playerId == 2).value.money should be(-1)
     }
     "have a working Method activateCards" in {
-      var state = new Gamestate(Players = List(new Player(playerId = 0), new Player(playerId = 1),new Player(playerId = 2)))
+      val state = new Gamestate(Players = List(new Player(playerId = 0), new Player(playerId = 1),new Player(playerId = 2)))
       state.Players.find(_.playerId == 1).value.money should be(0)
       state.Players.find(_.playerId == 0).value.money should be(0)
       state.Players.find(_.playerId == 2).value.money should be(0)
-      state = state.giveCard(0, bauernhof)
-      state = state.giveCard(0, baeckerei)
+      val state2 = state.giveCard(0, bauernhof).giveCard(0, baeckerei).giveCard(1, bauernhof).giveCard(1, baeckerei)
+        .giveCard(2, bauernhof).giveCard(2, baeckerei).activateCards(2,0)
 
-      state = state.giveCard(1, bauernhof)
-      state = state.giveCard(1, baeckerei)
-
-      state = state.giveCard(2, bauernhof)
-      state = state.giveCard(2, baeckerei)
-
-      state = state.activateCards(2,0)
-
-      state.Players.find(_.playerId == 0).value.money should be(2)
-      state.Players.find(_.playerId == 1).value.money should be(1)
-      state.Players.find(_.playerId == 2).value.money should be(1)
+      state2.Players.find(_.playerId == 0).value.money should be(2)
+      state2.Players.find(_.playerId == 1).value.money should be(1)
+      state2.Players.find(_.playerId == 2).value.money should be(1)
     }
     "have a working Method iterateTurn" in {
       val state0 = new Gamestate(
