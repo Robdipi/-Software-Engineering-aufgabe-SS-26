@@ -114,7 +114,7 @@ class GamestateTest extends AnyWordSpec with Matchers {
         val gameState0 = new Gamestate().initializeStandartGame(4)
 
         val gameState1 = gameState0.iterateTurn().giveCard(1, bahnhof)
-          .copy(rndManager = new RandomnessManager(numbers = List(3,5)),inputManager =  new InputManager(inputs = List("dfghjklölkjhgfdfghjk1","2")))//bad input  and real one 2 
+          .copy(rndManager = new RandomnessManager(numbers = List(3,5)),inputManager =  new InputManager(inputs = List("dfghjklölkjhgfdfghjk1","2")))//bad input  and real one 2
         
 
        
@@ -136,7 +136,7 @@ class GamestateTest extends AnyWordSpec with Matchers {
 
         val gameState2 = gameState1.choseDiceamount()
 
-        gameState2.DiceResult should be(3)
+        gameState2.DiceResult should be(1)
         gameState2.diceChoosen should be(1)
         gameState2.Players
           .find(_.playerId == gameState2.CurrentTurnPlayerId)

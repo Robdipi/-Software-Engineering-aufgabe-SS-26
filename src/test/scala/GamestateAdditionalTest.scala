@@ -92,9 +92,9 @@ class GamestateAdditionalTest extends AnyWordSpec with Matchers {
     "getDiceAmount should accept one and two" in {
       val state = new Gamestate(inputManager = new InputManager(inputs = List("1","2")))
 
-      val (diceamount1, state1) = state.getDiceAmount()
+      val (diceamount1, state1) = state.getDiceAmount(state.inputManager)
       diceamount1 should be(1)
-      val (diceamount2, state2) = state1.getDiceAmount()
+      val (diceamount2, state2) = state1.getDiceAmount(state1.inputManager)
       diceamount2 should be(2)
     }
 

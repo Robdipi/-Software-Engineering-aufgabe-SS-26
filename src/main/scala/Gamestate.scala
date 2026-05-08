@@ -149,7 +149,7 @@ case class Gamestate (val curentTurn : Int = 0,
     val gamestate2 = gamestate1.copy(rndManager = rndManager2)
 
     if(Players.find(_.playerId == CurrentTurnPlayerId).exists(_.canChooseDyeAmount())){
-      val (diceAmount, inputManagerState) = getDiceAmount()
+      val (diceAmount, inputManagerState) = getDiceAmount(this.inputManager)
       if(diceAmount == 2){
         if(dicethrowA == dicethrowB && Players.find(_.playerId == CurrentTurnPlayerId).exists(_.canGetAnotherTurn())){ //Pasch und die Karte die einem einem Weiter Zug gibt
           val updatedPlayers = Players.map { currentplayer =>
@@ -174,16 +174,16 @@ case class Gamestate (val curentTurn : Int = 0,
       return gamestate2.copy(diceChoosen = 1, DiceResult = dicethrowA)
     }
   }
-  def getDiceAmount(): (Int, Gamestate) = {
+  def getDiceAmount(inputManager1: InputManager): (Int, Gamestate) = {
 
-    val (input, inputManager2) = inputManager.getNextInput("How many Dice do you want to use?(1/2)")
+    val (input, inputManager2) = inputManager1.getNextInput("How many Dice do you want to use?(1/2)")
     if(input.equals("1")){
       return (1, this.copy(inputManager = inputManager2))
     }else if(input.equals("2")){
       return (2, this.copy(inputManager = inputManager2))
     }else{
       println("BadInput! " + input)
-      return getDiceAmount()
+      return getDiceAmount(inputManager2)
     }
   }
 
