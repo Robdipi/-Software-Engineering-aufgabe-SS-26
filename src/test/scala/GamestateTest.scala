@@ -131,7 +131,7 @@ class GamestateTest extends AnyWordSpec with Matchers {
       "work for single dice after choosing explicitly" in {
         val gameState0 = new Gamestate().initializeStandartGame(4)
 
-        val gameState1 = gameState0.iterateTurn().giveCard(2, bahnhof).copy(rndManager = new RandomnessManager(numbers = List(1,3)))
+        val gameState1 = gameState0.iterateTurn().giveCard(2, bahnhof).copy(rndManager = new RandomnessManager(numbers = List(1,3)),inputManager =  new InputManager(inputs = List("dfghjklölkjhgfdfghjk1","1")))
         
 
         val gameState2 = gameState1.choseDiceamount()

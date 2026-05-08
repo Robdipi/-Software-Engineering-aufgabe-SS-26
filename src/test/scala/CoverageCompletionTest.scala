@@ -174,7 +174,7 @@ class CoverageCompletionTest extends AnyWordSpec with Matchers {
       value should be <= 6
       nextManager should be(new RandomnessManager())
     }
-/*
+    /*
     "finish the game loop immediately when the current player already has all landmarks" in silence {
       val state = new Gamestate(
         Players = List(new Player(playerId = 0, money = 100)),
@@ -189,7 +189,7 @@ class CoverageCompletionTest extends AnyWordSpec with Matchers {
 
       main.gameloop(state)
     }
-*/
+
     "cover main by playing until player one buys all landmarks" in silence {
       val scriptedInput = List(
         "Bahnhof",
@@ -205,5 +205,7 @@ class CoverageCompletionTest extends AnyWordSpec with Matchers {
         main.main(Array.empty)
       }
     }
+  }*/
+
   }
 }
