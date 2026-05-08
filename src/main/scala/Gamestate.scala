@@ -182,7 +182,7 @@ case class Gamestate (val curentTurn : Int = 0,
     }else if(input.equals("2")){
       return (2, this.copy(inputManager = inputManager2))
     }else{
-      print("BadInput!")
+      println("BadInput! " + input)
       return getDiceAmount()
     }
   }
@@ -259,7 +259,7 @@ case class Gamestate (val curentTurn : Int = 0,
   def askForCardToBuy(inputManager: InputManager): Gamestate = {
     val (input,inputManager2) = inputManager.getNextInput("Type the name of a card to buy it or type 'next' to buy nothing")
     if (input.equals("next")) {
-      return this
+      return this.copy(inputManager = inputManager2)
     } else if (cardStacks.find(_.stackCard.cardName.equals(input)).isDefined) {
 
       val currentPlayer = Players.find(_.playerId == CurrentTurnPlayerId).get
@@ -282,7 +282,7 @@ case class Gamestate (val curentTurn : Int = 0,
         return askForCardToBuy(inputManager2)
       }
     } else {
-      print("BadInput!")
+      println("BadInput! " + input)
       return askForCardToBuy(inputManager2)
     }
   }
