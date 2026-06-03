@@ -1,7 +1,8 @@
-import de.htwg.se.machikoro.remake.{Gamestate, InputManager, Player, RandomnessManager, cardStack}
-import de.htwg.se.machikoro.remake.allCardsBaseGame.*
+import Controller.{InputManager, RandomnessManager, main}
+import Model.Player
+import de.htwg.se.machikoro.remake.{Gamestate, cardStack}
+import Model.allCardsBaseGame.*
 import de.htwg.se.machikoro.remake.Color
-import de.htwg.se.machikoro.remake.main
 import org.scalatest.OptionValues.convertOptionToValuable
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec

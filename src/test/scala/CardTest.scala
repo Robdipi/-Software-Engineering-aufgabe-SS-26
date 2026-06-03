@@ -1,6 +1,7 @@
+import Model.Player
 import de.htwg.se.machikoro.remake.Type.Restaurants
-import de.htwg.se.machikoro.remake.{Gamestate, Player, card}
-import de.htwg.se.machikoro.remake.allCardsBaseGame.*
+import de.htwg.se.machikoro.remake.{Gamestate, card}
+import Model.allCardsBaseGame.*
 import org.scalatest.OptionValues.convertOptionToValuable
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatest.matchers.should.Matchers

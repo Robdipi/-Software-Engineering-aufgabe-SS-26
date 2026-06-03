@@ -1,5 +1,6 @@
-import de.htwg.se.machikoro.remake.{Gamestate, Player}
-import de.htwg.se.machikoro.remake.allCardsBaseGame.*
+import Model.Player
+import de.htwg.se.machikoro.remake.Gamestate
+import Model.allCardsBaseGame.*
 import org.scalatest.OptionValues.convertOptionToValuable
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec

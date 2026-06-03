@@ -1,5 +1,5 @@
-package de.htwg.se.machikoro.remake;
-import de.htwg.se.machikoro.remake.*
+package de.htwg.se.machikoro.remake.controller
+import de.htwg.se.machikoro.remake.model.Gamestate
 
 import scala.io.StdIn.readLine
 object main {

@@ -1,4 +1,5 @@
-package de.htwg.se.machikoro.remake
+package de.htwg.se.machikoro.remake.controller
+
 import scala.util.Random
 
 case class RandomnessManager(numbers: List[Int] = Nil, index: Int = 0) {

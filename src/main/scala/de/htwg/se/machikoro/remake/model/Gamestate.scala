@@ -1,7 +1,6 @@
-package de.htwg.se.machikoro.remake
+package de.htwg.se.machikoro.remake.model
 
-import de.htwg.se.machikoro.remake.Color.*
-import de.htwg.se.machikoro.remake.allCardsBaseGame.*
+import de.htwg.se.machikoro.remake.controller.*
 
 import javax.smartcardio.Card
 import scala.io.StdIn.readLine

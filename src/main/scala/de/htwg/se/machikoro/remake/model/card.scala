@@ -1,4 +1,5 @@
-package de.htwg.se.machikoro.remake;
+package de.htwg.se.machikoro.remake.model
+import de.htwg.se.machikoro.remake.controller.*
 
 /*
   The Type of Industry the card is corresponding to the symbol in the grey circle. In the original game there is one Type more which is redundant so

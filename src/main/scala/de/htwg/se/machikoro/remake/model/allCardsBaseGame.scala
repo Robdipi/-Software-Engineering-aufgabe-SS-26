@@ -1,6 +1,4 @@
-package de.htwg.se.machikoro.remake
-
-import de.htwg.se.machikoro.remake.Type.{Industry, Restaurants}
+package de.htwg.se.machikoro.remake.model
 
 //cardType:
 //Major_Establishment => Fernsehturn-Symbol

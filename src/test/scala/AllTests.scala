@@ -1,7 +1,8 @@
-import de.htwg.se.machikoro.remake.*
-import de.htwg.se.machikoro.remake.allCardsBaseGame.*
+import Model.Player
+import Model.allCardsBaseGame.*
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatest.matchers.should.Matchers
+
 import scala.collection.immutable.Queue
 import java.io.ByteArrayInputStream
 import scala.Console

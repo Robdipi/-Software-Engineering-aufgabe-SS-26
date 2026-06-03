@@ -1,7 +1,9 @@
-import de.htwg.se.machikoro.remake.{Gamestate, InputManager, Player, RandomnessManager, Type}
+import Controller.{InputManager, RandomnessManager}
+import Model.Player
+import de.htwg.se.machikoro.remake.{Gamestate, Type}
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
-import de.htwg.se.machikoro.remake.allCardsBaseGame.*
+import Model.allCardsBaseGame.*
 import de.htwg.se.machikoro.remake.Gamestate.*
 import de.htwg.se.machikoro.remake.Type.{Restaurants, Store}
 import org.scalatest.OptionValues.convertOptionToValuable

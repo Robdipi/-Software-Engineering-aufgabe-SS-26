@@ -1,7 +1,7 @@
-package de.htwg.se.machikoro.remake
+package de.htwg.se.machikoro.remake.model
 
-import allCardsBaseGame.*
-import de.htwg.se.machikoro.remake.Color.{Blue, Red}
+
+
 
 case class Player (val money: Int = 0,
                    val properties: List[card] = List(), // var because I dont want to have to changeout the player because I want to be able to refferenz a specific player to test

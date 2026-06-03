@@ -1,5 +1,7 @@
-import de.htwg.se.machikoro.remake.{Gamestate, InputManager, Player, RandomnessManager, Type, cardStack, startMoneyPlayers}
-import de.htwg.se.machikoro.remake.allCardsBaseGame.*
+import Controller.{InputManager, RandomnessManager}
+import Model.Player
+import de.htwg.se.machikoro.remake.{Gamestate, Type, cardStack, startMoneyPlayers}
+import Model.allCardsBaseGame.*
 import org.scalatest.OptionValues.convertOptionToValuable
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
