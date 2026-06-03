@@ -1,6 +1,7 @@
 package de.htwg.se.machikoro.remake.model
 
-
+import de.htwg.se.machikoro.remake.model.Color.*
+import de.htwg.se.machikoro.remake.model.allCardsBaseGame.*
 
 
 case class Player (val money: Int = 0,

@@ -1,5 +1,7 @@
 package de.htwg.se.machikoro.remake.model
 
+import de.htwg.se.machikoro.remake.model.Type.*
+
 //cardType:
 //Major_Establishment => Fernsehturn-Symbol
 //Landmark => Fernsehturm-Symbol

@@ -1,4 +1,4 @@
-package de.htwg.se.machikoro.remake.controller
+package de.htwg.se.machikoro.remake.view.Tui
 
 import scala.io.StdIn.readLine
 

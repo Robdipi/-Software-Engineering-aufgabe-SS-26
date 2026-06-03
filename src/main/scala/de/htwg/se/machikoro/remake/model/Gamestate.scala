@@ -1,6 +1,9 @@
 package de.htwg.se.machikoro.remake.model
 
 
+import de.htwg.se.machikoro.remake.model.allCardsBaseGame.*
+import de.htwg.se.machikoro.remake.model.turnState.StartofTurn
+
 import scala.io.StdIn.readLine
 import scala.util.Random
 
@@ -8,12 +11,19 @@ import scala.util.Random
 val startMoneyPlayers = 100
 case class cardStack(val amount : Int,
                      val stackCard : card)
+
+enum turnState {
+  case StartofTurn, ChooseDiceAmount,Result1,AskForRejectionOfResult,Result2,Cardeffects,Buyphase,PlayerWins
+}
+
+
 case class Gamestate (val curentTurn : Int = 0,
-                 val Players: List[Player] = List(),
-                 val CurrentTurnPlayerId: Int = 0,
-                 val DiceResult: Int = -1, 
+                      val Players: List[Player] = List(),
+                      val CurrentTurnPlayerId: Int = 0,
+                      val DiceResult: Int = -1, 
                       val diceChoosen: Int = 1,
-                      val cardStacks : List[cardStack] = List()) 
+                      val cardStacks : List[cardStack] = List(),
+                      val state : turnState = StartofTurn) 
 {
   
   def initializeStandartGame(playerAmount:Int): Gamestate = {
@@ -26,7 +36,7 @@ case class Gamestate (val curentTurn : Int = 0,
       new cardStack(6, cafe.copy()),
       new cardStack(6, minimarkt.copy()),
       new cardStack(6, wald.copy()),
-      new cardStack(4, buerohaus.copy()),
+      new cardStack(0, buerohaus.copy()),
       new cardStack(4, stadion.copy()),
       new cardStack(4, fernsehsender.copy()),
       new cardStack(6, molkerei.copy()),

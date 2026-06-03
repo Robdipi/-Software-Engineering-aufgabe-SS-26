@@ -1,56 +1,37 @@
 package de.htwg.se.machikoro.remake.controller
 
-import de.htwg.se.machikoro.remake.view.*
 import de.htwg.se.machikoro.remake.model.*
+import de.htwg.se.machikoro.remake.model.turnState.{ChooseDiceAmount, Result1}
+import de.htwg.se.machikoro.remake.view.Tui.TUI
 
 import scala.io.StdIn.readLine
-object main extends viewObserverable{
-  /*
-      ,
-                      val rndManager : RandomnessManager = new RandomnessManager(),
-                      val inputManager : InputManager = new InputManager()
+object controllerMain extends viewObserverable(){
 
-   */
+
+  var randomnessManager = new RandomnessManager() // I have no Idea how to do It other than with var
+
+  def gameloop(gamestate: Gamestate): Unit = {
+    val gamestate1 = startphase(gamestate)
+    notifiyObservers(gamestate1)
+
+  }
   
   
-  val currentView = Tui; 
-  def main(args: Array[String]): Unit = {
-    val gameState = new Gamestate().initializeStandartGame(2)
-    gameloop(gameState)
-  }
-  def gameloop(gameState : Gamestate): Unit = {
-    val gameState1 = gameState.choseDiceamount().checkingResult()
-    val gameState2 = gameState1.activateCards(gameState1.DiceResult,gameState1.CurrentTurnPlayerId)
-      .BuyPhase()
-      if(gameState2.currentPlayerHasWon()){
-        println("---------------------------------------------------------")
-        println("Player " + (gameState2.CurrentTurnPlayerId + 1) + " has Won!")
-        println("---------------------------------------------------------")
-      }else{
-        gameloop(gameState2.iterateTurn())
-      }
-  }
-
-
-
-
-  def startphase(state : Gamestate):Gamestate = {
+  def startphase(gamestate : Gamestate):Gamestate = {
     //update visuals for current player
-    
-    if(state.Players.find(_.playerId == CurrentTurnPlayerId).exists(_.canChooseDyeAmount()){
-      
-      return state.copy(diceChoosen = currentView.getDiceAmount())//result from view
+    if(gamestate.Players.find(_.playerId == gamestate.CurrentTurnPlayerId).exists(_.canChooseDyeAmount())){
+      val gamestate2 = gamestate.copy(state = ChooseDiceAmount)
+      notifiyObservers(gamestate2)
+      return gamestate.copy(diceChoosen = 2)///value
     }else{
-      return state.copy(diceChoosen = 1)
+      return gamestate.copy(diceChoosen = 1, state = Result1)
+      
     }
   }
 
 /*
   def choseDiceamount(): Gamestate = {
-    println("---------------------------------------------------------")
-    println("Player " + (this.CurrentTurnPlayerId + 1) + "'s Turn")
-    Players.foreach(_.printAllCards())
-    println("")
+   
 
     val gamestate0 = this
 
