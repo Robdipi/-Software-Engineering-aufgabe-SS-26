@@ -25,7 +25,6 @@ object controllerMain extends viewObserverable(){
       return gamestate.copy(diceChoosen = 2)///value
     }else{
       return gamestate.copy(diceChoosen = 1, state = Result1)
-      
     }
   }
 
