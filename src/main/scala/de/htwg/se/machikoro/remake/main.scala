@@ -6,7 +6,7 @@ import de.htwg.se.machikoro.remake.view.Tui.TUI
 
 object main {
   def main(args: Array[String]): Unit = {
-    controllerMain.add(new TUI)
+    Controller.add(new TUI)
     val gameState = new Gamestate().initializeStandartGame(2)
     controllerMain.gameloop(gameState)
   }
