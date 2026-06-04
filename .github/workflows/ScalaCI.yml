@@ -2,34 +2,43 @@ name: Scala CI
 
 on:
   push:
-    branches: [master]
+    branches:
+      - master
   pull_request:
-    branches: [master]
+    branches:
+      - master
 
 jobs:
   test:
     runs-on: ubuntu-latest
 
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: '17'
+          cache: sbt
 
-      - name: Cache SBT Dependencies
+      - name: Cache Coursier Dependencies
         uses: actions/cache@v4
         with:
           path: |
             ~/.ivy2/cache
             ~/.sbt
             ~/.coursier/cache
-          key: ${{ runner.os }}-sbt-${{ hashFiles('**/*.sbt') }}
+          key: ${{ runner.os }}-scala-${{ hashFiles('**/*.sbt', '**/project/build.properties', '**/project/plugins.sbt') }}
           restore-keys: |
-            ${{ runner.os }}-sbt-
+            ${{ runner.os }}-scala-
+
+      - name: Check sbt Version
+        run: sbt --version
 
       - name: Compile
         run: sbt compile
