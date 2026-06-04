@@ -7,19 +7,25 @@ import de.htwg.se.machikoro.remake.model.*
 class TUI extends viewObserver {
 
   def update(gamestate: Gamestate): Unit = {
-    draw(gamestate)
+    handleVisuals(gamestate)
     handleInput(gamestate)
   }
 
-  def draw(gamestate: Gamestate): Unit = {
-    //yooo have to do that
-  }
+  
 //StartofTurn, ChooseDiceAmount,Result1,AskForRejectionOfResult,Result2,Cardeffects,Buyphase,PlayerWins
   def handleVisuals(gamestate: Gamestate): Unit = gamestate.state match {
-    case turnState.StartofTurn => gamestate.Players.find(_.playerId == gamestate.CurrentTurnPlayerId).foreach(p => p.printAllCards())
+    case turnState.StartofTurn =>
+      println("---------------------------------------------------------------------" )
+      println("Player " + (gamestate.CurrentTurnPlayerId +1) + " turn" )
+      gamestate.Players.find(_.playerId == gamestate.CurrentTurnPlayerId).foreach(p => p.printAllCards())//all cards of current player
     case turnState.Result1 => println(gamestate.DiceResult)
     case turnState.Result2 => println(gamestate.DiceResult) 
     case turnState.PlayerWins => println("Player " + (gamestate.CurrentTurnPlayerId +1) + " won!" )
+    case turnState.ALREADY_OWN_THAT_YELLOW_CARD_WARNING => println("You already own this yellow card")
+    case turnState.ALREADY_OWN_PURPLE_CARD_WARNING => println("You already own a purple card")
+    case turnState.NO_CARDS_LEFT_OF_THAT_TYPE_WARNING => println("No cards left of this type")
+    case turnState.YOU_CANT_AFFORD_THIS_WARNING => println("You don't have enought money")
+    case turnState.NONE_EXISTANT_CARDNAME_WARNING => println("Cardname doesn't exist")
     case _ => // do nothing
   }
 
@@ -29,6 +35,16 @@ class TUI extends viewObserver {
       Controller.handleInput(ChooseDiceAmount(dice))
 
     case turnState.Buyphase =>
+      println("")
+      println("These Cards are currently available to buy: ")
+      println("")
+      gamestate.cardStacks.foreach(cardStack => println(s"${cardStack.stackCard.price}€-${cardStack.stackCard.cardName} x${cardStack.amount}"))
+      println("")
+      val money = gamestate.Players.find(_.playerId == gamestate.CurrentTurnPlayerId).map(_.money).getOrElse(0)
+      println(s"You have $money €")
+
+
+      
       val cardName = getCardToBuy()
       Controller.handleInput(BuyCard(cardName))
 

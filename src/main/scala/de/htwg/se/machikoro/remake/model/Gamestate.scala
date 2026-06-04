@@ -13,7 +13,21 @@ case class cardStack(val amount : Int,
                      val stackCard : card)
 
 enum turnState {
-  case StartofTurn, ChooseDiceAmount,Result1,AskForRejectionOfResult,Result2,Cardeffects,Buyphase,PlayerWins
+  case StartofTurn, 
+  ChooseDiceAmount,
+  Result1,
+  AskForRejectionOfResult,
+  Result2,
+  Cardeffects,
+  Buyphase,
+  EndofTurn,
+  PlayerWins,
+  ALREADY_OWN_THAT_YELLOW_CARD_WARNING,
+  ALREADY_OWN_PURPLE_CARD_WARNING,
+  NO_CARDS_LEFT_OF_THAT_TYPE_WARNING,
+  YOU_CANT_AFFORD_THIS_WARNING,
+  NONE_EXISTANT_CARDNAME_WARNING
+  
 }
 
 
@@ -137,6 +151,16 @@ case class Gamestate (val curentTurn : Int = 0,
   
   def currentPlayerHasWon(): Boolean = {
     return Players.find(_.playerId == CurrentTurnPlayerId).exists(_.hasWonTheGame())
+  }
+
+  def removeCardFromStack(cardToRemove: card): Gamestate = {
+    val updatedCardStacks = cardStacks.map { currentStack =>
+      if (currentStack.stackCard.cardName.equals(cardToRemove.cardName)) {
+        currentStack.copy(amount = currentStack.amount - 1)
+      }
+      else currentStack
+    }
+    return copy(cardStacks = updatedCardStacks)
   }
 }
 
