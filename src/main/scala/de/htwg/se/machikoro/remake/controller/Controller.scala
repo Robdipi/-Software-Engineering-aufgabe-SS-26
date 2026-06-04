@@ -14,6 +14,8 @@ case class RejectDiceRoll(reject: Boolean) extends UserInput
 object Controller extends viewObserverable{
   var gamestate = new Gamestate()
   var rndManager = new RandomnessManager()
+  var winCondition: Player => Boolean = _.hasWonTheGameSmallRound()
+  
 
   def handleInput(input: UserInput): Unit = input match {
     case ChooseDiceAmount(amount) =>
@@ -22,7 +24,7 @@ object Controller extends viewObserverable{
     case BuyCard(cardName) =>
       gamestate = processBuyingCard(gamestate, cardName)
       notifiyObservers(gamestate)
-      if(gamestate.Players.find(_.playerId == gamestate.CurrentTurnPlayerId).exists(_.hasWonTheGame())){
+      if(gamestate.Players.find(_.playerId == gamestate.CurrentTurnPlayerId).exists(winCondition)){
         gamestate = gamestate.copy(state = PlayerWins)
         notifiyObservers(gamestate)
       } else {

@@ -17,6 +17,10 @@ case class Player (val money: Int = 0,
     return canChooseDyeAmount() && canGetAnotherTurn() && canRejectDyeTrow() && getExtraMoney()
   }
 
+  def hasWonTheGameSmallRound(): Boolean = {
+    return canChooseDyeAmount() && canRejectDyeTrow()
+  }
+
 
   def activateCards(rollNum: Int,rollerId: Int, state: Gamestate) : Gamestate = {
     var tmpGamestate = state  //changes a lot so var
