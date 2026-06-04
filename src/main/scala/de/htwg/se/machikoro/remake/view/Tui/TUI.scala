@@ -6,6 +6,7 @@ import de.htwg.se.machikoro.remake.model.turnState.{Buyphase, Cardeffects}
 
 
 class TUI extends viewObserver {
+  var inputManager : InputManager = new InputManager()
 
   def update(gamestate: Gamestate): Unit = {
     println(s"UPDATE: ${gamestate.state}")//To debug
@@ -66,15 +67,23 @@ class TUI extends viewObserver {
     }
   }
 
-  private def getCardToBuy(): String =
-    scala.io.StdIn.readLine("Enter card name to buy (or 'next'): ")
+  private def getCardToBuy(): String = {
+    val (input, inputManager2) = inputManager.getNextInput("Enter card name to buy (or 'next'): ")
+    inputManager = inputManager2
+    return input
+  }
 
-  private def askForRejection(): Boolean =
-    scala.io.StdIn.readLine("Reject dice? (y/n): ").toLowerCase match {
+
+
+  private def askForRejection(): Boolean = {
+    val (input, inputManager2) = inputManager.getNextInput("Reject dice? (y/n): ")
+    inputManager = inputManager2
+    input.toLowerCase match {
       case "y" => true
       case "n" => false
       case _ =>
         println("Invalid input")
         askForRejection()
     }
+  }
 }

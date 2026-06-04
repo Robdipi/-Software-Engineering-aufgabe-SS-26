@@ -1,10 +1,10 @@
-import Model.Player
+package Depreciated
+
 import de.htwg.se.machikoro.remake.Gamestate
-import Model.allCardsBaseGame.*
 import org.scalatest.OptionValues.convertOptionToValuable
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
-
+@deprecated
 class PlayerAdditionalTest extends AnyWordSpec with Matchers {
 
   "Player" should {

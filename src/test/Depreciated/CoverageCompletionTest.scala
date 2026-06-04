@@ -1,15 +1,13 @@
-import Controller.{InputManager, RandomnessManager, main}
-import Model.Player
-import de.htwg.se.machikoro.remake.{Gamestate, cardStack}
-import Model.allCardsBaseGame.*
-import de.htwg.se.machikoro.remake.Color
+package Depreciated
+
+import de.htwg.se.machikoro.remake.{Color, Gamestate, cardStack}
 import org.scalatest.OptionValues.convertOptionToValuable
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 
 import java.io.{ByteArrayInputStream, ByteArrayOutputStream}
 import scala.Console
-
+@deprecated
 class CoverageCompletionTest extends AnyWordSpec with Matchers {
 
   private def silence[A](block: => A): A = {

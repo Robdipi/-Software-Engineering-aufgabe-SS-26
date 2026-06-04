@@ -1,11 +1,11 @@
-import Model.Player
+package Depreciated
+
 import de.htwg.se.machikoro.remake.Type.Restaurants
 import de.htwg.se.machikoro.remake.{Gamestate, card}
-import Model.allCardsBaseGame.*
 import org.scalatest.OptionValues.convertOptionToValuable
-import org.scalatest.wordspec.AnyWordSpec
 import org.scalatest.matchers.should.Matchers
-
+import org.scalatest.wordspec.AnyWordSpec
+@deprecated
 class CardTest extends AnyWordSpec with Matchers {
   "cardToString" should {
     "return the expected string" in {

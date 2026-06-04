@@ -1,13 +1,12 @@
-import Controller.{InputManager, RandomnessManager}
-import Model.Player
+package Depreciated
+
 import de.htwg.se.machikoro.remake.{Gamestate, Type, cardStack, startMoneyPlayers}
-import Model.allCardsBaseGame.*
 import org.scalatest.OptionValues.convertOptionToValuable
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 
 import scala.collection.immutable.Queue
-
+@deprecated
 class GamestateAdditionalTest extends AnyWordSpec with Matchers {
 
   "Gamestate" should {

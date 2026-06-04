@@ -1,12 +1,12 @@
-import Model.Player
-import Model.allCardsBaseGame.*
-import org.scalatest.wordspec.AnyWordSpec
-import org.scalatest.matchers.should.Matchers
+package Depreciated
 
-import scala.collection.immutable.Queue
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpec
+
 import java.io.ByteArrayInputStream
 import scala.Console
-
+import scala.collection.immutable.Queue
+@deprecated
 class AllTests extends AnyWordSpec with Matchers {
 
   def baseState(): Gamestate =
