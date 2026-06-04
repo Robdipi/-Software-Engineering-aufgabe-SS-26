@@ -2,57 +2,66 @@ name: Scala CI
 
 on:
   push:
-    branches:
-      - master
+    branches: [master]
   pull_request:
-    branches:
-      - master
+    branches: [master]
 
 jobs:
   test:
     runs-on: ubuntu-latest
-
     env:
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
     steps:
+      # Checkout code
       - name: Checkout Repository
         uses: actions/checkout@v5
 
+      # Setup Java (needed for sbt)
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: '17'
-          cache: sbt
+          java-version: 17
 
-      - name: Cache Coursier Dependencies
+      # Install sbt
+      - name: Install sbt
+        run: |
+          echo "Installing sbt..."
+          curl -L -o sbt.deb https://github.com/sbt/sbt/releases/download/v1.9.3/sbt-1.9.3.deb
+          sudo dpkg -i sbt.deb
+          sbt sbtVersion
+
+      # Cache SBT and Coursier dependencies
+      - name: Cache SBT & Coursier
         uses: actions/cache@v4
         with:
           path: |
             ~/.ivy2/cache
             ~/.sbt
             ~/.coursier/cache
-          key: ${{ runner.os }}-scala-${{ hashFiles('**/*.sbt', '**/project/build.properties', '**/project/plugins.sbt') }}
+          key: ${{ runner.os }}-sbt-${{ hashFiles('**/*.sbt', '**/project/build.properties') }}
           restore-keys: |
-            ${{ runner.os }}-scala-
+            ${{ runner.os }}-sbt-
 
-      - name: Check sbt Version
-        run: sbt --version
-
+      # Compile project
       - name: Compile
         run: sbt compile
 
+      # Run tests
       - name: Run Tests
         run: sbt test
 
-      - name: Generate Coverage Report
+      # Generate coverage report
+      - name: Coverage Report
         run: sbt clean coverage test coverageReport
 
+      # Upload to Coveralls
       - name: Upload Coverage to Coveralls
         env:
           COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
         run: sbt coveralls
 
+      # Run mutation tests
       - name: Run Mutation Tests
         run: sbt stryker4s
