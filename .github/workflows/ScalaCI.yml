@@ -9,59 +9,37 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+
     env:
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
     steps:
-      # Checkout code
       - name: Checkout Repository
         uses: actions/checkout@v5
 
-      # Setup Java (needed for sbt)
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: 17
+          cache: sbt
 
-      # Install sbt
-      - name: Install sbt
-        run: |
-          echo "Installing sbt..."
-          curl -L -o sbt.deb https://github.com/sbt/sbt/releases/download/v1.12.6/sbt-1.12.6.deb
-          sudo dpkg -i sbt.deb
-          sbt sbtVersion
+      - name: Verify sbt
+        run: sbt sbtVersion
 
-      # Cache SBT and Coursier dependencies
-      - name: Cache SBT & Coursier
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.ivy2/cache
-            ~/.sbt
-            ~/.coursier/cache
-          key: ${{ runner.os }}-sbt-${{ hashFiles('**/*.sbt', '**/project/build.properties') }}
-          restore-keys: |
-            ${{ runner.os }}-sbt-
-
-      # Compile project
       - name: Compile
         run: sbt compile
 
-      # Run tests
       - name: Run Tests
         run: sbt test
 
-      # Generate coverage report
-      - name: Coverage Report
+      - name: Coverage
         run: sbt clean coverage test coverageReport
 
-      # Upload to Coveralls
       - name: Upload Coverage to Coveralls
         env:
           COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
         run: sbt coveralls
 
-      # Run mutation tests
       - name: Run Mutation Tests
         run: sbt stryker4s
