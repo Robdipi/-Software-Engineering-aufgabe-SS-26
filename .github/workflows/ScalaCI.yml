@@ -28,7 +28,7 @@ jobs:
       - name: Install sbt
         run: |
           echo "Installing sbt..."
-          curl -L -o sbt.deb https://github.com/sbt/sbt/releases/download/v1.9.3/sbt-1.9.3.deb
+          curl -L -o sbt.deb https://github.com/sbt/sbt/releases/download/v1.12.6/sbt-1.12.6.deb
           sudo dpkg -i sbt.deb
           sbt sbtVersion
 
