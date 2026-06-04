@@ -1,55 +1,58 @@
-    name: Scala CI
+name: Scala CI
 
-    on:
-    push:
-    branches: [ master,  ]
-    pull_request:
-    branches: [ master ]
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
 
-    jobs:
-    test:
+jobs:
+  test:
     runs-on: ubuntu-latest
 
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
     steps:
-      
-        name: Checkout Repository
-          uses: actions/checkout@v4
+      - name: Checkout Repository
+        uses: actions/checkout@v5
 
-      
-        name: Setup Java
-          uses: actions/setup-java@v4
-          with:
-            distribution: temurin
-            java-version: '17'
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: sbt
 
-      
-        name: Cache SBT Dependencies
-          uses: actions/cache@v4
-          with:
-            path: |~/.ivy2/cache~/.sbt~/.coursier/cache
-            key: ${{ runner.os }}-sbt-${{ hashFiles('*/.sbt') }}
-            restore-keys: |${{ runner.os }}-sbt-
+      - name: Cache Coursier Dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.ivy2/cache
+            ~/.sbt
+            ~/.coursier/cache
+          key: ${{ runner.os }}-scala-${{ hashFiles('**/*.sbt', '**/project/build.properties', '**/project/plugins.sbt') }}
+          restore-keys: |
+            ${{ runner.os }}-scala-
 
-      
-        name: Compile
-          run: sbt compile
+      - name: Check sbt Version
+        run: sbt --version
 
-      
-        name: Run Tests
-          run: sbt test
+      - name: Compile
+        run: sbt compile
 
-      
-        name: Generate Coverage Report
-          run: sbt clean coverage test coverageReport
+      - name: Run Tests
+        run: sbt test
 
-      
-        name: Upload Coverage to Coveralls
-          env:
-            COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
-          run: sbt coveralls
+      - name: Generate Coverage Report
+        run: sbt clean coverage test coverageReport
 
-      
-        name: Run Mutation Tests
-          run: sbt stryker4s
+      - name: Upload Coverage to Coveralls
+        env:
+          COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
+        run: sbt coveralls
 
-﻿
+      - name: Run Mutation Tests
+        run: sbt stryker4s
