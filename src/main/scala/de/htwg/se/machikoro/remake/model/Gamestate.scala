@@ -143,6 +143,21 @@ case class Gamestate (val curentTurn : Int = 0,
     }
     return copy(cardStacks = updatedCardStacks)
   }
+  def changeState(newState : turnState):Gamestate = {
+    return this.copy(state = newState)
+  }
+
+  def changeDiceChosen(newAmount: Int): Gamestate = {
+    return this.copy(diceChoosen = newAmount)
+  }
+
+  def changePlayers(newPlayers: List[Player]): Gamestate = {
+    return this.copy(Players = newPlayers)
+  }
+
+  def changeDiceResult(newAmount: Int): Gamestate = {
+    return this.copy(DiceResult = newAmount)
+  }
 }
 
 

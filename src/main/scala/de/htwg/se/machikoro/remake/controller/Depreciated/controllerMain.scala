@@ -1,10 +1,12 @@
-package de.htwg.se.machikoro.remake.controller
+package de.htwg.se.machikoro.remake.controller.Depreciated
 
+import de.htwg.se.machikoro.remake.controller.{RandomnessManager, viewObserverable}
 import de.htwg.se.machikoro.remake.model.*
 import de.htwg.se.machikoro.remake.model.turnState.{ChooseDiceAmount, Result1}
 import de.htwg.se.machikoro.remake.view.Tui.TUI
 
 import scala.io.StdIn.readLine
+@deprecated
 object controllerMain extends viewObserverable(){
 
 

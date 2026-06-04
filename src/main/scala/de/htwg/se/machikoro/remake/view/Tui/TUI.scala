@@ -2,11 +2,13 @@ package de.htwg.se.machikoro.remake.view.Tui
 
 import de.htwg.se.machikoro.remake.controller.*
 import de.htwg.se.machikoro.remake.model.*
+import de.htwg.se.machikoro.remake.model.turnState.{Buyphase, Cardeffects}
 
 
 class TUI extends viewObserver {
 
   def update(gamestate: Gamestate): Unit = {
+    println(s"UPDATE: ${gamestate.state}")//To debug
     handleVisuals(gamestate)
     handleInput(gamestate)
   }
@@ -19,7 +21,7 @@ class TUI extends viewObserver {
       println("Player " + (gamestate.CurrentTurnPlayerId +1) + " turn" )
       gamestate.Players.find(_.playerId == gamestate.CurrentTurnPlayerId).foreach(p => p.printAllCards())//all cards of current player
     case turnState.Result1 => println(gamestate.DiceResult)
-    case turnState.Result2 => println(gamestate.DiceResult) 
+    case turnState.Result2 => println(gamestate.DiceResult)
     case turnState.PlayerWins => println("Player " + (gamestate.CurrentTurnPlayerId +1) + " won!" )
     case turnState.ALREADY_OWN_THAT_YELLOW_CARD_WARNING => println("You already own this yellow card")
     case turnState.ALREADY_OWN_PURPLE_CARD_WARNING => println("You already own a purple card")
@@ -29,11 +31,13 @@ class TUI extends viewObserver {
     case _ => // do nothing
   }
 
+
+
+//dont change stuff bellow here
   def handleInput(gamestate: Gamestate): Unit = gamestate.state match {
     case turnState.ChooseDiceAmount =>
       val dice = getDiceAmount()
-      Controller.handleInput(ChooseDiceAmount(dice))
-
+      ControllerV2.handleInput(ChooseDiceAmount(dice), gamestate)
     case turnState.Buyphase =>
       println("")
       println("These Cards are currently available to buy: ")
@@ -42,16 +46,12 @@ class TUI extends viewObserver {
       println("")
       val money = gamestate.Players.find(_.playerId == gamestate.CurrentTurnPlayerId).map(_.money).getOrElse(0)
       println(s"You have $money €")
-
-
       
       val cardName = getCardToBuy()
-      Controller.handleInput(BuyCard(cardName))
-
+      ControllerV2.handleInput(BuyCard(cardName), gamestate)
     case turnState.AskForRejectionOfResult =>
       val reject = askForRejection()
-      Controller.handleInput(RejectDiceRoll(reject))
-
+      ControllerV2.handleInput(RejectDiceRoll(reject), gamestate)
     case _ => // do nothing
   }
 
