@@ -1,6 +1,6 @@
 ![Scala CI](https://github.com/Robdipi/-Software-Engineering-aufgabe-SS-26/actions/workflows/scala.yml/badge.svg)
 
-[![Coverage Status](https://coveralls.io/repos/github/Robdipi/-Software-Engineering-aufgabe-SS-26//badge.svg)](https://coveralls.io/github/Robdipi/-Software-Engineering-aufgabe-SS-26)
+[![Coverage Status](https://coveralls.io/repos/github/Robdipi/-Software-Engineering-aufgabe-SS-26/badge.svg)](https://coveralls.io/github/Robdipi/-Software-Engineering-aufgabe-SS-26)
 
 This is the Readme for our Machi Koro remake
 
