@@ -11,7 +11,7 @@ class cardSpec {
     "A card" should {
 
       "execute its effect when activate is called" in {
-        val cardEffect = card(
+        val cardEffect = Card(
           cardName = "Test",
           cardOwnerId = 0,
           effect = (g, owner) => g.changeMoneyOfPlayer(owner, 5)
@@ -26,7 +26,7 @@ class cardSpec {
       }
 
       "return a readable string" in {
-        val c = card(
+        val c = Card(
           cardName = "Cafe",
           price = 2,
           cardOwnerId = 0

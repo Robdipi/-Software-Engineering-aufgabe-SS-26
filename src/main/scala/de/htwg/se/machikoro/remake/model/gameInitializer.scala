@@ -21,12 +21,17 @@ Factory Pattern to switch out start position
 
 
 
-trait gameInitializer {
-  def createGame(players:Int): Gamestate
+object Game {
+  def apply(n: Int, gametype: String): Gamestate = {
+    gametype match {
+      case "hell_of_weat" => initializeWeatHell().createGame(n)
+      case _ | "standart" => initializeStandartGame().createGame(n)
+    }
+  }
 }
 
 
-class initializeStandartGame() extends  gameInitializer {
+class initializeStandartGame(){
   def createGame(playerAmount: Int): Gamestate = {
     val players = (0 until playerAmount).toList.map(i => Player(money = startMoneyPlayers, playerId = i, properties = List(starterweizenfeld.copy(cardOwnerId = i), starterbaeckerei.copy(cardOwnerId = i)))) //gives the players their start cards
     var gameState = new Gamestate(Players = players)
@@ -54,7 +59,7 @@ class initializeStandartGame() extends  gameInitializer {
   }
 }
 
-class initializeWeatHell() extends  gameInitializer {
+class initializeWeatHell(){
   def createGame(playerAmount: Int): Gamestate = {
     val players = (0 until playerAmount).toList.map(i => Player(money = startMoneyPlayers, playerId = i, properties = List(starterweizenfeld.copy(cardOwnerId = i), starterbaeckerei.copy(cardOwnerId = i)))) //gives the players their start cards
     var gameState = new Gamestate(Players = players)

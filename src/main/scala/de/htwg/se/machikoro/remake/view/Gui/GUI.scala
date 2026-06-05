@@ -13,8 +13,8 @@ import scalafx.scene.layout.*
 import scalafx.scene.paint.Color
 import scalafx.scene.text.Font
 
-class GUI extends viewObserver {
-
+class GUI(controller: ControllerV2) extends viewObserver {
+  controller.add(this)
   private val rootPane = new StackPane()
 
   private val boardPane = new BorderPane()
@@ -174,7 +174,7 @@ class GUI extends viewObserver {
         cardButton.onAction = _ => {
           println(stack.stackCard.cardName)
           if(gamestate.state == Buyphase){
-            ControllerV2.handleInput(BuyCard(stack.stackCard.cardName), gamestate)
+            controller.handleInput(BuyCard(stack.stackCard.cardName), gamestate)
           }
         }
 

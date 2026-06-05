@@ -10,7 +10,7 @@ import scala.util.Random
 
 val startMoneyPlayers = 100
 case class cardStack(val amount : Int,
-                     val stackCard : card)
+                     val stackCard : Card)
 
 enum turnState {
   case StartofTurn, 
@@ -39,12 +39,7 @@ case class Gamestate (val curentTurn : Int = 0,
                       val cardStacks : List[cardStack] = List(),
                       val state : turnState = StartofTurn) 
 {
-  def createGame(n : Int, gametype : String): Gamestate = {
-    gametype match {
-      case "hell_of_weat" => initializeWeatHell().createGame(n)
-      case _ | "standart" => initializeStandartGame().createGame(n)
-    }
-  }
+ 
   
   def changeMoneyOfPlayer(playerId: Int, amount: Int, cardtype: Type = Type.Secondary_Industry): Gamestate = {
     val updatedPlayers = Players.map { currentplayer =>
@@ -92,7 +87,7 @@ case class Gamestate (val curentTurn : Int = 0,
     this.copy(Players = updatedPlayers)
   }
   
-  def giveCard(ownerId: Int, newCard: card): Gamestate = {
+  def giveCard(ownerId: Int, newCard: Card): Gamestate = {
     val updatedPlayers = Players.map { currentplayer =>
       if (currentplayer.playerId == ownerId) {
         currentplayer.copy(properties = newCard.copy(cardOwnerId = ownerId) :: currentplayer.properties)
@@ -134,7 +129,7 @@ case class Gamestate (val curentTurn : Int = 0,
     return Players.find(_.playerId == CurrentTurnPlayerId).exists(_.hasWonTheGame())
   }
 
-  def removeCardFromStack(cardToRemove: card): Gamestate = {
+  def removeCardFromStack(cardToRemove: Card): Gamestate = {
     val updatedCardStacks = cardStacks.map { currentStack =>
       if (currentStack.stackCard.cardName.equals(cardToRemove.cardName)) {
         currentStack.copy(amount = currentStack.amount - 1)

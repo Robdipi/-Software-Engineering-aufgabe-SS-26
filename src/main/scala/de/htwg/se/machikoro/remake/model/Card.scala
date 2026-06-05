@@ -29,22 +29,22 @@ enum Color {
     texturePath - where the texture is saved
     effect      - function which happens when the card needs to be executed
  */
-case class card (val cardName : String = "Weizenfeld"
-            ,val price : Int = 0
-            ,val cardType : Type = Type.Farm
-            ,val roleNumbers : Array[Int] = Array(1)
-            ,val color : Color  = Color.Blue
-            ,val description : String = "Erhalte 1 Münze aus der Bank."
-            ,val texturePath : String = ""
-            ,val effect: (Gamestate, Int) => Gamestate = {(gamestate, OwnerID) =>  gamestate}
-            ,val cardOwnerId: Int) {
+case class Card(val cardName : String = "Weizenfeld"
+                , val price : Int = 0
+                , val cardType : Type = Type.Farm
+                , val roleNumbers : Array[Int] = Array(1)
+                , val color : Color  = Color.Blue
+                , val description : String = "Erhalte 1 Münze aus der Bank."
+                , val texturePath : String = ""
+                , val effect: (Gamestate, Int) => Gamestate = {(gamestate, OwnerID) =>  gamestate}
+                , val cardOwnerId: Int) {
   /*
       When activate is called the corresponding function "effect" gets called.
       When a card is called depends on the Cardcolor
    */
 
   def activate(gamestate : Gamestate): Gamestate = {
-    println(s"$cardName is activated!")
+    //println(s"$cardName is activated!")
     return effect(gamestate,cardOwnerId)
   }
 

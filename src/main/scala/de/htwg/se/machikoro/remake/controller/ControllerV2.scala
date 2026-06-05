@@ -12,12 +12,12 @@ case class ChooseDiceAmount(amount: Int) extends UserInput
 case class BuyCard(cardName: String) extends UserInput
 case class RejectDiceRoll(reject: Boolean) extends UserInput
 
-object ControllerV2 extends viewObserverable {
+class ControllerV2(val winCondition: Player => Boolean ) extends viewObserverable {
 
  // var gamestate = Gamestate()
   private var rndManager = RandomnessManager()
   private val undoManager = new UndoManager()
-  var winCondition: Player => Boolean = _.hasWonTheGameSmallRound()
+ 
 
 
 
@@ -32,7 +32,6 @@ object ControllerV2 extends viewObserverable {
       undoManager.doStep(gamestate,new ChooseDiceCommand(amount,gamestate))
 
     case BuyCard(cardName) =>
-      println("checkpoint one")
       undoManager.doStep(gamestate,new BuyCardCommand(cardName,gamestate))
 
     case RejectDiceRoll(reject) =>

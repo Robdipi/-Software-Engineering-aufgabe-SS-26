@@ -13,7 +13,7 @@ import de.htwg.se.machikoro.remake.model.Type.*
 //Dairy => Kuh-Symbol
 
 object allCardsBaseGame {
-  val starterweizenfeld = card(
+  val starterweizenfeld = Card(
     cardName = "Weizenfeld",
     price = 0,
     cardType = Type.Farm,
@@ -26,7 +26,7 @@ object allCardsBaseGame {
       gamestate.changeMoneyOfPlayer(Owner, 1)
     }
   )
-  val weizenfeld = card(
+  val weizenfeld = Card(
     cardName = "Weizenfeld",
     price = 1,
     cardType = Type.Farm,
@@ -39,7 +39,7 @@ object allCardsBaseGame {
         gamestate.changeMoneyOfPlayer(Owner,1)
     }
   )
-  val bauernhof = card(
+  val bauernhof = Card(
     cardName = "Bauernhof",
     price = 1,
     cardType = Type.Dairy,
@@ -52,7 +52,7 @@ object allCardsBaseGame {
       gamestate.changeMoneyOfPlayer(Owner, 1)
     }
   )
-  val baeckerei = card(
+  val baeckerei = Card(
     cardName = "Bäckerei",
     price = 1,
     cardType = Type.Store,
@@ -65,7 +65,7 @@ object allCardsBaseGame {
       gamestate.changeMoneyOfPlayer(Owner, 1)
     }
   )
-  val starterbaeckerei = card(
+  val starterbaeckerei = Card(
     cardName = "Bäckerei",
     price = 0,
     cardType = Type.Store,
@@ -78,7 +78,7 @@ object allCardsBaseGame {
       gamestate.changeMoneyOfPlayer(Owner, 1)
     }
   )
-  val cafe = card(
+  val cafe = Card(
     cardName = "Cafe",
     price = 2,
     cardType = Type.Restaurants,
@@ -91,7 +91,7 @@ object allCardsBaseGame {
       gamestate.transferMoneyBetweenPlayers(gamestate.CurrentTurnPlayerId,Owner,1,Restaurants)//Transfer Money from the Player who has gotten the number to the player who owns this card
     }
   )
-  val minimarkt = card(
+  val minimarkt = Card(
     cardName = "Mini-Markt",
     price = 2,
     cardType = Type.Store,
@@ -104,7 +104,7 @@ object allCardsBaseGame {
       gamestate.changeMoneyOfPlayer(Owner, 3)
     }
   )
-  val wald = card(
+  val wald = Card(
     cardName = "wald",
     price = 3,
     cardType = Type.Industry,
@@ -117,7 +117,7 @@ object allCardsBaseGame {
       gamestate.changeMoneyOfPlayer(Owner, 1)
     }
   )
-  val stadion = card(
+  val stadion = Card(
     cardName = "stadion",
     price = 6,
     cardType = Type.Major_Establishment,
@@ -131,7 +131,7 @@ object allCardsBaseGame {
     }
   )
   
-  val buerohaus = card(
+  val buerohaus = Card(
     cardName = "Bürohaus",
     price = 6,
     cardType = Type.Major_Establishment,
@@ -144,7 +144,7 @@ object allCardsBaseGame {
       gamestate//TODO
     }
   )
-  val fernsehsender = card(
+  val fernsehsender = Card(
     cardName = "Fernsehsender",
     price = 7,
     cardType = Type.Major_Establishment,
@@ -158,7 +158,7 @@ object allCardsBaseGame {
     }
   )
 
-  val molkerei = card(
+  val molkerei = Card(
     cardName = "Molkerei",
     price = 7,
     cardType = Type.Secondary_Industry, 
@@ -172,7 +172,7 @@ object allCardsBaseGame {
     }
   )
 
-  val möbelfabrik = card(
+  val möbelfabrik = Card(
     cardName = "Möbelfabrik",
     price = 3,
     cardType = Type.Secondary_Industry,
@@ -186,7 +186,7 @@ object allCardsBaseGame {
     }
   )
 
-  val bergwerk = card(
+  val bergwerk = Card(
     cardName = "Bergwerk",
     price = 6,
     cardType = Type.Industry,
@@ -200,7 +200,7 @@ object allCardsBaseGame {
     }
   )
 
-  val familienRestaurant = card(
+  val familienRestaurant = Card(
     cardName = "Familien-Restaurant",
     price = 3,
     cardType = Type.Restaurants,
@@ -213,7 +213,7 @@ object allCardsBaseGame {
       gamestate.transferMoneyBetweenPlayers(gamestate.CurrentTurnPlayerId, Owner, 2, Restaurants)
     }
   )
-  val apfelgarten = card(
+  val apfelgarten = Card(
     cardName = "apfelgarten",
     price = 3,
     cardType = Type.Farm,
@@ -226,7 +226,7 @@ object allCardsBaseGame {
       gamestate.changeMoneyOfPlayer(Owner,3)
     }
   )
-  val markthalle = card(
+  val markthalle = Card(
     cardName = "Markthalle",
     price = 2,
     cardType = Type.Secondary_Industry,
@@ -239,7 +239,7 @@ object allCardsBaseGame {
       gamestate.changeMoneyOfPlayerScaleByType(OwnerID, Type.Farm, 2)
     }
   )
-  val funkturm = card(
+  val funkturm = Card(
     cardName = "Funkturm",
     price = 22,
     cardType = Type.Landmark,
@@ -253,7 +253,7 @@ object allCardsBaseGame {
     }
   )
  
-  val freizeitpark = card(
+  val freizeitpark = Card(
     cardName = "Freizeitpark",
     price = 16,
     cardType = Type.Landmark,
@@ -267,7 +267,7 @@ object allCardsBaseGame {
     }
   )
 
-  val bahnhof = card(
+  val bahnhof = Card(
     cardName = "Bahnhof",
     price = 4,
     cardType = Type.Landmark,
@@ -281,7 +281,7 @@ object allCardsBaseGame {
     }
   )
 
-  val einkaufszentrum = card(
+  val einkaufszentrum = Card(
     cardName = "Einkaufszentrum",
     price = 10,
     cardType = Type.Landmark,

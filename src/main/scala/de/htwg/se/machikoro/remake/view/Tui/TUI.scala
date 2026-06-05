@@ -5,9 +5,10 @@ import de.htwg.se.machikoro.remake.model.*
 import de.htwg.se.machikoro.remake.model.turnState.{Buyphase, Cardeffects}
 
 
-class TUI extends viewObserver {
+class TUI(controllerV2: ControllerV2) extends viewObserver {
   var inputManager : InputManager = new InputManager()
-
+  controllerV2.add(this)
+  
   def update(gamestate: Gamestate): Unit = {
     println(s"UPDATE: ${gamestate.state}")//To debug
     handleVisuals(gamestate)
@@ -38,7 +39,7 @@ class TUI extends viewObserver {
   def handleInput(gamestate: Gamestate): Unit = gamestate.state match {
     case turnState.ChooseDiceAmount =>
       val dice = getDiceAmount()
-      ControllerV2.handleInput(ChooseDiceAmount(dice), gamestate)
+      controllerV2.handleInput(ChooseDiceAmount(dice), gamestate)
     case turnState.Buyphase =>
       println("")
       println("These Cards are currently available to buy: ")
@@ -49,10 +50,10 @@ class TUI extends viewObserver {
       println(s"You have $money €")
 
       val cardName = getCardToBuy()
-      ControllerV2.handleInput(BuyCard(cardName), gamestate)
+      controllerV2.handleInput(BuyCard(cardName), gamestate)
     case turnState.AskForRejectionOfResult =>
       val reject = askForRejection()
-      ControllerV2.handleInput(RejectDiceRoll(reject), gamestate)
+      controllerV2.handleInput(RejectDiceRoll(reject), gamestate)
     case _ => // do nothing
   }
 
