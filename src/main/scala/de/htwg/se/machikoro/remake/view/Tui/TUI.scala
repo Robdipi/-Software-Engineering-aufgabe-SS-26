@@ -14,7 +14,7 @@ class TUI extends viewObserver {
     handleInput(gamestate)
   }
 
-  
+
 //StartofTurn, ChooseDiceAmount,Result1,AskForRejectionOfResult,Result2,Cardeffects,Buyphase,PlayerWins
   def handleVisuals(gamestate: Gamestate): Unit = gamestate.state match {
     case turnState.StartofTurn =>
@@ -47,7 +47,7 @@ class TUI extends viewObserver {
       println("")
       val money = gamestate.Players.find(_.playerId == gamestate.CurrentTurnPlayerId).map(_.money).getOrElse(0)
       println(s"You have $money €")
-      
+
       val cardName = getCardToBuy()
       ControllerV2.handleInput(BuyCard(cardName), gamestate)
     case turnState.AskForRejectionOfResult =>

@@ -20,7 +20,7 @@ object allCardsBaseGame {
     roleNumbers = Array(1),
     color = Color.Blue,
     description = "Erhalte 1 Münze aus der Bank.",
-    texturePath = "",
+    texturePath = "Assets/textures/cards/weizenfeld.png",
     cardOwnerId = -1,
     effect = (gamestate, Owner) => {
       gamestate.changeMoneyOfPlayer(Owner, 1)
@@ -33,7 +33,7 @@ object allCardsBaseGame {
     roleNumbers = Array(1),
     color = Color.Blue,
     description =  "Erhalte 1 Münze aus der Bank.",
-    texturePath = "",
+    texturePath = "Assets/textures/cards/weizenfeld.png",
     cardOwnerId = -1,
       effect = (gamestate, Owner) => {
         gamestate.changeMoneyOfPlayer(Owner,1)
@@ -46,7 +46,7 @@ object allCardsBaseGame {
     roleNumbers = Array(2),
     color = Color.Blue,
     description = "Erhalte 1 Münze aus der Bank.",
-    texturePath = "",
+    texturePath = "Assets/textures/cards/bauernhof.png",
     cardOwnerId = -1,
     effect = (gamestate, Owner) => {
       gamestate.changeMoneyOfPlayer(Owner, 1)
@@ -59,7 +59,7 @@ object allCardsBaseGame {
     roleNumbers = Array(2,3),
     color = Color.Green,
     description = "Erhalte 1 Münze aus der Bank.",
-    texturePath = "",
+    texturePath = "Assets/textures/cards/baeckerei.png",
     cardOwnerId = -1,
     effect = (gamestate, Owner) => {
       gamestate.changeMoneyOfPlayer(Owner, 1)
@@ -72,7 +72,7 @@ object allCardsBaseGame {
     roleNumbers = Array(2, 3),
     color = Color.Green,
     description = "Erhalte 1 Münze aus der Bank.",
-    texturePath = "",
+    texturePath = "Assets/textures/cards/baeckerei.png",
     cardOwnerId = -1,
     effect = (gamestate, Owner) => {
       gamestate.changeMoneyOfPlayer(Owner, 1)
@@ -85,7 +85,7 @@ object allCardsBaseGame {
     roleNumbers = Array(3),
     color = Color.Red,
     description = "Erhalte 1 Münze von dem Mitspieler der eine '3' gewürfelt hat.",
-    texturePath = "",
+    texturePath = "Assets/textures/cards/cafe.png",
     cardOwnerId = -1,
     effect = (gamestate, Owner) => {
       gamestate.transferMoneyBetweenPlayers(gamestate.CurrentTurnPlayerId,Owner,1,Restaurants)//Transfer Money from the Player who has gotten the number to the player who owns this card
@@ -98,7 +98,7 @@ object allCardsBaseGame {
     roleNumbers = Array(4),
     color = Color.Green,
     description = "Erhalte 3 Münzen aus der Bank.",
-    texturePath = "",
+    texturePath = "Assets/textures/cards/minimarkt.png",
     cardOwnerId = -1,
     effect = (gamestate, Owner) => {
       gamestate.changeMoneyOfPlayer(Owner, 3)
@@ -111,7 +111,7 @@ object allCardsBaseGame {
     roleNumbers = Array(5),
     color = Color.Blue,
     description = "Erhalte 1 Münze aus der Bank.",
-    texturePath = "",
+    texturePath = "Assets/textures/cards/forrest.png",
     cardOwnerId = -1,
     effect = (gamestate, Owner) => {
       gamestate.changeMoneyOfPlayer(Owner, 1)
@@ -124,7 +124,7 @@ object allCardsBaseGame {
     roleNumbers = Array(6),
     color = Color.Purple,
     description = "Erhalte von jedem Mitspieler 2 Münzen.",
-    texturePath = "",
+    texturePath = "Assets/textures/cards/stadium.png",
     cardOwnerId = -1,
     effect = (gamestate, Owner) => {
       gamestate.stealFromEveryone(Owner, 2)
@@ -138,7 +138,7 @@ object allCardsBaseGame {
     roleNumbers = Array(6),
     color = Color.Purple,
     description = "Tausche 1 karte mit einem Mitspieler deiner Wahl. Kein >🗼< Unternehmen.",
-    texturePath = "",
+    texturePath = "Assets/textures/cards/buero.png",
     cardOwnerId = -1,
     effect = (gamestate, Owner) => {
       gamestate//TODO
@@ -151,7 +151,7 @@ object allCardsBaseGame {
     roleNumbers = Array(6),
     color = Color.Purple,
     description = "Erhalte von einem Mitspieler deiner Wahl 5 Münzen.",
-    texturePath = "",
+    texturePath = "Assets/textures/cards/fernsehsender.png",
     cardOwnerId = -1,
     effect = (gamestate, Owner) => {
       gamestate.changeMoneyOfPlayer(Owner, 1)
@@ -165,7 +165,7 @@ object allCardsBaseGame {
     roleNumbers = Array(7),
     color = Color.Green,
     description = "Erhalte 3 Münzen aus der Bank für jedes deiner >🐄< Unternehmen",
-    texturePath = "",
+    texturePath = "Assets/textures/cards/molkerei.png",
     cardOwnerId = -1,
     effect = (gamestate, Owner) => {
       gamestate.changeMoneyOfPlayerScaleByType(Owner, Type.Dairy, 3)
@@ -179,7 +179,7 @@ object allCardsBaseGame {
     roleNumbers = Array(8),
     color = Color.Green,
     description = "Erhalte 3 Münzen aus der Bank für jedes deiner >⚙️< Unternehmen.",
-    texturePath = "",
+    texturePath = "Assets/textures/cards/saegewerk.png",
     cardOwnerId = -1,
     effect = (gamestate, Owner) => {
       gamestate.changeMoneyOfPlayerScaleByType(Owner,Type.Industry,3)
@@ -193,7 +193,7 @@ object allCardsBaseGame {
     roleNumbers = Array(9),
     color = Color.Blue,
     description = "Erhalte 5 Münzen aus der Bank.",
-    texturePath = "",
+    texturePath = "Assets/textures/cards/bergwerk.png",
     cardOwnerId = -1,
     effect = (gamestate, Owner) => {
       gamestate.changeMoneyOfPlayer(Owner, 5)
@@ -207,7 +207,7 @@ object allCardsBaseGame {
     roleNumbers = Array(9, 10),
     color = Color.Red,
     description = "Erhalte 2 Münzen von dem Mitspieler, der eine 9 oder 10 gewürfelt hat.",
-    texturePath = "",
+    texturePath = "Assets/textures/cards/familyRestaurant.png",
     cardOwnerId = -1,
     effect = (gamestate, Owner) => {
       gamestate.transferMoneyBetweenPlayers(gamestate.CurrentTurnPlayerId, Owner, 2, Restaurants)
@@ -220,7 +220,7 @@ object allCardsBaseGame {
     roleNumbers = Array(10),
     color = Color.Blue,
     description = "Erhalte 3 Münzen aus der Bank.",
-    texturePath = "",
+    texturePath = "Assets/textures/cards/apfelhein.png",
     cardOwnerId = -1,
     effect = (gamestate, Owner) => {
       gamestate.changeMoneyOfPlayer(Owner,3)
@@ -233,7 +233,7 @@ object allCardsBaseGame {
     roleNumbers = Array(11,12),
     color = Color.Green,
     description = "Erhalte 2 Münzen aus der Bank für jedes deiner >🌾< Unternehmen.",
-    texturePath = "",
+    texturePath = "Assets/textures/cards/markthalle.png",
     cardOwnerId = -1,
     effect = (gamestate, OwnerID) => {
       gamestate.changeMoneyOfPlayerScaleByType(OwnerID, Type.Farm, 2)
@@ -246,7 +246,7 @@ object allCardsBaseGame {
     roleNumbers = Array(),
     color = Color.Yellow,
     description = "Einmal pro Zug darfst du erneut würfeln.",
-    texturePath = "",
+    texturePath = "Assets/textures/cards/funkturm.png",
     cardOwnerId = -1,
     effect = (gamestate, OwnerID) => {
       gamestate
@@ -260,7 +260,7 @@ object allCardsBaseGame {
     roleNumbers = Array(),
     color = Color.Yellow,
     description = "Würfelst du zwei gleiche Zahlen, hast du einen weiteren Zug.",
-    texturePath = "",
+    texturePath = "Assets/textures/cards/freizeitpark.png",
     cardOwnerId = -1,
     effect = (gamestate, OwnerID) => {
       gamestate
@@ -274,7 +274,7 @@ object allCardsBaseGame {
     roleNumbers = Array(),
     color = Color.Yellow,
     description = "Würfle mit 1 oder 2 Würfeln.",
-    texturePath = "",
+    texturePath = "Assets/textures/cards/bahnhof.png",
     cardOwnerId = -1,
     effect = (gamestate, OwnerID) => {
       gamestate
@@ -288,7 +288,7 @@ object allCardsBaseGame {
     roleNumbers = Array(),
     color = Color.Yellow,
     description = "Erhalte 1 Münze mehr für jedes deiner >☕️< und >🛍️< Unternehmen.",
-    texturePath = "",
+    texturePath = "Assets/textures/cards/einkaufszentrum.png",
     cardOwnerId = -1,
     effect = (gamestate, OwnerID) => {
       gamestate
