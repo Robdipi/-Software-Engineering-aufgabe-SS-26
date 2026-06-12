@@ -21,8 +21,15 @@ class AllCardsBaseGameSpec extends AnyWordSpec with Matchers {
     "define the starter cards correctly" in {
       starterweizenfeld.price shouldBe 0
       starterweizenfeld.cardName shouldBe "Weizenfeld"
+      starterweizenfeld.cardType shouldBe Farm
+      starterweizenfeld.color shouldBe Color.Blue
+      starterweizenfeld.roleNumbers should contain(1)
+
       starterbaeckerei.price shouldBe 0
       starterbaeckerei.cardName shouldBe "Bäckerei"
+      starterbaeckerei.cardType shouldBe Store
+      starterbaeckerei.color shouldBe Color.Green
+      starterbaeckerei.roleNumbers should contain allOf (2, 3)
     }
 
     "define regular card metadata correctly" in {
@@ -44,6 +51,90 @@ class AllCardsBaseGameSpec extends AnyWordSpec with Matchers {
       funkturm.color shouldBe Color.Yellow
       funkturm.price shouldBe 22
       funkturm.roleNumbers shouldBe empty
+    }
+
+    "define every remaining regular card metadata" in {
+      bauernhof.cardName shouldBe "Bauernhof"
+      bauernhof.price shouldBe 1
+      bauernhof.cardType shouldBe Dairy
+      bauernhof.roleNumbers should contain(2)
+
+      baeckerei.cardName shouldBe "Bäckerei"
+      baeckerei.price shouldBe 1
+      baeckerei.cardType shouldBe Store
+      baeckerei.roleNumbers should contain allOf (2, 3)
+
+      minimarkt.cardName shouldBe "Mini-Markt"
+      minimarkt.price shouldBe 2
+      minimarkt.cardType shouldBe Store
+      minimarkt.roleNumbers should contain(4)
+
+      wald.cardName shouldBe "wald"
+      wald.price shouldBe 3
+      wald.cardType shouldBe Industry
+      wald.roleNumbers should contain(5)
+
+      buerohaus.cardName shouldBe "Bürohaus"
+      buerohaus.price shouldBe 6
+      buerohaus.cardType shouldBe Major_Establishment
+      buerohaus.roleNumbers should contain(6)
+
+      fernsehsender.cardName shouldBe "Fernsehsender"
+      fernsehsender.price shouldBe 7
+      fernsehsender.cardType shouldBe Major_Establishment
+      fernsehsender.roleNumbers should contain(6)
+
+      molkerei.cardName shouldBe "Molkerei"
+      molkerei.price shouldBe 7
+      molkerei.cardType shouldBe Secondary_Industry
+      molkerei.roleNumbers should contain(7)
+
+      möbelfabrik.cardName shouldBe "Möbelfabrik"
+      möbelfabrik.price shouldBe 3
+      möbelfabrik.cardType shouldBe Secondary_Industry
+      möbelfabrik.roleNumbers should contain(8)
+
+      bergwerk.cardName shouldBe "Bergwerk"
+      bergwerk.price shouldBe 6
+      bergwerk.cardType shouldBe Industry
+      bergwerk.roleNumbers should contain(9)
+
+      familienRestaurant.cardName shouldBe "Familien-Restaurant"
+      familienRestaurant.price shouldBe 3
+      familienRestaurant.cardType shouldBe Restaurants
+      familienRestaurant.roleNumbers should contain allOf (9, 10)
+
+      apfelgarten.cardName shouldBe "apfelgarten"
+      apfelgarten.price shouldBe 3
+      apfelgarten.cardType shouldBe Farm
+      apfelgarten.roleNumbers should contain(10)
+
+      markthalle.cardName shouldBe "Markthalle"
+      markthalle.price shouldBe 2
+      markthalle.cardType shouldBe Secondary_Industry
+      markthalle.roleNumbers should contain allOf (11, 12)
+
+      freizeitpark.cardName shouldBe "Freizeitpark"
+      freizeitpark.price shouldBe 16
+      freizeitpark.cardType shouldBe Landmark
+      freizeitpark.roleNumbers shouldBe empty
+
+      bahnhof.cardName shouldBe "Bahnhof"
+      bahnhof.price shouldBe 4
+      bahnhof.cardType shouldBe Landmark
+      bahnhof.roleNumbers shouldBe empty
+
+      einkaufszentrum.cardName shouldBe "Einkaufszentrum"
+      einkaufszentrum.price shouldBe 10
+      einkaufszentrum.cardType shouldBe Landmark
+      einkaufszentrum.roleNumbers shouldBe empty
+    }
+
+    "execute starter card effects" in {
+      val state = stateWithPlayers()
+
+      starterweizenfeld.effect(state, 0).Players.find(_.playerId == 0).get.money shouldBe 11
+      starterbaeckerei.effect(state, 0).Players.find(_.playerId == 0).get.money shouldBe 11
     }
 
     "execute simple bank payout effects" in {

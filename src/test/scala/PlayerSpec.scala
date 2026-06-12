@@ -4,6 +4,8 @@ import de.htwg.se.machikoro.remake.model.allCardsBaseGame.*
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 
+import java.io.ByteArrayOutputStream
+
 class PlayerSpec extends AnyWordSpec with Matchers {
 
   "A Player" should {
@@ -61,6 +63,15 @@ class PlayerSpec extends AnyWordSpec with Matchers {
       )
 
       player.hasWonTheGameSmallRound() shouldBe true
+    }
+
+    "not detect a small round win condition when Funkturm is missing" in {
+      val player = Player(
+        properties = List(bahnhof.copy(cardOwnerId = 0)),
+        playerId = 0
+      )
+
+      player.hasWonTheGameSmallRound() shouldBe false
     }
 
     "not detect a win condition when a landmark is missing" in {
@@ -143,6 +154,26 @@ class PlayerSpec extends AnyWordSpec with Matchers {
       val result = player.activateCards(2, 0, game)
 
       result.Players.head.money shouldBe 0
+    }
+
+    "print all owned cards" in {
+      val player = Player(
+        properties = List(
+          weizenfeld.copy(cardOwnerId = 0),
+          cafe.copy(cardOwnerId = 0)
+        ),
+        playerId = 0
+      )
+
+      val output = new ByteArrayOutputStream()
+      Console.withOut(output) {
+        player.printAllCards()
+      }
+
+      val printed = output.toString
+      printed should include("Your Current cards:")
+      printed should include("Weizenfeld")
+      printed should include("Cafe")
     }
   }
 }
