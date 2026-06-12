@@ -1,8 +1,10 @@
 package de.htwg.se.machikoro.remake.view.Gui
 
-import de.htwg.se.machikoro.remake.controller.main.*
-import de.htwg.se.machikoro.remake.model.*
+
 import de.htwg.se.machikoro.remake.model.turnState.Buyphase
+import de.htwg.se.machikoro.remake.controller.main.{BuyCardInput, ChooseDiceAmountInput, ControllerInterface, RejectDiceRollInput, viewObserver}
+import de.htwg.se.machikoro.remake.model.{Gamestate, Player, turnState}
+import de.htwg.se.machikoro.remake.model.turnState.{Buyphase, Cardeffects}
 import scalafx.geometry.Pos
 import scalafx.scene.layout.StackPane
 import scalafx.Includes.*
@@ -13,7 +15,7 @@ import scalafx.scene.layout.*
 import scalafx.scene.paint.Color
 import scalafx.scene.text.Font
 
-class GUI(controller: ControllerV2) extends viewObserver {
+class GUI(controller: ControllerInterface) extends viewObserver {
   controller.add(this)
   private val rootPane = new StackPane()
 
@@ -174,7 +176,7 @@ class GUI(controller: ControllerV2) extends viewObserver {
         cardButton.onAction = _ => {
           println(stack.stackCard.cardName)
           if(gamestate.state == Buyphase){
-            controller.handleInput(BuyCard(stack.stackCard.cardName), gamestate)
+            controller.handleInput(BuyCardInput(stack.stackCard.cardName), gamestate)
           }
         }
 

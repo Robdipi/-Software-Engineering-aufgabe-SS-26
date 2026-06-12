@@ -1,6 +1,10 @@
+package de.htwg.se.machikoro.remake.controller.mementoPatern.implXml
+
+
+
+import com.google.inject.Inject
 import de.htwg.se.machikoro.remake.controller.commandPattern.*
 import de.htwg.se.machikoro.remake.controller.commandPattern.impl1.UndoManager
-
 import de.htwg.se.machikoro.remake.controller.mementoPatern.*
 import de.htwg.se.machikoro.remake.model.*
 import de.htwg.se.machikoro.remake.model.Type.{Dairy, Farm}
@@ -18,13 +22,13 @@ import scala.util.Try
 
 
 
-case class mementoXml(override val undoManager: Option[UndoManager], override val safeFilePath: String) extends mementoIntervace{
+case class mementoXml@Inject()(override val undoManager: Option[UndoManagerInterface], override val safeFilePath: String) extends mementoIntervace{
   
   def restore(): Option[Gamestate] = {
    None
   }
 
-  def create(gamestate: Gamestate, undoManager: Option[UndoManager]): mementoXml = {
+  def create(gamestate: Gamestate, undoManager: Option[UndoManagerInterface]): mementoXml = {
    mementoXml(None,"skibidi")
   }
 }

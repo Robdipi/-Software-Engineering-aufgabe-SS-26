@@ -25,7 +25,7 @@ object mementoConstatants {
 }
 
 trait mementoIntervace () {
-  val undoManager: Option[UndoManager]
+  val undoManager: Option[UndoManagerInterface]
   val safeFilePath : String
   var fileCorrupted = false
   def markFileCorrupted(): Unit = {fileCorrupted = true}
@@ -35,7 +35,7 @@ trait mementoIntervace () {
     undoManager.foreach(_.delete("safeFilePath"))
   }
   def restore(): Option[Gamestate]
-  def create(gamestate: Gamestate, undoManager: Option[UndoManager]): mementoIntervace
+  def create(gamestate: Gamestate, undoManager: Option[UndoManagerInterface]): mementoIntervace
 }
 
 
@@ -58,7 +58,7 @@ object mementoCreator {
       .toMap
   
 
-  def create(gamestate: Gamestate, undoManager: Option[UndoManager]): mementoJson = {
+  def create(gamestate: Gamestate, undoManager: Option[UndoManagerInterface]): mementoJson = {
     theCreatorOfMementos.create(gamestate, undoManager)
   }
   // delete all savefiles in
@@ -69,7 +69,7 @@ object mementoCreator {
   }
 
   // writes all savefiles ordered as mementos into the undo queue and loads the lattest one
-  def loadGamesave(undoManager: UndoManager): Option[Gamestate] = {
+  def loadGamesave(undoManager: UndoManagerInterface): Option[Gamestate] = {
     if (Files.exists(savefolderpath) && Files.isDirectory(savefolderpath)) {
       val mementos = Files.list(savefolderpath)
         .iterator()

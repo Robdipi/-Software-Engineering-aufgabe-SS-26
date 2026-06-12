@@ -1,14 +1,16 @@
 package de.htwg.se.machikoro.remake.view.Gui
 
-import de.htwg.se.machikoro.remake.controller.main.ControllerV2
+import de.htwg.se.machikoro.remake.controller.main.ControllerInterface
+import de.htwg.se.machikoro.remake.controller.main.impl1.ControllerV2
 import de.htwg.se.machikoro.remake.model.Gamestate
-import de.htwg.se.machikoro.remake.model.initialization.{Game, gameInitializationSystem}
+import de.htwg.se.machikoro.remake.model.initialization.gameInitializationSystem
+import de.htwg.se.machikoro.remake.model.initialization.impl1.Game
 import scalafx.application.JFXApp3
 import scalafx.scene.Scene
 
 
 object MachiKoroApp extends JFXApp3 {
-  var controller: ControllerV2 = _
+  var controller: ControllerInterface = _
   var startGamestate : Gamestate = _;
   override def start(): Unit = {
     val gameInitializationSystem: gameInitializationSystem = new Game()

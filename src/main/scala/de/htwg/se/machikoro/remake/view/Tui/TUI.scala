@@ -1,13 +1,13 @@
 package de.htwg.se.machikoro.remake.view.Tui
 
-import de.htwg.se.machikoro.remake.controller.main.*
-import de.htwg.se.machikoro.remake.model.*
+import de.htwg.se.machikoro.remake.controller.main.{BuyCardInput, ChooseDiceAmountInput, ControllerInterface, RejectDiceRollInput, viewObserver}
+import de.htwg.se.machikoro.remake.model.{Gamestate, turnState}
 import de.htwg.se.machikoro.remake.model.turnState.{Buyphase, Cardeffects}
 
 
-class TUI(controllerV2: ControllerV2) extends viewObserver {
+class TUI(controller: ControllerInterface) extends viewObserver {
   var inputManager : InputManager = new InputManager()
-  controllerV2.add(this)
+  controller.add(this)
   
   def update(gamestate: Gamestate): Unit = {
     println(s"UPDATE: ${gamestate.state}")//To debug
@@ -39,7 +39,7 @@ class TUI(controllerV2: ControllerV2) extends viewObserver {
   def handleInput(gamestate: Gamestate): Unit = gamestate.state match {
     case turnState.ChooseDiceAmount =>
       val dice = getDiceAmount()
-      controllerV2.handleInput(ChooseDiceAmount(dice), gamestate)
+      controller.handleInput(ChooseDiceAmountInput(dice), gamestate)
     case turnState.Buyphase =>
       println("")
       println("These Cards are currently available to buy: ")
@@ -50,10 +50,10 @@ class TUI(controllerV2: ControllerV2) extends viewObserver {
       println(s"You have $money €")
 
       val cardName = getCardToBuy()
-      controllerV2.handleInput(BuyCard(cardName), gamestate)
+      controller.handleInput(BuyCardInput(cardName), gamestate)
     case turnState.AskForRejectionOfResult =>
       val reject = askForRejection()
-      controllerV2.handleInput(RejectDiceRoll(reject), gamestate)
+      controller.handleInput(RejectDiceRollInput(reject), gamestate)
     case _ => // do nothing
   }
 

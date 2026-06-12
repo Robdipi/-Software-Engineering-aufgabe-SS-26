@@ -1,5 +1,6 @@
 package de.htwg.se.machikoro.remake.controller.mementoPatern.implJson
 
+import com.google.inject.Inject
 import de.htwg.se.machikoro.remake.controller.commandPattern.impl1.UndoManager
 import de.htwg.se.machikoro.remake.controller.commandPattern.{Command, UndoManagerInterface}
 import de.htwg.se.machikoro.remake.controller.mementoPatern.mementoConstatants.savefilefolder
@@ -18,7 +19,7 @@ import java.time.format.DateTimeFormatter
 import scala.util.Try
 
 
-case class mementoJson(override val undoManager: Option[UndoManager], override val safeFilePath: String) extends mementoIntervace {
+case class mementoJson @Inject()(override val undoManager: Option[UndoManagerInterface], override val safeFilePath: String) extends mementoIntervace {
  
   
 
@@ -63,7 +64,7 @@ case class mementoJson(override val undoManager: Option[UndoManager], override v
 
   
 
-  def create(gamestate: Gamestate, undoManager: Option[UndoManager]): mementoJson = {
+  def create(gamestate: Gamestate, undoManager: Option[UndoManagerInterface]): mementoJson = {
     val jsonString = Json.obj("gamestate" -> gamestate.asJson).spaces2
     val now = LocalDateTime.now()
     val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss")

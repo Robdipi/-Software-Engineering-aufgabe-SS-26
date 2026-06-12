@@ -1,4 +1,4 @@
-package de.htwg.se.machikoro.remake.controller.main
+package de.htwg.se.machikoro.remake.controller.main.impl1
 
 import scala.util.Random
 

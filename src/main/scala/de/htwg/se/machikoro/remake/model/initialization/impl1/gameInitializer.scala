@@ -1,6 +1,8 @@
-package de.htwg.se.machikoro.remake.model.initialization
+package de.htwg.se.machikoro.remake.model.initialization.impl1
 
+import com.google.inject.Inject
 import de.htwg.se.machikoro.remake.model.allCardsBaseGame.*
+import de.htwg.se.machikoro.remake.model.initialization.gameInitializationSystem
 import de.htwg.se.machikoro.remake.model.{Gamestate, Player, cardStack, startMoneyPlayers}
 /*
 Factory Pattern to switch out start position
@@ -22,7 +24,7 @@ Factory Pattern to switch out start position
 
 
 
-class Game extends gameInitializationSystem {
+class Game @Inject() ()extends gameInitializationSystem {
   def apply(n: Int, gametype: String): Gamestate = {
     gametype match {
       case "hell_of_weat" => initializeWeatHell().createGame(n)
