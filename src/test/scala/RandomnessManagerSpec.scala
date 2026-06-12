@@ -1,5 +1,6 @@
 package de.htwg.se.machikoro.remake.controller
 
+import de.htwg.se.machikoro.remake.controller.main.RandomnessManager
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 

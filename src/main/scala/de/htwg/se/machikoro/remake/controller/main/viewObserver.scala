@@ -1,5 +1,6 @@
-package de.htwg.se.machikoro.remake.controller
+package de.htwg.se.machikoro.remake.controller.main
 
+import de.htwg.se.machikoro.remake.controller.main.viewObserver
 import de.htwg.se.machikoro.remake.model.*
 
 trait viewObserver {

@@ -1,6 +1,6 @@
 package de.htwg.se.machikoro.remake.view.Tui
 
-import de.htwg.se.machikoro.remake.controller.*
+import de.htwg.se.machikoro.remake.controller.main.*
 import de.htwg.se.machikoro.remake.model.*
 import de.htwg.se.machikoro.remake.model.turnState.{Buyphase, Cardeffects}
 

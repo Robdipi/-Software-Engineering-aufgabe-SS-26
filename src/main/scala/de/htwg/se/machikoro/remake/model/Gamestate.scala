@@ -39,7 +39,13 @@ case class Gamestate (val curentTurn : Int = 0,
                       val cardStacks : List[cardStack] = List(),
                       val state : turnState = StartofTurn) 
 {
- 
+  
+  
+  
+  
+
+
+
   
   def changeMoneyOfPlayer(playerId: Int, amount: Int, cardtype: Type = Type.Secondary_Industry): Gamestate = {
     val updatedPlayers = Players.map { currentplayer =>

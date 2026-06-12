@@ -1,8 +1,12 @@
-package de.htwg.se.machikoro.remake.controller
+package de.htwg.se.machikoro.remake.controller.main
 
+import de.htwg.se.machikoro.remake.controller.commandPattern.{Command, UndoManagerInterface}
+import de.htwg.se.machikoro.remake.controller.mementoPatern.{memento, mementoCreator}
+import de.htwg.se.machikoro.remake.controller.*
+import de.htwg.se.machikoro.remake.controller.commandPattern.impl1.UndoManager
+import de.htwg.se.machikoro.remake.model.*
 import de.htwg.se.machikoro.remake.model.Color.{Purple, Yellow}
 import de.htwg.se.machikoro.remake.model.turnState.*
-import de.htwg.se.machikoro.remake.model.*
 
 
 
@@ -16,7 +20,7 @@ class ControllerV2(val winCondition: Player => Boolean ) extends viewObserverabl
 
  // var gamestate = Gamestate()
   private var rndManager = RandomnessManager()
-  private val undoManager = new UndoManager()
+  val undoManager = new UndoManager()
  
 
 
@@ -29,13 +33,14 @@ class ControllerV2(val winCondition: Player => Boolean ) extends viewObserverabl
 
   def handleInput(input: UserInput, gamestate: Gamestate): Unit = input match {
     case ChooseDiceAmount(amount) =>
-      undoManager.doStep(gamestate,new ChooseDiceCommand(amount,gamestate))
+
+      undoManager.doStep(gamestate,new ChooseDiceCommand(amount,mementoCreator.create(gamestate,Some(undoManager))))
 
     case BuyCard(cardName) =>
-      undoManager.doStep(gamestate,new BuyCardCommand(cardName,gamestate))
+      undoManager.doStep(gamestate,new BuyCardCommand(cardName,mementoCreator.create(gamestate,Some(undoManager))))
 
     case RejectDiceRoll(reject) =>
-      undoManager.doStep(gamestate,new RejectDiceCommand(reject,gamestate))
+      undoManager.doStep(gamestate,new RejectDiceCommand(reject,mementoCreator.create(gamestate,Some(undoManager))))
   }
 
   /*
@@ -108,23 +113,23 @@ class ControllerV2(val winCondition: Player => Boolean ) extends viewObserverabl
 
   //----------------------------------------------------------------------
 
-  class ChooseDiceCommand(amount: Int, val previousState: Gamestate) extends Command {
+  class ChooseDiceCommand(amount: Int, savedGamestate : memento) extends Command(savedGamestate){
     override def doStep(gamestate: Gamestate): Unit = {
       val gamestate2 = gamestate.changeDiceChosen(amount).changeState(Result1)
       notifiyObservers(gamestate2)
       resultone(gamestate2)
     }
     override def undoStep(gamestate: Gamestate): Unit = {
-      startTurn(previousState)
+      startTurn(savedGamestate.restore().getOrElse(gamestate))
     }
     override def redoStep(gamestate: Gamestate): Unit = {
-      doStep(previousState)
+      doStep(savedGamestate.restore().getOrElse(gamestate))
     }
   }
 
 
 
-  class BuyCardCommand(cardName: String,val previousState: Gamestate) extends Command {
+  class BuyCardCommand(cardName: String,savedGamestate : memento) extends Command(savedGamestate) {
 
     override def doStep(gamestate: Gamestate): Unit = {
 
@@ -151,19 +156,23 @@ class ControllerV2(val winCondition: Player => Boolean ) extends viewObserverabl
               )
           }
         case None =>
-          tryToBuy(gamestate.changeState(NONE_EXISTANT_CARDNAME_WARNING))
-
+          if (cardName.contains("undo")) {    //like undo5 = 5 X undo
+            val lastDigit = cardName.last.asDigit
+             undoManager.undoStep(gamestate,lastDigit)
+          }else{
+            tryToBuy(gamestate.changeState(NONE_EXISTANT_CARDNAME_WARNING))
+          }
       }
     }
     override def undoStep(gamestate: Gamestate): Unit = {
-      startTurn(previousState)
+      startTurn(savedGamestate.restore().getOrElse(gamestate))
     }
     override def redoStep(gamestate: Gamestate): Unit = {
-      doStep(previousState)
+      doStep(savedGamestate.restore().getOrElse(gamestate))
     }
   }
 
-    class RejectDiceCommand(reject: Boolean, val previousState: Gamestate) extends Command {
+    class RejectDiceCommand(reject: Boolean,savedGamestate : memento) extends Command(savedGamestate) {
 
       override def doStep(gamestate: Gamestate): Unit = {
         if (reject) {
@@ -182,11 +191,11 @@ class ControllerV2(val winCondition: Player => Boolean ) extends viewObserverabl
       }
 
       override def undoStep(gamestate: Gamestate): Unit = {
-        startTurn(previousState)
+        startTurn(savedGamestate.restore().getOrElse(gamestate))
       }
 
       override def redoStep(gamestate: Gamestate): Unit = {
-        doStep(previousState)
+        doStep(savedGamestate.restore().getOrElse(gamestate))
       }
     }
   //----------------------------------------------------------------------
