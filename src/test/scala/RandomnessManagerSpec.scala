@@ -1,5 +1,4 @@
-package de.htwg.se.machikoro.remake.controller.main
-
+import de.htwg.se.machikoro.remake.controller.main.RandomnessManager
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 
@@ -24,18 +23,20 @@ class RandomnessManagerSpec extends AnyWordSpec with Matchers {
 
       val (_, r1) = rnd.getNextNum
       val (_, r2) = r1.getNextNum
-      val (v3, _) = r2.getNextNum
+      val (v3, r3) = r2.getNextNum
 
       v3 shouldBe 1
+      r3.index shouldBe 1
     }
 
-    "return values between one and six when no predefined values exist" in {
+    "return values between one and six when no predefined numbers exist" in {
       val rnd = RandomnessManager()
-      val (value, nextManager) = rnd.getNextNum
+
+      val (value, next) = rnd.getNextNum
 
       value should be >= 1
       value should be <= 6
-      nextManager shouldBe rnd
+      next shouldBe rnd
     }
   }
 }
