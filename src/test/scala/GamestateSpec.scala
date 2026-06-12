@@ -109,6 +109,17 @@ class GamestateSpec extends AnyWordSpec with Matchers {
       moneyOf(result, 2) shouldBe 10
     }
 
+    "not apply restaurant bonus when taker player does not exist" in {
+      val state =
+        Gamestate(Players = List(p1))
+
+      val result =
+        state.transferMoneyBetweenPlayers(0, 99, 2, Type.Restaurants)
+
+      moneyOf(result, 0) shouldBe 8
+      result.Players.size shouldBe 1
+    }
+
     "not transfer money to self" in {
       val state =
         Gamestate(Players = List(p1))
@@ -228,6 +239,37 @@ class GamestateSpec extends AnyWordSpec with Matchers {
       result.Players.find(_.playerId == 0).get.GetsAnotherTurn shouldBe false
     }
 
+    "only clear the extra turn flag of the current player" in {
+      val current =
+        Player(money = 10, playerId = 0, GetsAnotherTurn = true)
+
+      val other =
+        Player(money = 10, playerId = 1, GetsAnotherTurn = true)
+
+      val result =
+        Gamestate(
+          curentTurn = 0,
+          Players = List(current, other),
+          CurrentTurnPlayerId = 0
+        ).iterateTurn()
+
+      result.CurrentTurnPlayerId shouldBe 0
+      result.Players.find(_.playerId == 0).get.GetsAnotherTurn shouldBe false
+      result.Players.find(_.playerId == 1).get.GetsAnotherTurn shouldBe true
+    }
+
+    "advance safely when current player id does not exist" in {
+      val result =
+        Gamestate(
+          curentTurn = 0,
+          Players = List(p1, p2),
+          CurrentTurnPlayerId = 99
+        ).iterateTurn()
+
+      result.curentTurn shouldBe 1
+      result.CurrentTurnPlayerId shouldBe 0
+    }
+
     "detect if current player has won" in {
       val winner = Player(
         playerId = 0,
@@ -241,6 +283,20 @@ class GamestateSpec extends AnyWordSpec with Matchers {
 
       Gamestate(Players = List(winner), CurrentTurnPlayerId = 0).currentPlayerHasWon() shouldBe true
       Gamestate(Players = List(p1), CurrentTurnPlayerId = 0).currentPlayerHasWon() shouldBe false
+    }
+
+    "return false when checking win condition for a missing current player" in {
+      val winner = Player(
+        playerId = 0,
+        properties = List(
+          bahnhof.copy(cardOwnerId = 0),
+          freizeitpark.copy(cardOwnerId = 0),
+          funkturm.copy(cardOwnerId = 0),
+          einkaufszentrum.copy(cardOwnerId = 0)
+        )
+      )
+
+      Gamestate(Players = List(winner), CurrentTurnPlayerId = 99).currentPlayerHasWon() shouldBe false
     }
 
     "remove a card from stack" in {

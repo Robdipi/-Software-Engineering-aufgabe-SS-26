@@ -3,6 +3,8 @@ import de.htwg.se.machikoro.remake.model.allCardsBaseGame.*
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 
+import java.io.ByteArrayOutputStream
+
 class PlayerSpec extends AnyWordSpec with Matchers {
 
   private def moneyOf(state: Gamestate, playerId: Int): Int =
@@ -42,6 +44,56 @@ class PlayerSpec extends AnyWordSpec with Matchers {
       player.hasWonTheGame() shouldBe true
     }
 
+    "reject full win condition when only one landmark is present" in {
+      Player(properties = List(bahnhof.copy(cardOwnerId = 0)), playerId = 0).hasWonTheGame() shouldBe false
+      Player(properties = List(freizeitpark.copy(cardOwnerId = 0)), playerId = 0).hasWonTheGame() shouldBe false
+      Player(properties = List(funkturm.copy(cardOwnerId = 0)), playerId = 0).hasWonTheGame() shouldBe false
+      Player(properties = List(einkaufszentrum.copy(cardOwnerId = 0)), playerId = 0).hasWonTheGame() shouldBe false
+    }
+
+    "reject full win condition when exactly one required landmark is missing" in {
+      val missingBahnhof = Player(
+        properties = List(
+          freizeitpark.copy(cardOwnerId = 0),
+          funkturm.copy(cardOwnerId = 0),
+          einkaufszentrum.copy(cardOwnerId = 0)
+        ),
+        playerId = 0
+      )
+
+      val missingFreizeitpark = Player(
+        properties = List(
+          bahnhof.copy(cardOwnerId = 0),
+          funkturm.copy(cardOwnerId = 0),
+          einkaufszentrum.copy(cardOwnerId = 0)
+        ),
+        playerId = 0
+      )
+
+      val missingFunkturm = Player(
+        properties = List(
+          bahnhof.copy(cardOwnerId = 0),
+          freizeitpark.copy(cardOwnerId = 0),
+          einkaufszentrum.copy(cardOwnerId = 0)
+        ),
+        playerId = 0
+      )
+
+      val missingEinkaufszentrum = Player(
+        properties = List(
+          bahnhof.copy(cardOwnerId = 0),
+          freizeitpark.copy(cardOwnerId = 0),
+          funkturm.copy(cardOwnerId = 0)
+        ),
+        playerId = 0
+      )
+
+      missingBahnhof.hasWonTheGame() shouldBe false
+      missingFreizeitpark.hasWonTheGame() shouldBe false
+      missingFunkturm.hasWonTheGame() shouldBe false
+      missingEinkaufszentrum.hasWonTheGame() shouldBe false
+    }
+
     "detect a small round win condition" in {
       val player = Player(
         properties = List(
@@ -52,6 +104,11 @@ class PlayerSpec extends AnyWordSpec with Matchers {
       )
 
       player.hasWonTheGameSmallRound() shouldBe true
+    }
+
+    "reject small round win condition when only one required landmark is present" in {
+      Player(properties = List(bahnhof.copy(cardOwnerId = 0)), playerId = 0).hasWonTheGameSmallRound() shouldBe false
+      Player(properties = List(funkturm.copy(cardOwnerId = 0)), playerId = 0).hasWonTheGameSmallRound() shouldBe false
     }
 
     "activate matching blue cards even when another player rolled" in {
@@ -107,13 +164,22 @@ class PlayerSpec extends AnyWordSpec with Matchers {
       player.activateCards(2, 0, Gamestate(Players = List(player))).Players.head.money shouldBe 0
     }
 
-    "print all cards without throwing an exception" in {
+    "print all cards with header and card descriptions" in {
       val player = Player(
         properties = List(weizenfeld.copy(cardOwnerId = 0)),
         playerId = 0
       )
 
-      noException should be thrownBy player.printAllCards()
+      val output = new ByteArrayOutputStream()
+
+      Console.withOut(output) {
+        player.printAllCards()
+      }
+
+      val printed = output.toString("UTF-8")
+      printed should include("Your Current cards:")
+      printed should include("Weizenfeld")
+      printed should include("Erhalte 1 Münze aus der Bank.")
     }
   }
 }
