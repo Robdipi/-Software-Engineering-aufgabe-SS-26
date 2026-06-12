@@ -7,18 +7,17 @@ import org.scalatest.wordspec.AnyWordSpec
 class UndoManagerSpec extends AnyWordSpec with Matchers {
 
   class TestCommand extends Command {
-
     var didDo = false
     var didUndo = false
     var didRedo = false
 
-    override def doStep(g: Gamestate): Unit =
+    override def doStep(gamestate: Gamestate): Unit =
       didDo = true
 
-    override def undoStep(g: Gamestate): Unit =
+    override def undoStep(gamestate: Gamestate): Unit =
       didUndo = true
 
-    override def redoStep(g: Gamestate): Unit =
+    override def redoStep(gamestate: Gamestate): Unit =
       didRedo = true
   }
 
@@ -41,6 +40,23 @@ class UndoManagerSpec extends AnyWordSpec with Matchers {
       manager.undoStep(Gamestate())
 
       command.didUndo shouldBe true
+    }
+
+    "undo multiple commands in reverse order" in {
+      val manager = new UndoManager
+      val command1 = new TestCommand
+      val command2 = new TestCommand
+
+      manager.doStep(Gamestate(), command1)
+      manager.doStep(Gamestate(), command2)
+      manager.undoStep(Gamestate())
+
+      command2.didUndo shouldBe true
+      command1.didUndo shouldBe false
+
+      manager.undoStep(Gamestate())
+
+      command1.didUndo shouldBe true
     }
 
     "handle undo on empty stack" in {

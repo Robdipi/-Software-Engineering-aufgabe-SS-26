@@ -28,5 +28,14 @@ class RandomnessManagerSpec extends AnyWordSpec with Matchers {
 
       v3 shouldBe 1
     }
+
+    "return values between one and six when no predefined values exist" in {
+      val rnd = RandomnessManager()
+      val (value, nextManager) = rnd.getNextNum
+
+      value should be >= 1
+      value should be <= 6
+      nextManager shouldBe rnd
+    }
   }
 }

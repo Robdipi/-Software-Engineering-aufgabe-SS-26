@@ -1,40 +1,41 @@
-import de.htwg.se.machikoro.remake.model.*
+package de.htwg.se.machikoro.remake.model
 
-class cardSpec {
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpec
 
+class CardSpec extends AnyWordSpec with Matchers {
 
-  import org.scalatest.wordspec.AnyWordSpec
-  import org.scalatest.matchers.should.Matchers
+  "A Card" should {
 
-  class CardSpec extends AnyWordSpec with Matchers {
+    "execute its effect when activate is called" in {
+      val card = Card(
+        cardName = "Testkarte",
+        cardOwnerId = 0,
+        effect = (g, owner) => g.changeMoneyOfPlayer(owner, 5)
+      )
 
-    "A card" should {
+      val game = Gamestate(Players = List(Player(money = 10, playerId = 0)))
+      val result = card.activate(game)
 
-      "execute its effect when activate is called" in {
-        val cardEffect = Card(
-          cardName = "Test",
-          cardOwnerId = 0,
-          effect = (g, owner) => g.changeMoneyOfPlayer(owner, 5)
-        )
+      result.Players.head.money shouldBe 15
+    }
 
-        val player = Player(money = 10, playerId = 0)
-        val game = Gamestate(Players = List(player))
+    "keep the state unchanged when the default effect is used" in {
+      val card = Card(cardOwnerId = 0)
+      val game = Gamestate(Players = List(Player(money = 10, playerId = 0)))
 
-        val result = cardEffect.activate(game)
+      card.activate(game) shouldBe game
+    }
 
-        result.Players.head.money shouldBe 15
-      }
+    "return the expected string representation" in {
+      val card = Card(
+        cardName = "Cafe",
+        price = 2,
+        description = "Erhalte 1 Münze.",
+        cardOwnerId = 0
+      )
 
-      "return a readable string" in {
-        val c = Card(
-          cardName = "Cafe",
-          price = 2,
-          cardOwnerId = 0
-        )
-
-        c.cardToString() should include("Cafe")
-        c.cardToString() should include("2")
-      }
+      card.cardToString() shouldBe "|Cafe|costs: 2|Erhalte 1 Münze.|"
     }
   }
 }
