@@ -1,7 +1,7 @@
 package de.htwg.se.machikoro.remake.controller.commandPattern.impl1
 
 import de.htwg.se.machikoro.remake.controller.commandPattern.{Command, UndoManagerInterface}
-import de.htwg.se.machikoro.remake.controller.mementoPatern.{memento, mementoConstatants}
+import de.htwg.se.machikoro.remake.controller.mementoPatern.{mementoConstatants, mementoIntervace}
 import de.htwg.se.machikoro.remake.model.Gamestate
 
 
@@ -35,7 +35,7 @@ class UndoManager extends UndoManagerInterface {
     undoStack = undoStack.filterNot(_.savedGamestate.safeFilePath.equals(mementoName))
   }
 
-  def loadSavefiles(mementos: List[memento]): Option[Gamestate] = {
+  def loadSavefiles(mementos: List[mementoIntervace]): Option[Gamestate] = {
     mementos.headOption.flatMap(_.restore())
   }
 }

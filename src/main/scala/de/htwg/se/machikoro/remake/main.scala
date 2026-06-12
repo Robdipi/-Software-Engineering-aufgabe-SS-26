@@ -6,10 +6,8 @@ import de.htwg.se.machikoro.remake.controller.mementoPatern.mementoCreator
 import de.htwg.se.machikoro.remake.model.Gamestate
 import de.htwg.se.machikoro.remake.model.initialization.{Game, gameInitializationSystem}
 import de.htwg.se.machikoro.remake.view.Tui.TUI
-import de.htwg.se.machikoro.remake.view.Gui.{GUI}
+import de.htwg.se.machikoro.remake.view.Gui.GUI
 import de.htwg.se.machikoro.remake.view.Gui.*
-
-
 import scalafx.application.JFXApp3
 
 

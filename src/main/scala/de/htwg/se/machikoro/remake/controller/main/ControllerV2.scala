@@ -1,9 +1,10 @@
 package de.htwg.se.machikoro.remake.controller.main
 
 import de.htwg.se.machikoro.remake.controller.commandPattern.{Command, UndoManagerInterface}
-import de.htwg.se.machikoro.remake.controller.mementoPatern.{memento, mementoCreator}
 import de.htwg.se.machikoro.remake.controller.*
 import de.htwg.se.machikoro.remake.controller.commandPattern.impl1.UndoManager
+import de.htwg.se.machikoro.remake.controller.mementoPatern.implJson.mementoJson
+import de.htwg.se.machikoro.remake.controller.mementoPatern.mementoCreator
 import de.htwg.se.machikoro.remake.model.*
 import de.htwg.se.machikoro.remake.model.Color.{Purple, Yellow}
 import de.htwg.se.machikoro.remake.model.turnState.*
@@ -113,7 +114,7 @@ class ControllerV2(val winCondition: Player => Boolean ) extends viewObserverabl
 
   //----------------------------------------------------------------------
 
-  class ChooseDiceCommand(amount: Int, savedGamestate : memento) extends Command(savedGamestate){
+  class ChooseDiceCommand(amount: Int, savedGamestate : mementoJson) extends Command(savedGamestate){
     override def doStep(gamestate: Gamestate): Unit = {
       val gamestate2 = gamestate.changeDiceChosen(amount).changeState(Result1)
       notifiyObservers(gamestate2)
@@ -129,7 +130,7 @@ class ControllerV2(val winCondition: Player => Boolean ) extends viewObserverabl
 
 
 
-  class BuyCardCommand(cardName: String,savedGamestate : memento) extends Command(savedGamestate) {
+  class BuyCardCommand(cardName: String,savedGamestate : mementoJson) extends Command(savedGamestate) {
 
     override def doStep(gamestate: Gamestate): Unit = {
 
@@ -172,7 +173,7 @@ class ControllerV2(val winCondition: Player => Boolean ) extends viewObserverabl
     }
   }
 
-    class RejectDiceCommand(reject: Boolean,savedGamestate : memento) extends Command(savedGamestate) {
+    class RejectDiceCommand(reject: Boolean,savedGamestate : mementoJson) extends Command(savedGamestate) {
 
       override def doStep(gamestate: Gamestate): Unit = {
         if (reject) {
