@@ -14,9 +14,7 @@ case class BuyCardInput(cardName: String) extends UserInput
 case class RejectDiceRollInput(reject: Boolean) extends UserInput
 
 trait ControllerInterface extends ViewObservable {
-  var winCondition: WinCondition
-  var undoManager: UndoManagerInterface
-  
+ 
   def handleInput(input: UserInput, gamestate: Gamestate): Unit
   def startTurn(gamestate: Gamestate): Unit
 }

@@ -23,10 +23,9 @@ class minimalWinCondition extends WinCondition{
 
 
 
-class ControllerV2 @Inject() extends ControllerInterface {
+class ControllerV2 @Inject() (val winCondition: WinCondition, val undoManager: UndoManagerInterface) extends ControllerInterface {
   private var rndManager = RandomnessManager()
-  var winCondition: WinCondition = _
-  var undoManager: UndoManagerInterface = _
+  
 
 
   //----------------------------------------------------------------------
@@ -34,13 +33,13 @@ class ControllerV2 @Inject() extends ControllerInterface {
 
   def handleInput(input: UserInput, gamestate: Gamestate): Unit = input match {
     case ChooseDiceAmountInput(amount) =>
-      undoManager.doStep(gamestate,new ChooseDiceCommand(amount,mementoCreator.create(gamestate,Some(undoManager))))
+      undoManager.doStep(gamestate,new ChooseDiceCommand(amount,mementoCreator.create(gamestate,undoManager)))
 
     case BuyCardInput(cardName) =>
-      undoManager.doStep(gamestate,new BuyCardCommand(cardName,mementoCreator.create(gamestate,Some(undoManager))))
+      undoManager.doStep(gamestate,new BuyCardCommand(cardName,mementoCreator.create(gamestate,undoManager)))
 
     case RejectDiceRollInput(reject) =>
-      undoManager.doStep(gamestate,new RejectDiceCommand(reject,mementoCreator.create(gamestate,Some(undoManager))))
+      undoManager.doStep(gamestate,new RejectDiceCommand(reject,mementoCreator.create(gamestate,undoManager)))
   }
 
 

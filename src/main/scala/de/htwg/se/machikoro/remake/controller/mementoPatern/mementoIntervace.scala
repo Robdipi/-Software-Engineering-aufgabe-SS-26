@@ -25,24 +25,24 @@ object mementoConstatants {
 }
 
 trait mementoIntervace () {
-  val undoManager: Option[UndoManagerInterface]
+  val undoManager: UndoManagerInterface
   val safeFilePath : String
   var fileCorrupted = false
   def markFileCorrupted(): Unit = {fileCorrupted = true}
   
   def delete(): Unit = {
     Files.deleteIfExists(Paths.get(safeFilePath))
-    undoManager.foreach(_.delete("safeFilePath"))
+    undoManager.delete("safeFilePath")
   }
   def restore(): Option[Gamestate]
-  def create(gamestate: Gamestate, undoManager: Option[UndoManagerInterface]): mementoIntervace
+  def create(gamestate: Gamestate, undoManager: UndoManagerInterface): mementoIntervace
 }
 
 
 
 object mementoCreator {
   //most stupid solution ever but I dont care. I like it everything else I tried doesn't work and I don't get it
-  val theCreatorOfMementos = mementoJson(None,"( • ̀ω•́ )✧ dont open this")
+  val theCreatorOfMementos = mementoJson( null ,"( • ̀ω•́ )✧ dont open this")  // I know I shouldn't use null 
   val savefolderpath = Paths.get(mementoConstatants.savefilefolder)
   
   //Technically Flywheel pattern as it simplifies the saving of the card and reduces used
@@ -58,7 +58,7 @@ object mementoCreator {
       .toMap
   
 
-  def create(gamestate: Gamestate, undoManager: Option[UndoManagerInterface]): mementoJson = {
+  def create(gamestate: Gamestate, undoManager:UndoManagerInterface): mementoJson = {
     theCreatorOfMementos.create(gamestate, undoManager)
   }
   // delete all savefiles in
@@ -77,7 +77,7 @@ object mementoCreator {
         .filter(_.toString.endsWith(".json"))
         .toSeq
         .sorted
-        .map(path => mementoJson(Some(undoManager),path.toString))
+        .map(path => mementoJson(undoManager,path.toString))
       undoManager.loadSavefiles(mementos.toList)
     }else{
       None

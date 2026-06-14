@@ -1,11 +1,13 @@
 package de.htwg.se.machikoro.remake.view.Tui
 
+import com.google.inject.Inject
 import de.htwg.se.machikoro.remake.controller.main.{BuyCardInput, ChooseDiceAmountInput, ControllerInterface, RejectDiceRollInput, viewObserver}
 import de.htwg.se.machikoro.remake.model.{Gamestate, turnState}
 import de.htwg.se.machikoro.remake.model.turnState.{Buyphase, Cardeffects}
+import de.htwg.se.machikoro.remake.view.ViewInterface
 
 
-class TUI(controller: ControllerInterface) extends viewObserver {
+class TUI @Inject() (controller: ControllerInterface)  extends ViewInterface {
   var inputManager : InputManager = new InputManager()
   controller.add(this)
   

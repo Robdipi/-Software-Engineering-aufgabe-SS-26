@@ -19,7 +19,7 @@ import java.time.format.DateTimeFormatter
 import scala.util.Try
 
 
-case class mementoJson @Inject()(override val undoManager: Option[UndoManagerInterface], override val safeFilePath: String) extends mementoIntervace {
+case class mementoJson @Inject()(override val undoManager: UndoManagerInterface, override val safeFilePath: String) extends mementoIntervace {
  
   
 
@@ -64,7 +64,7 @@ case class mementoJson @Inject()(override val undoManager: Option[UndoManagerInt
 
   
 
-  def create(gamestate: Gamestate, undoManager: Option[UndoManagerInterface]): mementoJson = {
+  def create(gamestate: Gamestate, undoManager: UndoManagerInterface): mementoJson = {
     val jsonString = Json.obj("gamestate" -> gamestate.asJson).spaces2
     val now = LocalDateTime.now()
     val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss")

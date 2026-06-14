@@ -22,14 +22,14 @@ import scala.util.Try
 
 
 
-case class mementoXml@Inject()(override val undoManager: Option[UndoManagerInterface], override val safeFilePath: String) extends mementoIntervace{
+case class mementoXml@Inject()(override val undoManager: UndoManagerInterface, override val safeFilePath: String) extends mementoIntervace{
   
   def restore(): Option[Gamestate] = {
    None
   }
 
-  def create(gamestate: Gamestate, undoManager: Option[UndoManagerInterface]): mementoXml = {
-   mementoXml(None,"skibidi")
+  def create(gamestate: Gamestate, undoManager: UndoManagerInterface): mementoXml = {
+   mementoXml(undoManager,"skibidi")
   }
 }
 
