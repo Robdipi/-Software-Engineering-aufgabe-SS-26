@@ -5,21 +5,21 @@ import de.htwg.se.machikoro.remake.controller.commandPattern.UndoManagerInterfac
 import de.htwg.se.machikoro.remake.controller.commandPattern.impl1.UndoManager
 import de.htwg.se.machikoro.remake.controller.main.{ControllerInterface, WinCondition}
 import de.htwg.se.machikoro.remake.controller.main.impl1.{ControllerV2, DefaultWinCondition, minimalWinCondition}
-import de.htwg.se.machikoro.remake.controller.mementoPatern.Memento.implJson.{mementoCreatorJson, mementoJson}
-import de.htwg.se.machikoro.remake.controller.mementoPatern.Memento.implXml.{mementoCareTakerXml, mementoXml}
-import de.htwg.se.machikoro.remake.controller.mementoPatern.{mementoCareTakerInterface, mementoIntervace}
-import de.htwg.se.machikoro.remake.model.initialization.gameInitializationSystem
+import de.htwg.se.machikoro.remake.controller.mementoPatern.Memento.implJson.{MementoCreatorJson, MementoJson}
+import de.htwg.se.machikoro.remake.controller.mementoPatern.Memento.implXml.{MementoCareTakerXml, MementoXml}
+import de.htwg.se.machikoro.remake.controller.mementoPatern.{MementoCareTakerInterface, MementoIntervace}
+import de.htwg.se.machikoro.remake.model.initialization.GameInitializationSystem
 import de.htwg.se.machikoro.remake.model.initialization.impl1.*
 import de.htwg.se.machikoro.remake.view.Gui.{GUI, MachiKoroApp}
 import de.htwg.se.machikoro.remake.view.Tui.TUI
-import de.htwg.se.machikoro.remake.view.{ViewInterface, starterInterface}
+import de.htwg.se.machikoro.remake.view.{ViewInterface, StarterInterface}
 
 
 class AppModule(args : Array[String]) extends AbstractModule {
   override def configure(): Unit = {
   
     //model/initialization component
-    bind(classOf[gameInitializationSystem]).to(classOf[Game])
+    bind(classOf[GameInitializationSystem]).to(classOf[Game])
     
     //---------------------------------------------------------------------------------
 
@@ -30,12 +30,12 @@ class AppModule(args : Array[String]) extends AbstractModule {
     //controller/mementoPattern component        // sbt "run --xml" to start with using xml for saving
     if (args.contains("--xml")) {
       println("using xml")
-      bind(classOf[mementoIntervace]).to(classOf[mementoXml])
-      bind(classOf[mementoCareTakerInterface]).to(classOf[mementoCareTakerXml])
+      bind(classOf[MementoIntervace]).to(classOf[MementoXml])
+      bind(classOf[MementoCareTakerInterface]).to(classOf[MementoCareTakerXml])
     } else {
       println("using json")
-      bind(classOf[mementoIntervace]).to(classOf[mementoJson])
-      bind(classOf[mementoCareTakerInterface]).to(classOf[mementoCreatorJson])
+      bind(classOf[MementoIntervace]).to(classOf[MementoJson])
+      bind(classOf[MementoCareTakerInterface]).to(classOf[MementoCreatorJson])
     }
     
     //controller/main component
@@ -59,7 +59,7 @@ class AppModule(args : Array[String]) extends AbstractModule {
     }
 
     //view/starterInterface Component
-    bind(classOf[starterInterface]).to(classOf[MachiKoroApp])
+    bind(classOf[StarterInterface]).to(classOf[MachiKoroApp])
 
   }
 

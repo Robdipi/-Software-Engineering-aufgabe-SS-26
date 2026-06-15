@@ -1,6 +1,6 @@
 package de.htwg.se.machikoro.remake.model.Data
 
-import allCardsBaseGame.*
+import AllCardsBaseGame.*
 import de.htwg.se.machikoro.remake.model.Data.turnState.StartofTurn
 import de.htwg.se.machikoro.remake.model.Data.{Player, cardStack, turnState}
 

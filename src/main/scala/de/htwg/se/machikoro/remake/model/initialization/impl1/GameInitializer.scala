@@ -2,8 +2,8 @@ package de.htwg.se.machikoro.remake.model.initialization.impl1
 
 import com.google.inject.Inject
 import de.htwg.se.machikoro.remake.model.Data.{Gamestate, Player, cardStack, startMoneyPlayers}
-import de.htwg.se.machikoro.remake.model.Data.allCardsBaseGame.*
-import de.htwg.se.machikoro.remake.model.initialization.gameInitializationSystem
+import de.htwg.se.machikoro.remake.model.Data.AllCardsBaseGame.*
+import de.htwg.se.machikoro.remake.model.initialization.GameInitializationSystem
 /*
 Factory Pattern to switch out start position
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
@@ -24,54 +24,54 @@ Factory Pattern to switch out start position
 
 
 
-class Game @Inject() ()extends gameInitializationSystem {
+class Game @Inject() extends GameInitializationSystem {
   def apply(n: Int, gametype: String): Gamestate = {
     gametype match {
-      case "hell_of_weat" => initializeWeatHell().createGame(n)
-      case _ | "standart" => initializeStandartGame().createGame(n)
+      case "hell_of_wheat" => InitializeWheatHell().createGame(n)
+      case _ | "standard" => InitializeStandardGame().createGame(n)
     }
   }
 }
 
 
-class initializeStandartGame(){
+class InitializeStandardGame {
   def createGame(playerAmount: Int): Gamestate = {
     val players = (0 until playerAmount).toList.map(i => Player(money = startMoneyPlayers, playerId = i, properties = List(starterweizenfeld.copy(cardOwnerId = i), starterbaeckerei.copy(cardOwnerId = i)))) //gives the players their start cards
-    var gameState = new Gamestate(Players = players)
-    return gameState.copy(cardStacks = List(
-      new cardStack(6, weizenfeld.copy()),
-      new cardStack(6, bauernhof.copy()),
-      new cardStack(6, baeckerei.copy()),
-      new cardStack(6, cafe.copy()),
-      new cardStack(6, minimarkt.copy()),
-      new cardStack(6, wald.copy()),
-      new cardStack(0, buerohaus.copy()),
-      new cardStack(4, stadion.copy()),
-      new cardStack(4, fernsehsender.copy()),
-      new cardStack(6, molkerei.copy()),
-      new cardStack(6, möbelfabrik.copy()),
-      new cardStack(6, familienRestaurant.copy()),
-      new cardStack(6, bergwerk.copy()),
-      new cardStack(6, apfelgarten.copy()),
-      new cardStack(6, markthalle.copy()),
-      new cardStack(4, bahnhof.copy()),
-      new cardStack(4, einkaufszentrum.copy()),
-      new cardStack(4, freizeitpark.copy()),
-      new cardStack(4, funkturm.copy())
+    val gameState = Gamestate(Players = players)
+    gameState.copy(cardStacks = List(
+      cardStack(6, weizenfeld.copy()),
+      cardStack(6, bauernhof.copy()),
+      cardStack(6, baeckerei.copy()),
+      cardStack(6, cafe.copy()),
+      cardStack(6, minimarkt.copy()),
+      cardStack(6, wald.copy()),
+      cardStack(0, buerohaus.copy()),
+      cardStack(4, stadion.copy()),
+      cardStack(4, fernsehsender.copy()),
+      cardStack(6, molkerei.copy()),
+      cardStack(6, möbelfabrik.copy()),
+      cardStack(6, familienRestaurant.copy()),
+      cardStack(6, bergwerk.copy()),
+      cardStack(6, apfelgarten.copy()),
+      cardStack(6, markthalle.copy()),
+      cardStack(4, bahnhof.copy()),
+      cardStack(4, einkaufszentrum.copy()),
+      cardStack(4, freizeitpark.copy()),
+      cardStack(4, funkturm.copy())
     ))
   }
 }
 
-class initializeWeatHell(){
+class InitializeWheatHell {
   def createGame(playerAmount: Int): Gamestate = {
     val players = (0 until playerAmount).toList.map(i => Player(money = startMoneyPlayers, playerId = i, properties = List(starterweizenfeld.copy(cardOwnerId = i), starterbaeckerei.copy(cardOwnerId = i)))) //gives the players their start cards
-    var gameState = new Gamestate(Players = players)
-    return gameState.copy(cardStacks = List(
-      new cardStack(100, weizenfeld.copy()),
-      new cardStack(4, bahnhof.copy()),
-      new cardStack(4, einkaufszentrum.copy()),
-      new cardStack(4, freizeitpark.copy()),
-      new cardStack(4, funkturm.copy())
+    val gameState = Gamestate(Players = players)
+    gameState.copy(cardStacks = List(
+      cardStack(100, weizenfeld.copy()),
+      cardStack(4, bahnhof.copy()),
+      cardStack(4, einkaufszentrum.copy()),
+      cardStack(4, freizeitpark.copy()),
+      cardStack(4, funkturm.copy())
     ))
   }
 }

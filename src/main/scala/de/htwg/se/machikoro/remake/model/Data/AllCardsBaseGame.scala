@@ -13,7 +13,7 @@ import de.htwg.se.machikoro.remake.model.Data.{Card, Color, Type}
 //Store => marktstand-Symbol
 //Dairy => Kuh-Symbol
 
-object allCardsBaseGame {
+object AllCardsBaseGame {
   val starterweizenfeld = Card(
     cardName = "Weizenfeld",
     price = 0,

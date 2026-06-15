@@ -3,8 +3,8 @@ package de.htwg.se.machikoro.remake.controller.mementoPatern.Memento.implXml
 import com.google.inject.Inject
 import de.htwg.se.machikoro.remake.controller.commandPattern.UndoManagerInterface
 import de.htwg.se.machikoro.remake.controller.commandPattern.impl1.UndoManager
-import de.htwg.se.machikoro.remake.controller.mementoPatern.{mementoConstatants, mementoIntervace}
-import de.htwg.se.machikoro.remake.model.Data.{Card, Gamestate, Player, allCardsBaseGame, cardStack, turnState}
+import de.htwg.se.machikoro.remake.controller.mementoPatern.{MementoConstatants, MementoIntervace}
+import de.htwg.se.machikoro.remake.model.Data.{Card, Gamestate, Player, AllCardsBaseGame, cardStack, turnState}
 import de.htwg.se.machikoro.remake.model.Data.Type.{Dairy, Farm}
 import io.circe.*
 import io.circe.generic.semiauto.*
@@ -21,16 +21,16 @@ import scala.xml.{Elem, PrettyPrinter, XML}
 
 
 
-case class mementoXml@Inject()(override val undoManager: UndoManagerInterface, override val safeFilePath: String) extends mementoIntervace{
+case class MementoXml @Inject()(override val undoManager: UndoManagerInterface, override val safeFilePath: String) extends MementoIntervace{
 
   //Technically Flywheel pattern as it simplifies the saving of the card and reduces used
   // memory as only the name gets saved as a key for the concrete card
   val cardRegistry: Map[String, Card] =
-    allCardsBaseGame.getClass.getDeclaredFields
+    AllCardsBaseGame.getClass.getDeclaredFields
       .filter(f => f.getType == classOf[Card])
       .map { f =>
         f.setAccessible(true)
-        val card = f.get(allCardsBaseGame).asInstanceOf[Card]
+        val card = f.get(AllCardsBaseGame).asInstanceOf[Card]
         card.cardName -> card
       }
       .toMap
@@ -95,7 +95,7 @@ case class mementoXml@Inject()(override val undoManager: UndoManagerInterface, o
   }
 
 
-  def create(gamestate: Gamestate, undoManager: UndoManagerInterface): mementoXml = {
+  def create(gamestate: Gamestate, undoManager: UndoManagerInterface): MementoXml = {
     print("create")
     val xml: Elem = gamestateToXml(gamestate)
     val prettyXml = new PrettyPrinter(120, 2).format(xml)
@@ -104,10 +104,10 @@ case class mementoXml@Inject()(override val undoManager: UndoManagerInterface, o
     val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss")
     val timestamp: String = now.format(formatter)
     val path = Paths.get(
-      mementoConstatants.savefilefolder + "/" + timestamp + ".xml"
+      MementoConstatants.SAVEFILE_FOLDER + "/" + timestamp + ".xml"
     )
     Files.write(path, prettyXml.getBytes("UTF-8"))
-    mementoXml(undoManager, path.toString)
+    MementoXml(undoManager, path.toString)
   }
 
   private def playerFromXml(node: scala.xml.Node): Option[Player] = {
@@ -131,7 +131,7 @@ case class mementoXml@Inject()(override val undoManager: UndoManagerInterface, o
       )
     }
   }
-  def cardStackFromXml(node: scala.xml.Node): Option[cardStack] = {
+  private def cardStackFromXml(node: scala.xml.Node): Option[cardStack] = {
     val cardName = (node \ "card").text.trim
     val amount = (node \ "amount").text.trim.toInt
 

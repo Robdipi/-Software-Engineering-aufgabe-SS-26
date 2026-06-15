@@ -1,6 +1,6 @@
 import de.htwg.se.machikoro.remake.model.*
 import de.htwg.se.machikoro.remake.model.Data.{Gamestate, Player, Type, cardStack, startMoneyPlayers, turnState}
-import de.htwg.se.machikoro.remake.model.Data.allCardsBaseGame.*
+import de.htwg.se.machikoro.remake.model.Data.AllCardsBaseGame.*
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 

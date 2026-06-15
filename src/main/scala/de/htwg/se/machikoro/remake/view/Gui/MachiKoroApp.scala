@@ -3,13 +3,12 @@ package de.htwg.se.machikoro.remake.view.Gui
 import com.google.inject.Inject
 import de.htwg.se.machikoro.remake.controller.main.ControllerInterface
 import de.htwg.se.machikoro.remake.model.Data.Gamestate
-import de.htwg.se.machikoro.remake.model.initialization.gameInitializationSystem
-import de.htwg.se.machikoro.remake.view.starterInterface
+import de.htwg.se.machikoro.remake.view.StarterInterface
 import scalafx.application.JFXApp3
 import scalafx.scene.Scene
 
 
-class MachiKoroApp @Inject() (val controller: ControllerInterface) extends starterInterface {
+class MachiKoroApp @Inject() (val controller: ControllerInterface) extends StarterInterface {
 
   private var gs : Gamestate = _
   

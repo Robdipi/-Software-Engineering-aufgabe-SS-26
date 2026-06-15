@@ -1,8 +1,8 @@
 import de.htwg.se.machikoro.remake.model.*
 import de.htwg.se.machikoro.remake.model.Data.{Gamestate, startMoneyPlayers}
-import de.htwg.se.machikoro.remake.model.Data.allCardsBaseGame.*
+import de.htwg.se.machikoro.remake.model.Data.AllCardsBaseGame.*
 import de.htwg.se.machikoro.remake.model.initialization.*
-import de.htwg.se.machikoro.remake.model.initialization.impl1.{Game, initializeStandartGame, initializeWeatHell}
+import de.htwg.se.machikoro.remake.model.initialization.impl1.{Game, InitializeStandardGame, InitializeWheatHell}
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 
@@ -31,14 +31,14 @@ class GameInitializerSpec extends AnyWordSpec with Matchers {
 
     "create requested amount of players with correct start cards and start money" in {
       val game =
-        initializeStandartGame().createGame(4)
+        InitializeStandardGame().createGame(4)
 
       checkStartPlayers(game, 4)
     }
 
     "create all standard card stacks in correct order" in {
       val game =
-        initializeStandartGame().createGame(2)
+        InitializeStandardGame().createGame(2)
 
       stackNames(game) shouldBe List(
         weizenfeld.cardName,
@@ -65,7 +65,7 @@ class GameInitializerSpec extends AnyWordSpec with Matchers {
 
     "create standard card stacks with correct amounts" in {
       val game =
-        initializeStandartGame().createGame(2)
+        InitializeStandardGame().createGame(2)
 
       game.cardStacks.size shouldBe 19
 
@@ -92,7 +92,7 @@ class GameInitializerSpec extends AnyWordSpec with Matchers {
 
     "create an empty standard game when zero players are requested" in {
       val game =
-        initializeStandartGame().createGame(0)
+        InitializeStandardGame().createGame(0)
 
       game.Players shouldBe empty
       game.cardStacks.size shouldBe 19
@@ -103,14 +103,14 @@ class GameInitializerSpec extends AnyWordSpec with Matchers {
 
     "create requested amount of players with correct start cards and start money" in {
       val game =
-        initializeWeatHell().createGame(3)
+        InitializeWheatHell().createGame(3)
 
       checkStartPlayers(game, 3)
     }
 
     "create wheat hell card stacks in correct order" in {
       val game =
-        initializeWeatHell().createGame(2)
+        InitializeWheatHell().createGame(2)
 
       stackNames(game) shouldBe List(
         weizenfeld.cardName,
@@ -123,7 +123,7 @@ class GameInitializerSpec extends AnyWordSpec with Matchers {
 
     "create wheat hell card stacks with correct amounts" in {
       val game =
-        initializeWeatHell().createGame(2)
+        InitializeWheatHell().createGame(2)
 
       game.cardStacks.size shouldBe 5
 
@@ -136,7 +136,7 @@ class GameInitializerSpec extends AnyWordSpec with Matchers {
 
     "create an empty wheat hell game when zero players are requested" in {
       val game =
-        initializeWeatHell().createGame(0)
+        InitializeWheatHell().createGame(0)
 
       game.Players shouldBe empty
       game.cardStacks.size shouldBe 5
@@ -170,7 +170,7 @@ class GameInitializerSpec extends AnyWordSpec with Matchers {
     }
 
     "be usable through gameInitializationSystem trait" in {
-      val system: gameInitializationSystem =
+      val system: GameInitializationSystem =
         new Game()
 
       val game =
