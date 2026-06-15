@@ -3,9 +3,7 @@ package de.htwg.se.machikoro.remake.controller.main
 import de.htwg.se.machikoro.remake.controller.commandPattern.{Command, UndoManagerInterface}
 import de.htwg.se.machikoro.remake.controller.main.impl1.RandomnessManager
 import de.htwg.se.machikoro.remake.controller.mementoPatern.mementoIntervace
-import de.htwg.se.machikoro.remake.model.{Gamestate, Player}
-
-
+import de.htwg.se.machikoro.remake.model.Data.{Gamestate, Player}
 
 
 trait UserInput

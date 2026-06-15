@@ -1,9 +1,9 @@
 package de.htwg.se.machikoro.remake.model.initialization.impl1
 
 import com.google.inject.Inject
-import de.htwg.se.machikoro.remake.model.allCardsBaseGame.*
+import de.htwg.se.machikoro.remake.model.Data.{Gamestate, Player, cardStack, startMoneyPlayers}
+import de.htwg.se.machikoro.remake.model.Data.allCardsBaseGame.*
 import de.htwg.se.machikoro.remake.model.initialization.gameInitializationSystem
-import de.htwg.se.machikoro.remake.model.{Gamestate, Player, cardStack, startMoneyPlayers}
 /*
 Factory Pattern to switch out start position
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀

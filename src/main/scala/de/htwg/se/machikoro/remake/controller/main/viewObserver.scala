@@ -1,6 +1,6 @@
 package de.htwg.se.machikoro.remake.controller.main
 
-import de.htwg.se.machikoro.remake.model.Gamestate
+import de.htwg.se.machikoro.remake.model.Data.Gamestate
 
 trait viewObserver {
     def update(state : Gamestate): Unit

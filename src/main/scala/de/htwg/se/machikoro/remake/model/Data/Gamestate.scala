@@ -1,8 +1,8 @@
-package de.htwg.se.machikoro.remake.model
+package de.htwg.se.machikoro.remake.model.Data
 
-
-import de.htwg.se.machikoro.remake.model.allCardsBaseGame.*
-import de.htwg.se.machikoro.remake.model.turnState.StartofTurn
+import allCardsBaseGame.*
+import de.htwg.se.machikoro.remake.model.Data.turnState.StartofTurn
+import de.htwg.se.machikoro.remake.model.Data.{Player, cardStack, turnState}
 
 import scala.io.StdIn.readLine
 import scala.util.Random

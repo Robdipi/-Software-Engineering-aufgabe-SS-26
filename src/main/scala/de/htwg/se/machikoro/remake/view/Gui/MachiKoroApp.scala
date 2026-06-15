@@ -2,19 +2,20 @@ package de.htwg.se.machikoro.remake.view.Gui
 
 import com.google.inject.Inject
 import de.htwg.se.machikoro.remake.controller.main.ControllerInterface
-import de.htwg.se.machikoro.remake.model.Gamestate
+import de.htwg.se.machikoro.remake.model.Data.Gamestate
 import de.htwg.se.machikoro.remake.model.initialization.gameInitializationSystem
 import de.htwg.se.machikoro.remake.view.starterInterface
 import scalafx.application.JFXApp3
 import scalafx.scene.Scene
 
 
-class MachiKoroApp @Inject() extends starterInterface {
+class MachiKoroApp @Inject() (val controller: ControllerInterface) extends starterInterface {
+
+  private var gs : Gamestate = _
   
-
-
-  def startView(): Unit = {
-    start()
+  
+  def startView(gamestate: Gamestate): Unit = {
+    gs = gamestate
   }
 
   override def start(): Unit = {
@@ -27,6 +28,6 @@ class MachiKoroApp @Inject() extends starterInterface {
       }
     }
 
-    controller.startTurn(startGamestate)
+    controller.startTurn(gs)
   }
 }

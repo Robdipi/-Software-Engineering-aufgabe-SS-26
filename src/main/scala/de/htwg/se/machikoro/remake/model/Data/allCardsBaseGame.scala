@@ -1,6 +1,7 @@
-package de.htwg.se.machikoro.remake.model
+package de.htwg.se.machikoro.remake.model.Data
 
-import de.htwg.se.machikoro.remake.model.Type.*
+import Type.*
+import de.htwg.se.machikoro.remake.model.Data.{Card, Color, Type}
 
 //cardType:
 //Major_Establishment => Fernsehturn-Symbol

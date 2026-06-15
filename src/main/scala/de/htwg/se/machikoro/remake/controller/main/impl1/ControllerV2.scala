@@ -3,10 +3,10 @@ package de.htwg.se.machikoro.remake.controller.main.impl1
 import com.google.inject.Inject
 import de.htwg.se.machikoro.remake.controller.commandPattern.{Command, UndoManagerInterface}
 import de.htwg.se.machikoro.remake.controller.main.{BuyCardInput, ChooseDiceAmountInput, ControllerInterface, RejectDiceRollInput, UserInput, WinCondition, viewObserver}
-import de.htwg.se.machikoro.remake.controller.mementoPatern.{mementoCreator, mementoIntervace}
-import de.htwg.se.machikoro.remake.model.Color.{Purple, Yellow}
-import de.htwg.se.machikoro.remake.model.turnState.*
-import de.htwg.se.machikoro.remake.model.{Gamestate, Player, turnState}
+import de.htwg.se.machikoro.remake.controller.mementoPatern.{mementoCareTakerInterface, mementoIntervace}
+import de.htwg.se.machikoro.remake.model.Data.Color.{Purple, Yellow}
+import de.htwg.se.machikoro.remake.model.Data.{Gamestate, Player, turnState}
+import de.htwg.se.machikoro.remake.model.Data.turnState.*
 
 class DefaultWinCondition extends WinCondition{
   def check(player: Player): Boolean = {
@@ -23,7 +23,9 @@ class minimalWinCondition extends WinCondition{
 
 
 
-class ControllerV2 @Inject() (val winCondition: WinCondition, val undoManager: UndoManagerInterface) extends ControllerInterface {
+class ControllerV2 @Inject() (val winCondition: WinCondition, 
+                              val undoManager: UndoManagerInterface,
+                              val mementoCreator : mementoCareTakerInterface) extends ControllerInterface {
   private var rndManager = RandomnessManager()
   
 

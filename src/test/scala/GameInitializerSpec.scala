@@ -1,5 +1,6 @@
 import de.htwg.se.machikoro.remake.model.*
-import de.htwg.se.machikoro.remake.model.allCardsBaseGame.*
+import de.htwg.se.machikoro.remake.model.Data.{Gamestate, startMoneyPlayers}
+import de.htwg.se.machikoro.remake.model.Data.allCardsBaseGame.*
 import de.htwg.se.machikoro.remake.model.initialization.*
 import de.htwg.se.machikoro.remake.model.initialization.impl1.{Game, initializeStandartGame, initializeWeatHell}
 import org.scalatest.matchers.should.Matchers

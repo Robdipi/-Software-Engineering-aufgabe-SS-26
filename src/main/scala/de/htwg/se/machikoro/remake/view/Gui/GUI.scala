@@ -2,10 +2,10 @@ package de.htwg.se.machikoro.remake.view.Gui
 
 
 import com.google.inject.Inject
-import de.htwg.se.machikoro.remake.model.turnState.Buyphase
+import de.htwg.se.machikoro.remake.model.Data.turnState.Buyphase
 import de.htwg.se.machikoro.remake.controller.main.{BuyCardInput, ChooseDiceAmountInput, ControllerInterface, RejectDiceRollInput, viewObserver}
-import de.htwg.se.machikoro.remake.model.{Gamestate, Player, turnState}
-import de.htwg.se.machikoro.remake.model.turnState.{Buyphase, Cardeffects}
+import de.htwg.se.machikoro.remake.model.Data.{Gamestate, Player, turnState}
+import turnState.{Buyphase, Cardeffects}
 import de.htwg.se.machikoro.remake.view.ViewInterface
 import scalafx.geometry.Pos
 import scalafx.scene.layout.StackPane

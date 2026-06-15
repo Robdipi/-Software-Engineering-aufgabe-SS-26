@@ -1,6 +1,6 @@
 import de.htwg.se.machikoro.remake.controller.commandPattern.Command
 import de.htwg.se.machikoro.remake.controller.commandPattern.impl1.UndoManager
-import de.htwg.se.machikoro.remake.model.Gamestate
+import de.htwg.se.machikoro.remake.model.Data.Gamestate
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 

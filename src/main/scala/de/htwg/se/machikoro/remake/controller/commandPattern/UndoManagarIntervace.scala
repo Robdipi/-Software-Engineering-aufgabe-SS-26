@@ -1,7 +1,7 @@
 package de.htwg.se.machikoro.remake.controller.commandPattern
 
 import de.htwg.se.machikoro.remake.controller.mementoPatern.mementoIntervace
-import de.htwg.se.machikoro.remake.model.Gamestate
+import de.htwg.se.machikoro.remake.model.Data.Gamestate
 
 trait UndoManagerInterface {
   def doStep(gamestate: Gamestate, command: Command): Unit

@@ -2,11 +2,9 @@ package de.htwg.se.machikoro.remake.controller.commandPattern.impl1
 
 import de.htwg.se.machikoro.remake.controller.commandPattern.{Command, UndoManagerInterface}
 import de.htwg.se.machikoro.remake.controller.mementoPatern.{mementoConstatants, mementoIntervace}
-import de.htwg.se.machikoro.remake.model.Gamestate
+import de.htwg.se.machikoro.remake.model.Data.Gamestate
 
 
-
-  
 class UndoManager extends UndoManagerInterface {
   private var undoStack: List[Command] = Nil
   private var redoStack: List[Command] = Nil

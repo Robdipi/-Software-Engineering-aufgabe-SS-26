@@ -1,13 +1,12 @@
-package de.htwg.se.machikoro.remake.controller.mementoPatern.implJson
+package de.htwg.se.machikoro.remake.controller.mementoPatern.Memento.implJson
 
 import com.google.inject.Inject
 import de.htwg.se.machikoro.remake.controller.commandPattern.impl1.UndoManager
 import de.htwg.se.machikoro.remake.controller.commandPattern.{Command, UndoManagerInterface}
 import de.htwg.se.machikoro.remake.controller.mementoPatern.mementoConstatants.savefilefolder
-import de.htwg.se.machikoro.remake.controller.mementoPatern.*
-import de.htwg.se.machikoro.remake.controller.mementoPatern.mementoCreator.cardRegistry
-import de.htwg.se.machikoro.remake.model.*
-import de.htwg.se.machikoro.remake.model.Type.{Dairy, Farm}
+import de.htwg.se.machikoro.remake.controller.mementoPatern.{mementoConstatants, mementoIntervace}
+import de.htwg.se.machikoro.remake.model.Data.{Card, Gamestate, Player, allCardsBaseGame, cardStack, turnState}
+import de.htwg.se.machikoro.remake.model.Data.Type.{Dairy, Farm}
 import io.circe.*
 import io.circe.generic.semiauto.*
 import io.circe.parser.decode
@@ -20,8 +19,18 @@ import scala.util.Try
 
 
 case class mementoJson @Inject()(override val undoManager: UndoManagerInterface, override val safeFilePath: String) extends mementoIntervace {
- 
-  
+
+  //Technically Flywheel pattern as it simplifies the saving of the card and reduces used
+  // memory as only the name gets saved as a key for the concrete card
+  val cardRegistry: Map[String, Card] =
+    allCardsBaseGame.getClass.getDeclaredFields
+      .filter(f => f.getType == classOf[Card])
+      .map { f =>
+        f.setAccessible(true)
+        val card = f.get(allCardsBaseGame).asInstanceOf[Card]
+        card.cardName -> card
+      }
+      .toMap
 
   given Decoder[Card] =
     Decoder.decodeString.emap { name =>

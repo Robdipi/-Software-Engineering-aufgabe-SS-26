@@ -4,9 +4,9 @@ import de.htwg.se.machikoro.remake.controller.commandPattern.impl1.UndoManager
 import de.htwg.se.machikoro.remake.controller.commandPattern.{Command, UndoManagerInterface}
 import mementoConstatants.savefilefolder
 import de.htwg.se.machikoro.remake.controller.mementoPatern.*
-import de.htwg.se.machikoro.remake.controller.mementoPatern.implJson.mementoJson
-import de.htwg.se.machikoro.remake.model.*
-import de.htwg.se.machikoro.remake.model.Type.{Dairy, Farm}
+import de.htwg.se.machikoro.remake.controller.mementoPatern.Memento.implJson.mementoJson
+import de.htwg.se.machikoro.remake.model.Data.{Card, Gamestate, allCardsBaseGame}
+import de.htwg.se.machikoro.remake.model.Data.Type.{Dairy, Farm}
 import io.circe.*
 import io.circe.generic.semiauto.*
 import io.circe.parser.decode
@@ -39,49 +39,10 @@ trait mementoIntervace () {
 }
 
 
+trait mementoCareTakerInterface () {
+  def create(gamestate: Gamestate, undoManager: UndoManagerInterface): mementoIntervace
+  def flushSavefiles(): Unit
+  def loadGamesave(undoManager: UndoManagerInterface): Option[Gamestate]
 
-object mementoCreator {
-  //most stupid solution ever but I dont care. I like it everything else I tried doesn't work and I don't get it
-  val theCreatorOfMementos = mementoJson( null ,"( • ̀ω•́ )✧ dont open this")  // I know I shouldn't use null 
-  val savefolderpath = Paths.get(mementoConstatants.savefilefolder)
   
-  //Technically Flywheel pattern as it simplifies the saving of the card and reduces used
-  // memory as only the name gets saved as a key for the concrete card
-  val cardRegistry: Map[String, Card] =
-    allCardsBaseGame.getClass.getDeclaredFields
-      .filter(f => f.getType == classOf[Card])
-      .map { f =>
-        f.setAccessible(true)
-        val card = f.get(allCardsBaseGame).asInstanceOf[Card]
-        card.cardName -> card
-      }
-      .toMap
-  
-
-  def create(gamestate: Gamestate, undoManager:UndoManagerInterface): mementoJson = {
-    theCreatorOfMementos.create(gamestate, undoManager)
-  }
-  // delete all savefiles in
-  def flushSavefiles() : Unit = {
-    if (Files.exists(savefolderpath) && Files.isDirectory(savefolderpath)) {
-      Files.list(savefolderpath).forEach(path => Files.delete(path))
-    }
-  }
-
-  // writes all savefiles ordered as mementos into the undo queue and loads the lattest one
-  def loadGamesave(undoManager: UndoManagerInterface): Option[Gamestate] = {
-    if (Files.exists(savefolderpath) && Files.isDirectory(savefolderpath)) {
-      val mementos = Files.list(savefolderpath)
-        .iterator()
-        .asScala
-        .filter(_.toString.endsWith(".json"))
-        .toSeq
-        .sorted
-        .map(path => mementoJson(undoManager,path.toString))
-      undoManager.loadSavefiles(mementos.toList)
-    }else{
-      None
-    }
-  }
-
 }

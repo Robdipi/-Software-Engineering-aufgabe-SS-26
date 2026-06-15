@@ -5,9 +5,9 @@ import de.htwg.se.machikoro.remake.controller.commandPattern.UndoManagerInterfac
 import de.htwg.se.machikoro.remake.controller.commandPattern.impl1.UndoManager
 import de.htwg.se.machikoro.remake.controller.main.{ControllerInterface, WinCondition}
 import de.htwg.se.machikoro.remake.controller.main.impl1.{ControllerV2, DefaultWinCondition, minimalWinCondition}
-import de.htwg.se.machikoro.remake.controller.mementoPatern.mementoIntervace
-import de.htwg.se.machikoro.remake.controller.mementoPatern.implJson.*
-import de.htwg.se.machikoro.remake.controller.mementoPatern.implXml.*
+import de.htwg.se.machikoro.remake.controller.mementoPatern.Memento.implJson.{mementoCreatorJson, mementoJson}
+import de.htwg.se.machikoro.remake.controller.mementoPatern.Memento.implXml.{mementoCareTakerXml, mementoXml}
+import de.htwg.se.machikoro.remake.controller.mementoPatern.{mementoCareTakerInterface, mementoIntervace}
 import de.htwg.se.machikoro.remake.model.initialization.gameInitializationSystem
 import de.htwg.se.machikoro.remake.model.initialization.impl1.*
 import de.htwg.se.machikoro.remake.view.Gui.{GUI, MachiKoroApp}
@@ -27,11 +27,15 @@ class AppModule(args : Array[String]) extends AbstractModule {
     bind(classOf[UndoManagerInterface]).to(classOf[UndoManager])
 
 
-    //controller/mementoPattern component
+    //controller/mementoPattern component        // sbt "run --xml" to start with using xml for saving
     if (args.contains("--xml")) {
+      println("using xml")
       bind(classOf[mementoIntervace]).to(classOf[mementoXml])
+      bind(classOf[mementoCareTakerInterface]).to(classOf[mementoCareTakerXml])
     } else {
+      println("using json")
       bind(classOf[mementoIntervace]).to(classOf[mementoJson])
+      bind(classOf[mementoCareTakerInterface]).to(classOf[mementoCreatorJson])
     }
     
     //controller/main component
