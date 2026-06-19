@@ -7,15 +7,24 @@ import de.htwg.se.machikoro.remake.view.StarterInterface
 import scalafx.application.JFXApp3
 import scalafx.scene.Scene
 
+class MachiKoroApp @Inject()(val controller: ControllerInterface) extends StarterInterface {
 
-class MachiKoroApp @Inject() (val controller: ControllerInterface) extends StarterInterface {
+  private var gs: Gamestate = _
 
-  private var gs : Gamestate = _
-  
-  
-  def startView(gamestate: Gamestate): Unit = {
+  override def startView(gamestate: Gamestate): Unit = {
     gs = gamestate
   }
+
+  override def start(): Unit = {
+    MachiKoroFxApp.controller = controller
+    MachiKoroFxApp.startGamestate = gs
+    MachiKoroFxApp.main(Array.empty)
+  }
+}
+
+object MachiKoroFxApp extends JFXApp3 {
+  var controller: ControllerInterface = _
+  var startGamestate: Gamestate = _
 
   override def start(): Unit = {
     val gui = new GUI(controller)
@@ -25,8 +34,11 @@ class MachiKoroApp @Inject() (val controller: ControllerInterface) extends Start
       scene = new Scene(1400, 900) {
         root = gui.root
       }
+      minWidth = 1180
+      minHeight = 760
     }
 
-    controller.startTurn(gs)
+    controller.add(gui)
+    controller.startTurn(startGamestate)
   }
 }
