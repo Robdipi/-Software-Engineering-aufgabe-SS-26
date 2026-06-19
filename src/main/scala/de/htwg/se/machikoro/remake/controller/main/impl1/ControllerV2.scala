@@ -1,75 +1,70 @@
-package de.htwg.se.machikoro.remake.controller.main
+package de.htwg.se.machikoro.remake.controller.main.impl1
 
+import com.google.inject.Inject
 import de.htwg.se.machikoro.remake.controller.commandPattern.{Command, UndoManagerInterface}
-import de.htwg.se.machikoro.remake.controller.*
-import de.htwg.se.machikoro.remake.controller.commandPattern.impl1.UndoManager
-import de.htwg.se.machikoro.remake.controller.mementoPatern.implJson.mementoJson
-import de.htwg.se.machikoro.remake.controller.mementoPatern.mementoCreator
-import de.htwg.se.machikoro.remake.model.*
-import de.htwg.se.machikoro.remake.model.Color.{Purple, Yellow}
-import de.htwg.se.machikoro.remake.model.turnState.*
+import de.htwg.se.machikoro.remake.controller.main.{BuyCardInput, ChooseDiceAmountInput, ControllerInterface, RejectDiceRollInput, UserInput, WinCondition}
+import de.htwg.se.machikoro.remake.controller.mementoPatern.{MementoCareTakerInterface, MementoIntervace}
+import de.htwg.se.machikoro.remake.model.Data.Color.{Purple, Yellow}
+import de.htwg.se.machikoro.remake.model.Data.{Gamestate, Player, turnState}
+import de.htwg.se.machikoro.remake.model.Data.turnState.*
+
+class DefaultWinCondition extends WinCondition{
+  def check(player: Player): Boolean = {
+    player.hasWonTheGame()
+  }
+}
+class minimalWinCondition extends WinCondition{
+  def check(player: Player): Boolean = {
+    player.hasWonTheGameSmallRound()
+  }
+}
 
 
 
 
-sealed trait UserInput
-case class ChooseDiceAmount(amount: Int) extends UserInput
-case class BuyCard(cardName: String) extends UserInput
-case class RejectDiceRoll(reject: Boolean) extends UserInput
 
-class ControllerV2(val winCondition: Player => Boolean ) extends viewObserverable {
-
- // var gamestate = Gamestate()
+class ControllerV2 @Inject() (val winCondition: WinCondition, 
+                              val undoManager: UndoManagerInterface,
+                              val mementoCreator : MementoCareTakerInterface) extends ControllerInterface {
   private var rndManager = RandomnessManager()
-  val undoManager = new UndoManager()
- 
+  
 
 
+  //----------------------------------------------------------------------
 
-  /*
-
-  Input
-
-   */
 
   def handleInput(input: UserInput, gamestate: Gamestate): Unit = input match {
-    case ChooseDiceAmount(amount) =>
+    case ChooseDiceAmountInput(amount) =>
+      undoManager.doStep(gamestate,new ChooseDiceCommand(amount,mementoCreator.create(gamestate,undoManager)))
 
-      undoManager.doStep(gamestate,new ChooseDiceCommand(amount,mementoCreator.create(gamestate,Some(undoManager))))
+    case BuyCardInput(cardName) =>
+      undoManager.doStep(gamestate,new BuyCardCommand(cardName,mementoCreator.create(gamestate,undoManager)))
 
-    case BuyCard(cardName) =>
-      undoManager.doStep(gamestate,new BuyCardCommand(cardName,mementoCreator.create(gamestate,Some(undoManager))))
-
-    case RejectDiceRoll(reject) =>
-      undoManager.doStep(gamestate,new RejectDiceCommand(reject,mementoCreator.create(gamestate,Some(undoManager))))
+    case RejectDiceRollInput(reject) =>
+      undoManager.doStep(gamestate,new RejectDiceCommand(reject,mementoCreator.create(gamestate,undoManager)))
   }
 
-  /*
-  Helper methods
+
+  //----------------------------------------------------------------------
 
 
-
-   */
-
-
-
-  def tryToBuy(gamestate: Gamestate): Unit = {
-    notifiyObservers(gamestate.changeState(Buyphase))
+  private def tryToBuy(gamestate: Gamestate): Unit = {
+    notifyObservers(gamestate.changeState(Buyphase))
   }
 
   def startTurn(gamestate: Gamestate): Unit = {
     val gamestate1 = gamestate.changeState(turnState.StartofTurn)
-    notifiyObservers(gamestate1)
+    notifyObservers(gamestate1)
     if (gamestate1.Players.find(_.playerId == gamestate1.CurrentTurnPlayerId).exists(_.canChooseDyeAmount())) {
-      notifiyObservers(gamestate1.changeState(turnState.ChooseDiceAmount))
+      notifyObservers(gamestate1.changeState(turnState.ChooseDiceAmount))
     } else {
       resultone(gamestate1.changeState(turnState.Result1).changeDiceChosen(1))
     }
   }
 
-  def endOfTurn(gamestate: Gamestate): Unit = {
-    if (gamestate.Players.find(_.playerId == gamestate.CurrentTurnPlayerId).exists(winCondition)) {
-      notifiyObservers(gamestate.changeState(PlayerWins))
+  private def endOfTurn(gamestate: Gamestate): Unit = {
+    if (gamestate.Players.find(_.playerId == gamestate.CurrentTurnPlayerId).exists(winCondition.check)) {
+      notifyObservers(gamestate.changeState(PlayerWins))
       System.exit(0)
     } else {
       startTurn(gamestate.iterateTurn().changeState(StartofTurn))
@@ -94,10 +89,10 @@ class ControllerV2(val winCondition: Player => Boolean ) extends viewObserverabl
       .changePlayers(updatedPlayers)
       .changeDiceResult(if (state.diceChoosen == 2) dicethrowA + dicethrowB else dicethrowA)
 
-    notifiyObservers(newState)
+    notifyObservers(newState)
 
     if (state.Players.exists(p => p.playerId == state.CurrentTurnPlayerId && p.canRejectDyeTrow())) {
-      notifiyObservers(newState.changeState(turnState.AskForRejectionOfResult))
+      notifyObservers(newState.changeState(turnState.AskForRejectionOfResult))
     } else {
       activateCardsController(newState)
     }
@@ -105,19 +100,19 @@ class ControllerV2(val winCondition: Player => Boolean ) extends viewObserverabl
 
 
 
-  def activateCardsController(state: Gamestate): Unit = {
+  private def activateCardsController(state: Gamestate): Unit = {
     val s2 = state.activateCards(state.DiceResult, state.CurrentTurnPlayerId).changeState(Result2)
-    notifiyObservers(s2)
+    notifyObservers(s2)
     tryToBuy(s2)
   }
 
 
   //----------------------------------------------------------------------
 
-  class ChooseDiceCommand(amount: Int, savedGamestate : mementoJson) extends Command(savedGamestate){
+   private class ChooseDiceCommand(amount: Int, savedGamestate : MementoIntervace) extends Command(savedGamestate){
     override def doStep(gamestate: Gamestate): Unit = {
       val gamestate2 = gamestate.changeDiceChosen(amount).changeState(Result1)
-      notifiyObservers(gamestate2)
+      notifyObservers(gamestate2)
       resultone(gamestate2)
     }
     override def undoStep(gamestate: Gamestate): Unit = {
@@ -130,7 +125,7 @@ class ControllerV2(val winCondition: Player => Boolean ) extends viewObserverabl
 
 
 
-  class BuyCardCommand(cardName: String,savedGamestate : mementoJson) extends Command(savedGamestate) {
+  private class BuyCardCommand(cardName: String, savedGamestate : MementoIntervace) extends Command(savedGamestate) {
 
     override def doStep(gamestate: Gamestate): Unit = {
 
@@ -180,7 +175,7 @@ class ControllerV2(val winCondition: Player => Boolean ) extends viewObserverabl
     }
   }
 
-    class RejectDiceCommand(reject: Boolean,savedGamestate : mementoJson) extends Command(savedGamestate) {
+    private class RejectDiceCommand(reject: Boolean, savedGamestate : MementoIntervace) extends Command(savedGamestate) {
 
       override def doStep(gamestate: Gamestate): Unit = {
         if (reject) {

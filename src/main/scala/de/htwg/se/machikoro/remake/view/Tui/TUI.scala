@@ -1,13 +1,16 @@
 package de.htwg.se.machikoro.remake.view.Tui
 
-import de.htwg.se.machikoro.remake.controller.main.*
-import de.htwg.se.machikoro.remake.model.*
-import de.htwg.se.machikoro.remake.model.turnState.{Buyphase, Cardeffects}
+import com.google.inject.Inject
+import de.htwg.se.machikoro.remake.controller.main.{BuyCardInput, ChooseDiceAmountInput, ControllerInterface, RejectDiceRollInput}
+import de.htwg.se.machikoro.remake.model.Data.{Gamestate, turnState}
+import de.htwg.se.machikoro.remake.view.ViewInterface
+
+import scala.annotation.tailrec
 
 
-class TUI(controllerV2: ControllerV2) extends viewObserver {
-  var inputManager : InputManager = new InputManager()
-  controllerV2.add(this)
+class TUI @Inject() (controller: ControllerInterface)  extends ViewInterface {
+  var inputManager : InputManager = InputManager()
+  controller.add(this)
   
   def update(gamestate: Gamestate): Unit = {
     println(s"UPDATE: ${gamestate.state}")//To debug
@@ -17,7 +20,7 @@ class TUI(controllerV2: ControllerV2) extends viewObserver {
 
 
 //StartofTurn, ChooseDiceAmount,Result1,AskForRejectionOfResult,Result2,Cardeffects,Buyphase,PlayerWins
-  def handleVisuals(gamestate: Gamestate): Unit = gamestate.state match {
+  private def handleVisuals(gamestate: Gamestate): Unit = gamestate.state match {
     case turnState.StartofTurn =>
       println("---------------------------------------------------------------------" )
       println("Player " + (gamestate.CurrentTurnPlayerId +1) + " turn" )
@@ -28,8 +31,8 @@ class TUI(controllerV2: ControllerV2) extends viewObserver {
     case turnState.ALREADY_OWN_THAT_YELLOW_CARD_WARNING => println("You already own this yellow card")
     case turnState.ALREADY_OWN_PURPLE_CARD_WARNING => println("You already own a purple card")
     case turnState.NO_CARDS_LEFT_OF_THAT_TYPE_WARNING => println("No cards left of this type")
-    case turnState.YOU_CANT_AFFORD_THIS_WARNING => println("You don't have enought money")
-    case turnState.NONE_EXISTANT_CARDNAME_WARNING => println("Cardname doesn't exist")
+    case turnState.YOU_CANT_AFFORD_THIS_WARNING => println("You don't have enough money")
+    case turnState.NONE_EXISTANT_CARDNAME_WARNING => println("Card name doesn't exist")
     case _ => // do nothing
   }
 
@@ -39,7 +42,7 @@ class TUI(controllerV2: ControllerV2) extends viewObserver {
   def handleInput(gamestate: Gamestate): Unit = gamestate.state match {
     case turnState.ChooseDiceAmount =>
       val dice = getDiceAmount()
-      controllerV2.handleInput(ChooseDiceAmount(dice), gamestate)
+      controller.handleInput(ChooseDiceAmountInput(dice), gamestate)
     case turnState.Buyphase =>
       println("")
       println("These Cards are currently available to buy: ")
@@ -50,13 +53,14 @@ class TUI(controllerV2: ControllerV2) extends viewObserver {
       println(s"You have $money €")
 
       val cardName = getCardToBuy()
-      controllerV2.handleInput(BuyCard(cardName), gamestate)
+      controller.handleInput(BuyCardInput(cardName), gamestate)
     case turnState.AskForRejectionOfResult =>
       val reject = askForRejection()
-      controllerV2.handleInput(RejectDiceRoll(reject), gamestate)
+      controller.handleInput(RejectDiceRollInput(reject), gamestate)
     case _ => // do nothing
   }
 
+  @tailrec
   private def getDiceAmount(): Int = {
     val input = scala.io.StdIn.readLine("How many dice? (1/2): ")
     input match {
@@ -71,11 +75,12 @@ class TUI(controllerV2: ControllerV2) extends viewObserver {
   private def getCardToBuy(): String = {
     val (input, inputManager2) = inputManager.getNextInput("Enter card name to buy (or 'next'): ")
     inputManager = inputManager2
-    return input
+    input
   }
 
 
 
+  @tailrec
   private def askForRejection(): Boolean = {
     val (input, inputManager2) = inputManager.getNextInput("Reject dice? (y/n): ")
     inputManager = inputManager2
