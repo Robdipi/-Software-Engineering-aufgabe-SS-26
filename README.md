@@ -2,7 +2,21 @@
 
 [![Coverage Status](https://coveralls.io/repos/github/Robdipi/-Software-Engineering-aufgabe-SS-26/badge.svg)](https://coveralls.io/github/Robdipi/-Software-Engineering-aufgabe-SS-26)
 
-This is the Readme for our Machi Koro remake
+## Machi Koro Remade using SCALA
+
+
+### TO Start the game in the GUI sbt "run --gui"
+
+
+### Start Flags
+You can combine these Flags
+
+sbt "run --gui" to start with GUI instead of TUI
+sbt "run --mem" to load last gamesave on start (Doesn't work!)
+sbt "run --xml" to make savefiles use Xml instead of Json
+sbt "run --SR" to start with a diffrent wincondition
+
+
 
 Here some nice Ascii art:
 
