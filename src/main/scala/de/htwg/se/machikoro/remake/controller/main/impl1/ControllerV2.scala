@@ -65,7 +65,6 @@ class ControllerV2 @Inject() (val winCondition: WinCondition,
   private def endOfTurn(gamestate: Gamestate): Unit = {
     if (gamestate.Players.find(_.playerId == gamestate.CurrentTurnPlayerId).exists(winCondition.check)) {
       notifyObservers(gamestate.changeState(PlayerWins))
-      System.exit(0)
     } else {
       startTurn(gamestate.iterateTurn().changeState(StartofTurn))
     }

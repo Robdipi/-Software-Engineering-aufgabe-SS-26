@@ -6,25 +6,22 @@ import de.htwg.se.machikoro.remake.controller.commandPattern.impl1.UndoManager
 import de.htwg.se.machikoro.remake.controller.mementoPatern.{MementoConstatants, MementoIntervace}
 import de.htwg.se.machikoro.remake.model.Data.{Card, Gamestate, Player, AllCardsBaseGame, cardStack, turnState}
 import de.htwg.se.machikoro.remake.model.Data.Type.{Dairy, Farm}
-import io.circe.*
-import io.circe.generic.semiauto.*
-import io.circe.parser.decode
-import io.circe.syntax.*
 
 import java.nio.file.{Files, Paths}
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-import scala.collection.JavaConverters.asScalaIteratorConverter
-import scala.util.Try
 import scala.xml.{Elem, PrettyPrinter, XML}
+
 
 
 
 
 case class MementoXml @Inject()(override val undoManager: UndoManagerInterface, override val safeFilePath: String) extends MementoIntervace{
 
-  //Technically Flywheel pattern as it simplifies the saving of the card and reduces used
-  // memory as only the name gets saved as a key for the concrete card
+ 
+  /**
+   * Flywheel pattern maps cardname to card to save it
+   */
   val cardRegistry: Map[String, Card] =
     AllCardsBaseGame.getClass.getDeclaredFields
       .filter(f => f.getType == classOf[Card])

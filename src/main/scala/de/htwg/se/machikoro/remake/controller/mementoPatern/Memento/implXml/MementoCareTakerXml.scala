@@ -12,13 +12,19 @@ class MementoCareTakerXml  @Inject() extends MementoCareTakerInterface {
     val savefolderpath = Paths.get(MementoConstatants.SAVEFILE_FOLDER)
 
 
-
-
+  /**
+   * Create a new Memento from a Gamestate and UndoManager
+   * @param gamestate the gamestate
+   *                  
+   */
     def create(gamestate: Gamestate, undoManager: UndoManagerInterface): MementoXml = {
       theCreatorOfMementos.create(gamestate, undoManager)
     }
 
-    // delete all savefiles in
+
+  /**
+   * Delete all savefiles
+   */
     def flushSavefiles(): Unit = {
       if (Files.exists(savefolderpath) && Files.isDirectory(savefolderpath)) {
         Files.list(savefolderpath).forEach(path => Files.delete(path))
