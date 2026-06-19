@@ -5,7 +5,7 @@ import de.htwg.se.machikoro.remake.controller.commandPattern.impl1.UndoManager
 import de.htwg.se.machikoro.remake.controller.commandPattern.{Command, UndoManagerInterface}
 import de.htwg.se.machikoro.remake.controller.mementoPatern.MementoConstatants.SAVEFILE_FOLDER
 import de.htwg.se.machikoro.remake.controller.mementoPatern.{MementoConstatants, MementoIntervace}
-import de.htwg.se.machikoro.remake.model.Data.{Card, Gamestate, Player, AllCardsBaseGame, cardStack, turnState}
+import de.htwg.se.machikoro.remake.model.Data.{Card, Gamestate, Player, AllCardsBaseGame, cardStack, TurnState}
 import de.htwg.se.machikoro.remake.model.Data.Type.{Dairy, Farm}
 import io.circe.*
 import io.circe.generic.semiauto.*
@@ -45,17 +45,17 @@ case class MementoJson @Inject()(override val undoManager: UndoManagerInterface,
   given Decoder[Player] = deriveDecoder
   given Decoder[cardStack] = deriveDecoder
   given Decoder[Gamestate] = deriveDecoder
-  given Decoder[turnState] = Decoder.decodeString.map { str =>
-    Try(turnState.valueOf(str)).getOrElse {
+  given Decoder[TurnState] = Decoder.decodeString.map { str =>
+    Try(TurnState.valueOf(str)).getOrElse {
       println(s"Warning: deleted safefile because of corrupted turnstate")
       markFileCorrupted()
-      turnState.StartofTurn
+      TurnState.StartofTurn
     }
   }
 
   
   given Encoder[Card] = Encoder.encodeString.contramap(_.cardName)
-  given Encoder[turnState] = Encoder.encodeString.contramap(_.toString)
+  given Encoder[TurnState] = Encoder.encodeString.contramap(_.toString)
   given Encoder[Player] = deriveEncoder
   given Encoder[cardStack] = deriveEncoder
   given Encoder[Gamestate] = deriveEncoder

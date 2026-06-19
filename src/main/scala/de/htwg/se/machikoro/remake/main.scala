@@ -26,12 +26,13 @@ object main{
     mementoCreator.flushSavefiles()
 
 
-    val ui = injector.getInstance(classOf[ViewInterface])
-    controller.add(ui)
-    if (args.contains("--gui")) { // sbt "run --gui" to start with gui
+    if (args.contains("--gui")) {
       val starter = injector.getInstance(classOf[StarterInterface])
       starter.startView(startGamestate)
-    }else{
+      starter.start()
+    } else {
+      val ui = injector.getInstance(classOf[ViewInterface])
+      controller.add(ui)
       controller.startTurn(startGamestate)
     }
 

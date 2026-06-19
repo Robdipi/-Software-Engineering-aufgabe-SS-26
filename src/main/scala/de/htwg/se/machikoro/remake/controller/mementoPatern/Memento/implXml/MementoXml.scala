@@ -4,7 +4,7 @@ import com.google.inject.Inject
 import de.htwg.se.machikoro.remake.controller.commandPattern.UndoManagerInterface
 import de.htwg.se.machikoro.remake.controller.commandPattern.impl1.UndoManager
 import de.htwg.se.machikoro.remake.controller.mementoPatern.{MementoConstatants, MementoIntervace}
-import de.htwg.se.machikoro.remake.model.Data.{Card, Gamestate, Player, AllCardsBaseGame, cardStack, turnState}
+import de.htwg.se.machikoro.remake.model.Data.{Card, Gamestate, Player, AllCardsBaseGame, cardStack, TurnState}
 import de.htwg.se.machikoro.remake.model.Data.Type.{Dairy, Farm}
 import io.circe.*
 import io.circe.generic.semiauto.*
@@ -160,7 +160,7 @@ case class MementoXml @Inject()(override val undoManager: UndoManagerInterface, 
         DiceResult = (xml \ "diceResult").text.trim.toInt,
         diceChoosen = (xml \ "diceChosen").text.trim.toInt,
         cardStacks = stacks,
-        state = turnState.valueOf((xml \ "state").text.trim)
+        state = TurnState.valueOf((xml \ "state").text.trim)
       )
     )
   }
