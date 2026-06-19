@@ -24,10 +24,6 @@ class GUI @Inject()(controller: ControllerInterface) extends ViewInterface {
 
   val root: BorderPane = new BorderPane()
 
-  private val titleFont = Font.loadFont(getClass.getResourceAsStream("/fonts/Matcha Cih.ttf"), 38)
-  private val smallFont = Font.loadFont(getClass.getResourceAsStream("/fonts/Matcha Cih.ttf"), 24)
-
-
   private val titleLabel = new Label("Machi Koro") {
     font = Font.font("Arial", FontWeight.Bold, 38)
     style = "-fx-text-fill: #0f172a;"
