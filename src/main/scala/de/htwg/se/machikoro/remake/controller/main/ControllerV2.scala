@@ -134,10 +134,17 @@ class ControllerV2(val winCondition: Player => Boolean ) extends viewObserverabl
 
     override def doStep(gamestate: Gamestate): Unit = {
 
-      val input = cardName
-      if (input == "next") endOfTurn(gamestate)
+      val input = cardName.trim
 
-      gamestate.cardStacks.find(_.stackCard.cardName == input) match {
+      // Wichtig: "next" beendet den Zug und darf danach NICHT weiter als Kartenname
+      // gesucht werden. Sonst wird direkt danach NONE_EXISTANT_CARDNAME_WARNING
+      // ausgelöst und die GUI springt scheinbar zurück in dieselbe Kaufphase.
+      if (input == "next") {
+        endOfTurn(gamestate)
+        return
+      }
+
+      gamestate.cardStacks.find(_.stackCard.cardName.equalsIgnoreCase(input)) match {
         case Some(stack) =>
           val currentPlayer = gamestate.Players.find(_.playerId == gamestate.CurrentTurnPlayerId).get
           val card = stack.stackCard
