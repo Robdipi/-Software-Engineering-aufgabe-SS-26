@@ -1,8 +1,8 @@
 package de.htwg.se.machikoro.remake.model.Data
 
 import AllCardsBaseGame.*
-import de.htwg.se.machikoro.remake.model.Data.turnState.StartofTurn
-import de.htwg.se.machikoro.remake.model.Data.{Player, cardStack, turnState}
+import de.htwg.se.machikoro.remake.model.Data.TurnState.StartofTurn
+import de.htwg.se.machikoro.remake.model.Data.{Player, cardStack, TurnState}
 
 import scala.io.StdIn.readLine
 import scala.util.Random
@@ -12,7 +12,7 @@ val startMoneyPlayers = 100
 case class cardStack(val amount : Int,
                      val stackCard : Card)
 
-enum turnState {
+enum TurnState {
   case StartofTurn, 
   ChooseDiceAmount,
   Result1,
@@ -37,7 +37,7 @@ case class Gamestate (val curentTurn : Int = 0,
                       val DiceResult: Int = -1, 
                       val diceChoosen: Int = 1,
                       val cardStacks : List[cardStack] = List(),
-                      val state : turnState = StartofTurn) 
+                      val state : TurnState = StartofTurn) 
 {
   
   
@@ -144,7 +144,7 @@ case class Gamestate (val curentTurn : Int = 0,
     }
     return copy(cardStacks = updatedCardStacks)
   }
-  def changeState(newState : turnState):Gamestate = {
+  def changeState(newState : TurnState):Gamestate = {
     return this.copy(state = newState)
   }
 

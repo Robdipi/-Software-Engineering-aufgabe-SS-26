@@ -1,24 +1,32 @@
 package de.htwg.se.machikoro.remake.view.Gui
 
-import de.htwg.se.machikoro.remake.controller.main.ControllerV2
-import de.htwg.se.machikoro.remake.model.Gamestate
-import de.htwg.se.machikoro.remake.model.initialization.Game
-
+import com.google.inject.Inject
+import de.htwg.se.machikoro.remake.controller.main.ControllerInterface
+import de.htwg.se.machikoro.remake.model.Data.Gamestate
+import de.htwg.se.machikoro.remake.view.StarterInterface
 import scalafx.application.JFXApp3
 import scalafx.scene.Scene
 
-/**
- * ScalaFX-Startpunkt fuer die GUI.
- * Wird aus main.scala mit --gui gestartet.
- */
-object MachiKoroApp extends JFXApp3 {
-  var controller: ControllerV2 = _
+class MachiKoroApp @Inject()(val controller: ControllerInterface) extends StarterInterface {
+
+  private var gs: Gamestate = _
+
+  override def startView(gamestate: Gamestate): Unit = {
+    gs = gamestate
+  }
+
+  override def start(): Unit = {
+    MachiKoroFxApp.controller = controller
+    MachiKoroFxApp.startGamestate = gs
+    MachiKoroFxApp.main(Array.empty)
+  }
+}
+
+object MachiKoroFxApp extends JFXApp3 {
+  var controller: ControllerInterface = _
   var startGamestate: Gamestate = _
 
   override def start(): Unit = {
-    if controller == null then controller = new ControllerV2(_.hasWonTheGame())
-    if startGamestate == null then startGamestate = new Game()(2, "standart")
-
     val gui = new GUI(controller)
 
     stage = new JFXApp3.PrimaryStage {
@@ -30,6 +38,7 @@ object MachiKoroApp extends JFXApp3 {
       minHeight = 760
     }
 
+    controller.add(gui)
     controller.startTurn(startGamestate)
   }
 }

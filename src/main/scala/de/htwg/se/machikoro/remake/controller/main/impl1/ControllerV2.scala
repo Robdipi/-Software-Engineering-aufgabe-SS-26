@@ -5,8 +5,8 @@ import de.htwg.se.machikoro.remake.controller.commandPattern.{Command, UndoManag
 import de.htwg.se.machikoro.remake.controller.main.{BuyCardInput, ChooseDiceAmountInput, ControllerInterface, RejectDiceRollInput, UserInput, WinCondition}
 import de.htwg.se.machikoro.remake.controller.mementoPatern.{MementoCareTakerInterface, MementoIntervace}
 import de.htwg.se.machikoro.remake.model.Data.Color.{Purple, Yellow}
-import de.htwg.se.machikoro.remake.model.Data.{Gamestate, Player, turnState}
-import de.htwg.se.machikoro.remake.model.Data.turnState.*
+import de.htwg.se.machikoro.remake.model.Data.{Gamestate, Player, TurnState}
+import de.htwg.se.machikoro.remake.model.Data.TurnState.*
 
 class DefaultWinCondition extends WinCondition{
   def check(player: Player): Boolean = {
@@ -53,18 +53,19 @@ class ControllerV2 @Inject() (val winCondition: WinCondition,
   }
 
   def startTurn(gamestate: Gamestate): Unit = {
-    val gamestate1 = gamestate.changeState(turnState.StartofTurn)
+    val gamestate1 = gamestate.changeState(TurnState.StartofTurn)
     notifyObservers(gamestate1)
     if (gamestate1.Players.find(_.playerId == gamestate1.CurrentTurnPlayerId).exists(_.canChooseDyeAmount())) {
-      notifyObservers(gamestate1.changeState(turnState.ChooseDiceAmount))
+      notifyObservers(gamestate1.changeState(TurnState.ChooseDiceAmount))
     } else {
-      resultone(gamestate1.changeState(turnState.Result1).changeDiceChosen(1))
+      resultone(gamestate1.changeState(TurnState.Result1).changeDiceChosen(1))
     }
   }
 
   private def endOfTurn(gamestate: Gamestate): Unit = {
     if (gamestate.Players.find(_.playerId == gamestate.CurrentTurnPlayerId).exists(winCondition.check)) {
       notifyObservers(gamestate.changeState(PlayerWins))
+
     } else {
       startTurn(gamestate.iterateTurn().changeState(StartofTurn))
     }
@@ -91,7 +92,7 @@ class ControllerV2 @Inject() (val winCondition: WinCondition,
     notifyObservers(newState)
 
     if (state.Players.exists(p => p.playerId == state.CurrentTurnPlayerId && p.canRejectDyeTrow())) {
-      notifyObservers(newState.changeState(turnState.AskForRejectionOfResult))
+      notifyObservers(newState.changeState(TurnState.AskForRejectionOfResult))
     } else {
       activateCardsController(newState)
     }
@@ -128,17 +129,10 @@ class ControllerV2 @Inject() (val winCondition: WinCondition,
 
     override def doStep(gamestate: Gamestate): Unit = {
 
-      val input = cardName.trim
+      val input = cardName
+      if (input == "next") endOfTurn(gamestate)
 
-      // Wichtig: "next" beendet den Zug und darf danach NICHT weiter als Kartenname
-      // gesucht werden. Sonst wird direkt danach NONE_EXISTANT_CARDNAME_WARNING
-      // ausgelöst und die GUI springt scheinbar zurück in dieselbe Kaufphase.
-      if (input == "next") {
-        endOfTurn(gamestate)
-        return
-      }
-
-      gamestate.cardStacks.find(_.stackCard.cardName.equalsIgnoreCase(input)) match {
+      gamestate.cardStacks.find(_.stackCard.cardName == input) match {
         case Some(stack) =>
           val currentPlayer = gamestate.Players.find(_.playerId == gamestate.CurrentTurnPlayerId).get
           val card = stack.stackCard
