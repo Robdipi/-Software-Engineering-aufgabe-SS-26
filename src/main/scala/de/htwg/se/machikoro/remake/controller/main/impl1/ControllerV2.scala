@@ -5,8 +5,8 @@ import de.htwg.se.machikoro.remake.controller.commandPattern.{Command, UndoManag
 import de.htwg.se.machikoro.remake.controller.main.{BuyCardInput, ChooseDiceAmountInput, ControllerInterface, RejectDiceRollInput, UserInput, WinCondition}
 import de.htwg.se.machikoro.remake.controller.mementoPatern.{MementoCareTakerInterface, MementoIntervace}
 import de.htwg.se.machikoro.remake.model.Data.Color.{Purple, Yellow}
-import de.htwg.se.machikoro.remake.model.Data.{Gamestate, Player, TurnState}
 import de.htwg.se.machikoro.remake.model.Data.TurnState.*
+import de.htwg.se.machikoro.remake.model.Data.{Gamestate, Player, TurnState}
 
 class DefaultWinCondition extends WinCondition{
   def check(player: Player): Boolean = {
