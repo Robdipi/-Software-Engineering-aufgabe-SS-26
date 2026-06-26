@@ -16,8 +16,11 @@ sbt "run --mem" to load last gamesave on start (Doesn't work!)
 sbt "run --xml" to make savefiles use Xml instead of Json
 sbt "run --SR" to start with a diffrent wincondition
 
-### The Docker Image
+### Run On Docker 
 I hope it works and Did not use the wrong Image
+
+#### Ubuntu distros
+
 
 docker pull sbtscala/scala-sbt:eclipse-temurin-25.0.3_9_2.x
 
@@ -26,6 +29,10 @@ sudo docker build -t blackjack .
 sudo docker run --rm -it blackjack
 
 sudo docker run --rm -it blackjack sbt "run --gui"
+#### Windows
+
+#### Apple
+
  
 Here some nice Ascii art:
 
