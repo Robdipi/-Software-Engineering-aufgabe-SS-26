@@ -25,6 +25,7 @@ sudo docker build -t blackjack .
 
 sudo docker run --rm -it blackjack
 
+sudo docker run --rm -it blackjack sbt "run --gui"
  
 Here some nice Ascii art:
 
