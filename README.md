@@ -25,7 +25,7 @@ docker pull sbtscala/scala-sbt:eclipse-temurin-25.0.3_9_2.x
 ##### Run with TUI
 sudo docker build -t blackjack .
 ##### Run with GUI
-xhost +local:docker && sudo docker run --rm -it   -e DISPLAY=$DISPLAY   -v /tmp/.X11-unix:/tmp/.X11-unix   blackjack   sbt "run --gui"
+xhost +local:docker && sudo -E docker run --rm -it   -e DISPLAY=$DISPLAY   -v /tmp/.X11-unix:/tmp/.X11-unix   blackjack   sbt "run --gui"
 #### Windows
 
 #### Apple
