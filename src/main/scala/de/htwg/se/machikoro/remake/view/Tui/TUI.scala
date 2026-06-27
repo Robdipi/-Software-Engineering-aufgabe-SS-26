@@ -24,7 +24,7 @@ class TUI @Inject() (controller: ControllerInterface)  extends ViewInterface {
     case TurnState.StartofTurn =>
       println("---------------------------------------------------------------------" )
       println("Player " + (gamestate.CurrentTurnPlayerId +1) + " turn" )
-      gamestate.Players.find(_.playerId == gamestate.CurrentTurnPlayerId).foreach(p => p.printAllCards())//all cards of current player
+      gamestate.Players.find(_.playerId == gamestate.CurrentTurnPlayerId).foreach(p => println(p.printAllCards()))//all cards of current player
     case TurnState.Result1 => println(gamestate.DiceResult)
     case TurnState.Result2 => println(gamestate.DiceResult)
     case TurnState.PlayerWins => println("Player " + (gamestate.CurrentTurnPlayerId +1) + " won!" )

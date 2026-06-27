@@ -32,12 +32,14 @@ case class Player (val money: Int = 0,
     }
     return tmpGamestate
   }
-  def printAllCards(): Unit = {
-    println("Your Current cards:")
+  def printAllCards(): String = {
+    val header = "Your Current cards:\n"
 
-    properties.foreach { c =>
-      println(s"${c.cardName}:   ${c.description}")
-    }
+    val body = properties
+      .map(c => s"${c.cardName}:   ${c.description}")
+      .mkString("\n")
+
+    header + body
   }
     
     /*println(

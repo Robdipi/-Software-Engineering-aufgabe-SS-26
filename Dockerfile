@@ -1,7 +1,27 @@
-FROM sbtscala/scala-sbt:eclipse-temurin-alpine-21.0.2_1.10.0_3.3.1
-RUN apt-get update && \
-    apt-get install -y libxrender1 libxtst6 libxi6
+FROM sbtscala/scala-sbt:eclipse-temurin-25.0.3_9_2.x
 
-WORKDIR /blackjack
-ADD . /blackjack
+RUN apt-get update && apt-get install -y \
+    libgtk-3-0 \
+    libglib2.0-0 \
+    libatk1.0-0 \
+    libatk-bridge2.0-0 \
+    libcups2t64 \
+    libdrm2 \
+    libgbm1 \
+    libasound2t64 \
+    libxcomposite1 \
+    libxdamage1 \
+    libxfixes3 \
+    libxrandr2 \
+    libxrender1 \
+    libxtst6 \
+    libxi6 \
+    libx11-6 \
+    libxext6 \
+    libxxf86vm1 \
+    libgl1 \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /machikoro
+COPY . .
 CMD ["sbt", "run"]
