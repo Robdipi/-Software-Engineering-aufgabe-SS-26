@@ -1,28 +1,40 @@
 package de.htwg.se.machikoro.remake
 
-import de.htwg.se.machikoro.remake.controller.main.ControllerV2
-import de.htwg.se.machikoro.remake.controller.mementoPatern.mementoCreator
-import de.htwg.se.machikoro.remake.model.initialization.{Game, gameInitializationSystem}
-import de.htwg.se.machikoro.remake.view.Gui.MachiKoroApp
-import de.htwg.se.machikoro.remake.view.Tui.TUI
+import com.google.inject.Guice
+import de.htwg.se.machikoro.remake.controller.commandPattern.UndoManagerInterface
+import de.htwg.se.machikoro.remake.controller.main.ControllerInterface
+import de.htwg.se.machikoro.remake.controller.mementoPatern.MementoCareTakerInterface
+import de.htwg.se.machikoro.remake.model.initialization.GameInitializationSystem
+import de.htwg.se.machikoro.remake.view.{ViewInterface, StarterInterface}
 
-object main {
+
+
+object main{
   def main(args: Array[String]): Unit = {
-    val gameInitializationSystem: gameInitializationSystem = new Game()
-    var startGamestate = gameInitializationSystem(2, "standart")
-    val controller = new ControllerV2(_.hasWonTheGame())
-
-    if args.contains("--mem") then
-      startGamestate = mementoCreator.loadGamesave(controller.undoManager).getOrElse(startGamestate)
-
+    val injector = Guice.createInjector(new AppModule(args))
+    
+    val GameInitializationSystem: GameInitializationSystem = injector.getInstance(classOf[GameInitializationSystem])
+    var startGamestate = GameInitializationSystem(2, "standard") //hell_of_wheat
+    
+    val controller = injector.getInstance(classOf[ControllerInterface])
+    val undoManager = injector.getInstance(classOf[UndoManagerInterface])
+    val mementoCreator = injector.getInstance(classOf[MementoCareTakerInterface])
+    
+    if (args.contains("--mem")) {// loads the last save that was left in the old saves and then deletes the old saves
+      startGamestate = mementoCreator.loadGamesave(undoManager).getOrElse(startGamestate)    
+    }
     mementoCreator.flushSavefiles()
 
-    if args.contains("--gui") then
-      MachiKoroApp.controller = controller
-      MachiKoroApp.startGamestate = startGamestate
-      MachiKoroApp.main(args)
-    else
-      new TUI(controller)
+
+    if (args.contains("--gui")) {
+      val starter = injector.getInstance(classOf[StarterInterface])
+      starter.startView(startGamestate)
+      starter.start()
+    } else {
+      val ui = injector.getInstance(classOf[ViewInterface])
+      controller.add(ui)
       controller.startTurn(startGamestate)
+    }
+
   }
 }

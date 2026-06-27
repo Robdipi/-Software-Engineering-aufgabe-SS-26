@@ -1,13 +1,12 @@
 package de.htwg.se.machikoro.remake.view.Gui
 
-import de.htwg.se.machikoro.remake.controller.main.{
-  BuyCard,
-  ChooseDiceAmount as ChooseDiceInput,
-  ControllerV2,
-  RejectDiceRoll,
-  viewObserver
-}
-import de.htwg.se.machikoro.remake.model.{Card, Color, Gamestate, Player, Type, turnState as TurnState}
+import com.google.inject.Inject
+import de.htwg.se.machikoro.remake.controller.main.{BuyCardInput, ChooseDiceAmountInput, ControllerInterface, RejectDiceRollInput}
+import de.htwg.se.machikoro.remake.model.Data.*
+import de.htwg.se.machikoro.remake.model.Data.TurnState
+import de.htwg.se.machikoro.remake.view.ViewInterface
+
+import java.io.File
 
 import scalafx.Includes.*
 import scalafx.application.Platform
@@ -17,19 +16,17 @@ import scalafx.scene.image.{Image, ImageView}
 import scalafx.scene.layout.*
 import scalafx.scene.text.{Font, FontWeight}
 
-/**
- * Komplette 2D-GUI fuer Machi Koro.
- *
- * Diese Datei ersetzt:
- * src/main/scala/de/htwg/se/machikoro/remake/view/Gui/GUI.scala
- */
-class GUI(controller: ControllerV2) extends viewObserver {
+class GUI @Inject()(controller: ControllerInterface) extends ViewInterface {
 
   controller.add(this)
 
   private var currentState: Option[Gamestate] = None
 
   val root: BorderPane = new BorderPane()
+
+  private val titleFont = Font.loadFont(getClass.getResourceAsStream("/fonts/Matcha Cih.ttf"), 38)
+  private val smallFont = Font.loadFont(getClass.getResourceAsStream("/fonts/Matcha Cih.ttf"), 24)
+
 
   private val titleLabel = new Label("Machi Koro") {
     font = Font.font("Arial", FontWeight.Bold, 38)
@@ -63,7 +60,7 @@ class GUI(controller: ControllerV2) extends viewObserver {
   private val marketGrid = new TilePane {
     hgap = 10
     vgap = 10
-    padding = Insets(10)
+    padding = Insets(14)
     prefColumns = 5
     alignment = Pos.TopCenter
   }
@@ -82,6 +79,20 @@ class GUI(controller: ControllerV2) extends viewObserver {
       """.stripMargin
   }
 
+  private val marketFrame = new StackPane {
+    padding = Insets(10)
+    style =
+      """
+        |-fx-background-color: rgba(255,255,255,0.45);
+        |-fx-border-color: #64748b;
+        |-fx-border-width: 2;
+        |-fx-border-radius: 12;
+        |-fx-background-radius: 12;
+        |-fx-effect: dropshadow(gaussian, rgba(15,23,42,0.14), 7, 0, 0, 2);
+      """.stripMargin
+    children = Seq(marketScroll)
+  }
+
   private val actionBox = new HBox(12) {
     alignment = Pos.Center
     padding = Insets(14)
@@ -95,15 +106,8 @@ class GUI(controller: ControllerV2) extends viewObserver {
     style = "-fx-font-family: monospace; -fx-font-size: 12px;"
   }
 
-  root.padding = Insets(14)
-  root.style =
-    """
-      |-fx-background-color: #fbfaf7;
-      |-fx-background-image:
-      |  linear-gradient(to right, rgba(15,23,42,0.035) 1px, transparent 1px),
-      |  linear-gradient(to bottom, rgba(15,23,42,0.035) 1px, transparent 1px);
-      |-fx-background-size: 34px 34px;
-    """.stripMargin
+  root.padding = Insets(16)
+  root.style = "-fx-background-color: linear-gradient(to bottom right, #e0f2fe, #f8fafc 45%, #dcfce7);"
   root.top = new VBox(7, titleLabel, new HBox(18, infoLabel, diceLabel) {
     alignment = Pos.Center
   }, statusLabel) {
@@ -111,8 +115,8 @@ class GUI(controller: ControllerV2) extends viewObserver {
     padding = Insets(8, 8, 15, 8)
   }
   root.left = playersBox
-  root.center = marketScroll
-  root.bottom = actionBox
+  root.center = marketFrame
+  root.bottom = new VBox(8, actionBox, logArea)
 
   override def update(state: Gamestate): Unit = {
     Platform.runLater {
@@ -161,9 +165,11 @@ class GUI(controller: ControllerV2) extends viewObserver {
         children = Seq(
           new Label(s"Spieler ${player.playerId + 1}${if isCurrent then "  ← dran" else ""}") {
             font = Font.font("Arial", FontWeight.Bold, 17)
+            style = "-fx-text-fill: black;"
           },
           new Label(s"💰 ${player.money} Münzen") {
             font = Font.font("Arial", FontWeight.Bold, 14)
+            style = "-fx-text-fill: black;"
           },
           new Label(landmarkText(player)) {
             wrapText = true
@@ -173,6 +179,7 @@ class GUI(controller: ControllerV2) extends viewObserver {
             wrapText = true
             maxWidth = 285
             font = Font.font(12)
+            style = "-fx-text-fill: black;"
           }
         )
       }
@@ -201,17 +208,16 @@ class GUI(controller: ControllerV2) extends viewObserver {
         disable = !canBuy
         style =
           if canBuy then
-            "-fx-background-color: #1f2937; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 8; -fx-font-size: 11px;"
+            "-fx-background-color: #2563eb; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 8; -fx-font-size: 11px;"
           else
-            "-fx-background-color: #cbd5e1; -fx-text-fill: #111111; -fx-background-radius: 8; -fx-font-size: 11px;"
-        onAction = _ => withState(s => controller.handleInput(BuyCard(card.cardName), s))
+            "-fx-background-color: #94a3b8; -fx-text-fill: black; -fx-background-radius: 8; -fx-font-size: 11px;"
+        onAction = _ => withState(s => controller.handleInput(BuyCardInput(card.cardName), s))
       }
 
       marketGrid.children += new VBox(5) {
-        prefWidth = 178
-        minHeight = 158
-        maxHeight = 178
-        padding = Insets(8)
+        prefWidth = 200
+        minHeight = 255
+        padding = Insets(9)
         alignment = Pos.TopCenter
         style =
           s"""
@@ -220,29 +226,36 @@ class GUI(controller: ControllerV2) extends viewObserver {
              |-fx-border-width: 2;
              |-fx-background-radius: 12;
              |-fx-border-radius: 12;
-             |-fx-effect: dropshadow(gaussian, rgba(15,23,42,0.12), 5, 0, 0, 2);
-             |-fx-text-fill: #111111;
+             |-fx-effect: dropshadow(gaussian, rgba(15,23,42,0.16), 6, 0, 0, 2);
+             |-fx-text-fill: black;
            """.stripMargin
 
         children = Seq(
           cardGraphic(card),
           new Label(card.cardName) {
-            font = Font.font("Arial", FontWeight.Bold, 13)
+            font = Font.font("Arial", FontWeight.Bold, 14)
             wrapText = true
             alignment = Pos.Center
-            maxWidth = 160
-            style = "-fx-text-fill: #111111;"
+            maxWidth = 178
+            style = "-fx-text-fill: black;"
           },
-          new Label(s"${card.price} Münzen  ·  Würfel $dice  ·  x${stack.amount}") {
+          new Label(s"Kosten: ${card.price}  |  Würfel: $dice  |  Stapel: ${stack.amount}") {
             font = Font.font("Arial", FontWeight.Bold, 10)
             wrapText = true
-            style = "-fx-text-fill: #111111;"
+            maxWidth = 178
+            style = "-fx-text-fill: black;"
           },
+          new Label(cardTypeName(card)) {
+            style = "-fx-text-fill: black; -fx-font-size: 10px;"
+            wrapText = true
+            maxWidth = 178
+          },
+          new Separator(),
           new Label(card.description) {
             wrapText = true
-            maxWidth = 160
+            maxWidth = 178
             font = Font.font(10)
-            style = "-fx-text-fill: #111111;"
+            style = "-fx-text-fill: black;"
           },
           new Region { VBox.setVgrow(this, Priority.Always) },
           buyButton
@@ -262,10 +275,10 @@ class GUI(controller: ControllerV2) extends viewObserver {
       case TurnState.ChooseDiceAmount =>
         statusLabel.text = "Wähle die Anzahl der Würfel."
         actionBox.children += bigButton("1 Würfel") {
-          controller.handleInput(ChooseDiceInput(1), state)
+          controller.handleInput(ChooseDiceAmountInput(1), state)
         }
         actionBox.children += bigButton("2 Würfel") {
-          controller.handleInput(ChooseDiceInput(2), state)
+          controller.handleInput(ChooseDiceAmountInput(2), state)
         }
 
       case TurnState.Result1 =>
@@ -274,10 +287,10 @@ class GUI(controller: ControllerV2) extends viewObserver {
       case TurnState.AskForRejectionOfResult =>
         statusLabel.text = s"Du hast ${state.DiceResult} gewürfelt. Mit Funkturm neu würfeln?"
         actionBox.children += bigButton("Neu würfeln") {
-          controller.handleInput(RejectDiceRoll(true), state)
+          controller.handleInput(RejectDiceRollInput(true), state)
         }
         actionBox.children += bigButton("Wurf behalten") {
-          controller.handleInput(RejectDiceRoll(false), state)
+          controller.handleInput(RejectDiceRollInput(false), state)
         }
 
       case TurnState.Result2 =>
@@ -289,7 +302,7 @@ class GUI(controller: ControllerV2) extends viewObserver {
       case TurnState.Buyphase =>
         statusLabel.text = "Kaufphase: Karte anklicken oder Zug ohne Kauf beenden."
         actionBox.children += bigButton("Zug beenden / nichts kaufen") {
-          controller.handleInput(BuyCard("next"), state)
+          endTurnFromGui(state)
         }
 
       case TurnState.EndofTurn =>
@@ -304,6 +317,12 @@ class GUI(controller: ControllerV2) extends viewObserver {
       case TurnState.YOU_CANT_AFFORD_THIS_WARNING        => warning("Du hast nicht genug Münzen.")
       case TurnState.NONE_EXISTANT_CARDNAME_WARNING      => warning("Diese Karte existiert nicht.")
     }
+  }
+
+  private def endTurnFromGui(state: Gamestate): Unit = {
+    val nextState = state.iterateTurn().changeState(TurnState.StartofTurn)
+    currentState = Some(nextState)
+    controller.startTurn(nextState)
   }
 
   private def warning(text: String): Unit = {
@@ -350,26 +369,33 @@ class GUI(controller: ControllerV2) extends viewObserver {
     imageFor(card) match {
       case Some(img) =>
         new StackPane {
-          prefWidth = 150
-          prefHeight = 68
+          prefWidth = 160
+          prefHeight = 84
           children = Seq(new ImageView(img) {
-            fitWidth = 148
-            fitHeight = 66
+            fitWidth = 158
+            fitHeight = 82
             preserveRatio = true
             smooth = true
           })
         }
       case None =>
         new StackPane {
-          prefWidth = 150
-          prefHeight = 68
-          style = s"-fx-background-color: ${cardBackground(card.color)}; -fx-background-radius: 10; -fx-border-color: ${cardBorder(card.color)}; -fx-border-radius: 10;"
+          prefWidth = 160
+          prefHeight = 84
+          style =
+            s"""
+               |-fx-background-color: rgba(255,255,255,0.45);
+               |-fx-background-radius: 9;
+               |-fx-border-color: ${cardBorder(card.color)};
+               |-fx-border-radius: 9;
+               |-fx-border-width: 1;
+            """.stripMargin
           children = Seq(new Label(card.cardName) {
             textFill = scalafx.scene.paint.Color.Black
-            font = Font.font("Arial", FontWeight.Bold, 12)
+            font = Font.font("Arial", FontWeight.Bold, 13)
             wrapText = true
             alignment = Pos.Center
-            maxWidth = 136
+            maxWidth = 144
           })
         }
     }
@@ -378,14 +404,32 @@ class GUI(controller: ControllerV2) extends viewObserver {
   private def imageFor(card: Card): Option[Image] = {
     val fileName = imageFileName(card.cardName)
     val candidates = Seq(
+      s"/Assets/textures/cards/$fileName",
+      s"/textures/cards/$fileName",
+      s"/cards/$fileName",
       s"/de/htwg/se/machikoro/remake/view/Gui/Assets.textures.cards/$fileName",
       s"/de/htwg/se/machikoro/remake/view/Gui/Assets/textures/cards/$fileName",
       s"/${card.texturePath}"
     ).distinct
 
-    candidates.view
+    val fromResources = candidates.view
       .flatMap(path => Option(getClass.getResourceAsStream(path)).map(stream => new Image(stream)))
       .headOption
+
+    fromResources.orElse {
+      val fileCandidates = Seq(
+        card.texturePath,
+        s"src/main/resources/${card.texturePath}",
+        s"src/main/resources/Assets/textures/cards/$fileName",
+        s"src/main/scala/de/htwg/se/machikoro/remake/view/Gui/Assets.textures.cards/$fileName",
+        s"src/main/scala/de/htwg/se/machikoro/remake/view/Gui/Assets/textures/cards/$fileName"
+      ).distinct
+
+      fileCandidates.view
+        .map(path => new File(path))
+        .find(_.exists())
+        .map(file => new Image(file.toURI.toString))
+    }
   }
 
   private def imageFileName(cardName: String): String = {
@@ -432,11 +476,11 @@ class GUI(controller: ControllerV2) extends viewObserver {
   }
 
   private def cardBackground(color: Color): String = color match {
-    case Color.Blue   => "#edf5ff"
-    case Color.Green  => "#eefaf0"
-    case Color.Red    => "#fff0f0"
-    case Color.Purple => "#f7f0ff"
-    case Color.Yellow => "#fff9dc"
+    case Color.Blue   => "#dbeafe"
+    case Color.Green  => "#dcfce7"
+    case Color.Red    => "#fee2e2"
+    case Color.Purple => "#f3e8ff"
+    case Color.Yellow => "#fef9c3"
   }
 
   private def cardBorder(color: Color): String = color match {
