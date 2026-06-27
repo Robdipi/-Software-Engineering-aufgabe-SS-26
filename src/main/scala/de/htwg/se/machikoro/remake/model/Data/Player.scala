@@ -22,15 +22,18 @@ case class Player (val money: Int = 0,
   }
 
 
-  def activateCards(rollNum: Int,rollerId: Int, state: Gamestate) : Gamestate = {
-    var tmpGamestate = state  //changes a lot so var
-    for (p <- properties) {
-      if(p.roleNumbers.contains(rollNum))
-        if(rollerId == playerId || p.color == Blue||p.color == Red){
-          tmpGamestate = p.activate(tmpGamestate)
-        }
+  def activateCards(rollNum: Int, rollerId: Int, state: Gamestate): Gamestate = {
+    properties.foldLeft(state) { (currentState, card) =>
+      val isMatchingRoll = card.roleNumbers.contains(rollNum)
+      val shouldActivate = card.color match {
+        case Blue => true
+        case Red => rollerId != playerId
+        case Green | Purple => rollerId == playerId
+        case Yellow => false
+      }
+
+      if (isMatchingRoll && shouldActivate) card.activate(currentState) else currentState
     }
-    return tmpGamestate
   }
   def printAllCards(): Unit = {
     println("Your Current cards:")

@@ -271,6 +271,15 @@ class GamestateSpec extends AnyWordSpec with Matchers {
       result.CurrentTurnPlayerId shouldBe 0
     }
 
+
+    "advance safely when no players exist" in {
+      val result = Gamestate(curentTurn = 4).iterateTurn()
+
+      result.curentTurn shouldBe 5
+      result.Players shouldBe empty
+      result.CurrentTurnPlayerId shouldBe 0
+    }
+
     "detect if current player has won" in {
       val winner = Player(
         playerId = 0,

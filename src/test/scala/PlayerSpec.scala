@@ -1,5 +1,5 @@
 import de.htwg.se.machikoro.remake.model.*
-import de.htwg.se.machikoro.remake.model.Data.{Gamestate, Player}
+import de.htwg.se.machikoro.remake.model.Data.{Card, Gamestate, Player}
 import de.htwg.se.machikoro.remake.model.Data.AllCardsBaseGame.*
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
@@ -163,6 +163,28 @@ class PlayerSpec extends AnyWordSpec with Matchers {
       )
 
       player.activateCards(2, 0, Gamestate(Players = List(player))).Players.head.money shouldBe 0
+    }
+
+
+    "not activate matching red cards when their owner rolled" in {
+      val owner = Player(money = 0, properties = List(cafe.copy(cardOwnerId = 0)), playerId = 0)
+      val game = Gamestate(Players = List(owner), CurrentTurnPlayerId = 0)
+
+      owner.activateCards(3, 0, game) shouldBe game
+    }
+
+    "not activate yellow cards even when a custom card has a matching roll" in {
+      val landmarkEffect = Card(
+        cardName = "Test landmark",
+        color = de.htwg.se.machikoro.remake.model.Data.Color.Yellow,
+        roleNumbers = Array(1),
+        cardOwnerId = 0,
+        effect = (state, ownerId) => state.changeMoneyOfPlayer(ownerId, 9)
+      )
+      val owner = Player(money = 0, properties = List(landmarkEffect), playerId = 0)
+      val game = Gamestate(Players = List(owner), CurrentTurnPlayerId = 0)
+
+      owner.activateCards(1, 0, game) shouldBe game
     }
 
     "print all cards with header and card descriptions" in {

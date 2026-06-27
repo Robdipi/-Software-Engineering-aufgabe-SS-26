@@ -117,17 +117,16 @@ case class Gamestate (val curentTurn : Int = 0,
     return tmpGamestate
   }*/
   def iterateTurn(): Gamestate = {
-    //curentTurn += 1
-    if(Players.find(_.playerId == CurrentTurnPlayerId).exists(_.GetsAnotherTurn)){
+    if (Players.isEmpty) {
+      copy(curentTurn = curentTurn + 1)
+    } else if (Players.find(_.playerId == CurrentTurnPlayerId).exists(_.GetsAnotherTurn)) {
       val updatedPlayers = Players.map { currentplayer =>
-        if (currentplayer.playerId == CurrentTurnPlayerId) {
-          currentplayer.copy(GetsAnotherTurn = false)
-        }
+        if (currentplayer.playerId == CurrentTurnPlayerId) currentplayer.copy(GetsAnotherTurn = false)
         else currentplayer
       }
-      return this.copy(Players = updatedPlayers, curentTurn = (curentTurn + 1))
+      copy(Players = updatedPlayers, curentTurn = curentTurn + 1)
     } else {
-      return this.copy( curentTurn = (curentTurn + 1), CurrentTurnPlayerId = ((CurrentTurnPlayerId + 1) % Players.size))
+      copy(curentTurn = curentTurn + 1, CurrentTurnPlayerId = (CurrentTurnPlayerId + 1) % Players.size)
     }
   }
   

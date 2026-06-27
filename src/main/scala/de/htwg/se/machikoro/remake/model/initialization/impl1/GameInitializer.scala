@@ -27,7 +27,7 @@ Factory Pattern to switch out start position
 class Game @Inject() extends GameInitializationSystem {
   def apply(n: Int, gametype: String): Gamestate = {
     gametype match {
-      case "hell_of_wheat" => InitializeWheatHell().createGame(n)
+      case "hell_of_weat" => InitializeWheatHell().createGame(n)
       case _ | "standard" => InitializeStandardGame().createGame(n)
     }
   }

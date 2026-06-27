@@ -31,7 +31,7 @@ trait MementoIntervace() {
   
   def delete(): Unit = {
     Files.deleteIfExists(Paths.get(safeFilePath))
-    undoManager.delete("safeFilePath")
+    undoManager.delete(safeFilePath)
   }
   def restore(): Option[Gamestate]
   def create(gamestate: Gamestate, undoManager: UndoManagerInterface): MementoIntervace

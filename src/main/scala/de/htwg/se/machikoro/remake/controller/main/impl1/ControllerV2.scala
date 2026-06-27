@@ -52,6 +52,15 @@ class ControllerV2 @Inject() (val winCondition: WinCondition,
     notifyObservers(gamestate.changeState(Buyphase))
   }
 
+  /** Shows a purchase warning before returning to the buy phase.
+    * Keeping the warning as a separate observer event lets TUI and GUI display it,
+    * while the following Buyphase event keeps the current player in the purchase flow.
+    */
+  private def warnAndRetryBuy(gamestate: Gamestate): Unit = {
+    notifyObservers(gamestate)
+    tryToBuy(gamestate)
+  }
+
   def startTurn(gamestate: Gamestate): Unit = {
     val gamestate1 = gamestate.changeState(TurnState.StartofTurn)
     notifyObservers(gamestate1)
@@ -128,36 +137,37 @@ class ControllerV2 @Inject() (val winCondition: WinCondition,
   private class BuyCardCommand(cardName: String, savedGamestate : MementoIntervace) extends Command(savedGamestate) {
 
     override def doStep(gamestate: Gamestate): Unit = {
+      val input = cardName.trim
 
-      val input = cardName
-      if (input == "next") endOfTurn(gamestate)
-
-      gamestate.cardStacks.find(_.stackCard.cardName == input) match {
-        case Some(stack) =>
-          val currentPlayer = gamestate.Players.find(_.playerId == gamestate.CurrentTurnPlayerId).get
-          val card = stack.stackCard
-
-          if (currentPlayer.money < card.price) {
-            tryToBuy(gamestate.changeState(YOU_CANT_AFFORD_THIS_WARNING))
-          } else if (card.color == Yellow && currentPlayer.properties.exists(_.cardName == card.cardName)) {
-            tryToBuy(gamestate.changeState(ALREADY_OWN_THAT_YELLOW_CARD_WARNING))
-          } else if (card.color == Purple && currentPlayer.properties.exists(_.color == Purple)) {
-            tryToBuy(gamestate.changeState(ALREADY_OWN_PURPLE_CARD_WARNING))
-          } else if (stack.amount <= 0) {
-            tryToBuy(gamestate.changeState(NO_CARDS_LEFT_OF_THAT_TYPE_WARNING))
-          } else {
-            endOfTurn(gamestate.changeMoneyOfPlayer(gamestate.CurrentTurnPlayerId, -card.price)
-              .removeCardFromStack(card)
-              .giveCard(gamestate.CurrentTurnPlayerId, card)
-              )
-          }
-        case None =>
-          if (cardName.contains("undo")) {    //like undo5 = 5 X undo
-            val lastDigit = cardName.last.asDigit
-             undoManager.undoStep(gamestate,lastDigit)
-          }else{
-            tryToBuy(gamestate.changeState(NONE_EXISTANT_CARDNAME_WARNING))
-          }
+      if (input == "next") {
+        endOfTurn(gamestate)
+      } else {
+        gamestate.cardStacks.find(_.stackCard.cardName.equalsIgnoreCase(input)) match {
+          case Some(stack) =>
+            gamestate.Players.find(_.playerId == gamestate.CurrentTurnPlayerId) match {
+              case None =>
+                warnAndRetryBuy(gamestate.changeState(NONE_EXISTANT_CARDNAME_WARNING))
+              case Some(currentPlayer) =>
+                val card = stack.stackCard
+                if (currentPlayer.money < card.price) {
+                  warnAndRetryBuy(gamestate.changeState(YOU_CANT_AFFORD_THIS_WARNING))
+                } else if (card.color == Yellow && currentPlayer.properties.exists(_.cardName == card.cardName)) {
+                  warnAndRetryBuy(gamestate.changeState(ALREADY_OWN_THAT_YELLOW_CARD_WARNING))
+                } else if (card.color == Purple && currentPlayer.properties.exists(_.color == Purple)) {
+                  warnAndRetryBuy(gamestate.changeState(ALREADY_OWN_PURPLE_CARD_WARNING))
+                } else if (stack.amount <= 0) {
+                  warnAndRetryBuy(gamestate.changeState(NO_CARDS_LEFT_OF_THAT_TYPE_WARNING))
+                } else {
+                  endOfTurn(gamestate.changeMoneyOfPlayer(gamestate.CurrentTurnPlayerId, -card.price)
+                    .removeCardFromStack(card)
+                    .giveCard(gamestate.CurrentTurnPlayerId, card))
+                }
+            }
+          case None if input.matches("undo\\d+") =>
+            undoManager.undoStep(gamestate, input.stripPrefix("undo").toInt)
+          case None =>
+            warnAndRetryBuy(gamestate.changeState(NONE_EXISTANT_CARDNAME_WARNING))
+        }
       }
     }
     override def undoStep(gamestate: Gamestate): Unit = {
