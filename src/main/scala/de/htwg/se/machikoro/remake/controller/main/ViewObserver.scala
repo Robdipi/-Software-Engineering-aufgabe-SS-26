@@ -5,7 +5,7 @@ import de.htwg.se.machikoro.remake.model.Data.Gamestate
 trait ViewObserver {
     def update(state : Gamestate): Unit
 }
-class ViewObservable  { //if I get an error change back to state
+class ViewObservable  {
   private var observers:Vector[ViewObserver] = Vector()
   def add(s:ViewObserver): Unit = observers = observers:+s
   def remove(s:ViewObserver): Unit = observers = observers.filterNot(_ == s)

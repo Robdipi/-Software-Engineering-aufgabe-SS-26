@@ -1,8 +1,8 @@
-package AI_generated_generall_tests
+package AI_Generated_Tests
 
 import de.htwg.se.machikoro.remake.model.*
 import de.htwg.se.machikoro.remake.model.Data.AllCardsBaseGame.*
-import de.htwg.se.machikoro.remake.model.Data.{Gamestate, Player}
+import de.htwg.se.machikoro.remake.model.Data.{Card, Gamestate, Player}
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 
@@ -167,19 +167,22 @@ class PlayerSpec extends AnyWordSpec with Matchers {
       player.activateCards(2, 0, Gamestate(Players = List(player))).Players.head.money shouldBe 0
     }
 
+
+    "not activate matching red cards when their owner rolled" in {
+      val owner = Player(money = 0, properties = List(cafe.copy(cardOwnerId = 0)), playerId = 0)
+      val game = Gamestate(Players = List(owner), CurrentTurnPlayerId = 0)
+
+      owner.activateCards(3, 0, game) shouldBe game
+    }
+
+
+
     "print all cards with header and card descriptions" in {
       val player = Player(
         properties = List(weizenfeld.copy(cardOwnerId = 0)),
         playerId = 0
       )
-
-      val output = new ByteArrayOutputStream()
-
-      Console.withOut(output) {
-        player.printAllCards()
-      }
-
-      val printed = output.toString("UTF-8")
+      val printed = player.printAllCards()
       printed should include("Your Current cards:")
       printed should include("Weizenfeld")
       printed should include("Erhalte 1 Münze aus der Bank.")

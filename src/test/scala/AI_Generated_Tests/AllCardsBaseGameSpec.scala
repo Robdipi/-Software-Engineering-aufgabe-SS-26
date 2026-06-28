@@ -1,6 +1,8 @@
+package AI_Generated_Tests
+
 import de.htwg.se.machikoro.remake.model.*
-import de.htwg.se.machikoro.remake.model.Data.{Color, Gamestate, Player, Type}
 import de.htwg.se.machikoro.remake.model.Data.AllCardsBaseGame.*
+import de.htwg.se.machikoro.remake.model.Data.{Color, Gamestate, Player, Type}
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 

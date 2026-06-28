@@ -1,4 +1,4 @@
-package AI_generated_generall_tests
+package AI_Generated_Tests
 
 import de.htwg.se.machikoro.remake.model.*
 import de.htwg.se.machikoro.remake.model.Data.{Card, Gamestate, Player}

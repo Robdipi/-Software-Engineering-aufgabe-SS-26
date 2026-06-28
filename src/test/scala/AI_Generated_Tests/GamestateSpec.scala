@@ -1,4 +1,4 @@
-package AI_generated_generall_tests
+package AI_Generated_Tests
 
 import de.htwg.se.machikoro.remake.model.*
 import de.htwg.se.machikoro.remake.model.Data.AllCardsBaseGame.*
@@ -273,6 +273,8 @@ class GamestateSpec extends AnyWordSpec with Matchers {
       result.CurrentTurnPlayerId shouldBe 0
     }
 
+
+    
     "detect if current player has won" in {
       val winner = Player(
         playerId = 0,
@@ -326,7 +328,7 @@ class GamestateSpec extends AnyWordSpec with Matchers {
       val state =
         Gamestate()
 
-      state.changeState(turnState.Buyphase).state shouldBe turnState.Buyphase
+      state.changeState(TurnState.Buyphase).state shouldBe TurnState.Buyphase
       state.changeDiceChosen(2).diceChoosen shouldBe 2
       state.changeDiceResult(9).DiceResult shouldBe 9
       state.changePlayers(List(p1)).Players should contain(p1)

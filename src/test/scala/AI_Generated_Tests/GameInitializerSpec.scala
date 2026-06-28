@@ -1,6 +1,8 @@
+package AI_Generated_Tests
+
 import de.htwg.se.machikoro.remake.model.*
-import de.htwg.se.machikoro.remake.model.Data.{Gamestate, startMoneyPlayers}
 import de.htwg.se.machikoro.remake.model.Data.AllCardsBaseGame.*
+import de.htwg.se.machikoro.remake.model.Data.{Gamestate, startMoneyPlayers}
 import de.htwg.se.machikoro.remake.model.initialization.*
 import de.htwg.se.machikoro.remake.model.initialization.impl1.{Game, InitializeStandardGame, InitializeWheatHell}
 import org.scalatest.matchers.should.Matchers
@@ -147,7 +149,7 @@ class GameInitializerSpec extends AnyWordSpec with Matchers {
 
     "create wheat hell game for hell_of_weat" in {
       val game =
-        new Game().apply(2, "hell_of_weat")
+        new Game().apply(2, "hell_of_wheat")
 
       game.cardStacks.size shouldBe 5
       stackAmount(game, weizenfeld.cardName) shouldBe 100

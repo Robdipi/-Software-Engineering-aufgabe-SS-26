@@ -1,1 +1,0 @@
-Im working in scala ive build a replica of the board game Machi Koro. Can you write me test for scoverage anyWordspec with matchers. write me clean seperated tests for everything thats testable especially the undomanager and all classes in the Model Package

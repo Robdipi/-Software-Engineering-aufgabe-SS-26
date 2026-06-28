@@ -1,3 +1,5 @@
+package AI_Generated_Tests
+
 import de.htwg.se.machikoro.remake.controller.main.impl1.RandomnessManager
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
