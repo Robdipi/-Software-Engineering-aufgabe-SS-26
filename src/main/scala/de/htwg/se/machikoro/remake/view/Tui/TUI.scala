@@ -13,7 +13,7 @@ class TUI @Inject() (controller: ControllerInterface)  extends ViewInterface {
   controller.add(this)
   
   def update(gamestate: Gamestate): Unit = {
-    println(s"UPDATE: ${gamestate.state}")//To debug
+    //println(s"UPDATE: ${gamestate.state}")//To debug
     handleVisuals(gamestate)
     handleInput(gamestate)
   }
