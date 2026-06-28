@@ -333,5 +333,92 @@ class GamestateSpec extends AnyWordSpec with Matchers {
       state.changeDiceResult(9).DiceResult shouldBe 9
       state.changePlayers(List(p1)).Players should contain(p1)
     }
+
+    "not change money when player id does not exist" in {
+      val state = Gamestate(Players = List(p1, p2))
+      state.changeMoneyOfPlayer(99, 5) shouldBe state
+    }
+
+    "transfer money from non existent giver gives taker free money" in {
+      val state = Gamestate(Players = List(p1, p2))
+      val result = state.transferMoneyBetweenPlayers(99, 0, 3)
+      moneyOf(result, 0) shouldBe 13
+      moneyOf(result, 1) shouldBe 10
+    }
+
+    "transfer money to non existent taker just removes money from giver" in {
+      val state = Gamestate(Players = List(p1, p2))
+      val result = state.transferMoneyBetweenPlayers(0, 99, 3)
+      moneyOf(result, 0) shouldBe 7
+      moneyOf(result, 1) shouldBe 10
+    }
+
+    "steal from everyone with single player does nothing" in {
+      val state = Gamestate(Players = List(p1))
+      state.stealFromEveryone(0, 2) shouldBe state
+    }
+
+    "steal from everyone with non existent owner still steals from all" in {
+      val state = Gamestate(Players = List(p1, p2))
+      val result = state.stealFromEveryone(99, 2)
+      moneyOf(result, 0) shouldBe 8
+      moneyOf(result, 1) shouldBe 8
+    }
+
+    "not scale money when owner id does not exist" in {
+      val state = Gamestate(Players = List(p1))
+      state.changeMoneyOfPlayerScaleByType(99, Type.Farm, 2) shouldBe state
+    }
+
+    "scale money returns zero when no matching card type" in {
+      val player = Player(money = 10, properties = List(weizenfeld.copy(cardOwnerId = 0)), playerId = 0)
+      val result = Gamestate(Players = List(player)).changeMoneyOfPlayerScaleByType(0, Type.Dairy, 2)
+      result.Players.head.money shouldBe 10
+    }
+
+    "remove card from stack when stacks are empty" in {
+      val state = Gamestate(Players = List(p1), cardStacks = List())
+      state.removeCardFromStack(weizenfeld) shouldBe state
+    }
+
+    "remove card from stack preserves amounts of non matching stacks" in {
+      val state = Gamestate(
+        Players = List(p1),
+        cardStacks = List(cardStack(5, weizenfeld), cardStack(3, bauernhof))
+      )
+      val result = state.removeCardFromStack(bauernhof)
+      result.cardStacks.find(_.stackCard.cardName == weizenfeld.cardName).get.amount shouldBe 5
+      result.cardStacks.find(_.stackCard.cardName == bauernhof.cardName).get.amount shouldBe 2
+    }
+
+    "activate cards with mixed card colors" in {
+      val player0 = Player(
+        money = 0, playerId = 0,
+        properties = List(
+          weizenfeld.copy(cardOwnerId = 0),
+          cafe.copy(cardOwnerId = 0)
+        )
+      )
+      val roller = Player(money = 10, playerId = 1)
+      val state = Gamestate(Players = List(player0, roller), CurrentTurnPlayerId = 1)
+
+      val result = state.activateCards(1, 1)
+
+      moneyOf(result, 0) shouldBe 1
+      moneyOf(result, 1) shouldBe 10
+    }
+
+    "iterate turn with single player" in {
+      val state = Gamestate(curentTurn = 0, Players = List(p1), CurrentTurnPlayerId = 0)
+      val result = state.iterateTurn()
+      result.curentTurn shouldBe 1
+      result.CurrentTurnPlayerId shouldBe 0
+    }
+
+    "cardStack case class works correctly" in {
+      val stack = cardStack(5, weizenfeld)
+      stack.amount shouldBe 5
+      stack.stackCard.cardName shouldBe "Weizenfeld"
+    }
   }
 }

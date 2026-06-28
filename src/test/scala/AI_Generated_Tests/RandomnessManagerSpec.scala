@@ -40,5 +40,13 @@ class RandomnessManagerSpec extends AnyWordSpec with Matchers {
       value should be <= 6
       next shouldBe rnd
     }
+
+    "handle empty list with non-zero index" in {
+      val rnd = RandomnessManager(Nil, 5)
+      val (value, next) = rnd.getNextNum
+      value should be >= 1
+      value should be <= 6
+      next shouldBe rnd
+    }
   }
 }

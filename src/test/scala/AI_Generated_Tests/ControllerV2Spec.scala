@@ -214,5 +214,132 @@ class ControllerV2Spec extends AnyWordSpec with Matchers {
       minimalWinCondition().check(smallWinner) shouldBe true
       minimalWinCondition().check(player(1)) shouldBe false
     }
+
+    "not buy card when player cannot afford it" in {
+      val (controller, observer, _, _) = newController()
+      val game = Gamestate(
+        Players = List(player(0, money = 1)),
+        CurrentTurnPlayerId = 0,
+        cardStacks = List(cardStack(4, bahnhof))
+      )
+
+      controller.handleInput(BuyCardInput("bahnhof"), game)
+
+      observer.states.last.state shouldBe Buyphase
+      observer.states.last.Players.head.money shouldBe 1
+      observer.states.last.cardStacks.head.amount shouldBe 4
+    }
+
+    "not buy card when player already owns that yellow card" in {
+      val (controller, observer, _, _) = newController()
+      val game = Gamestate(
+        Players = List(player(0, money = 10, cards = List(bahnhof))),
+        CurrentTurnPlayerId = 0,
+        cardStacks = List(cardStack(4, bahnhof))
+      )
+
+      controller.handleInput(BuyCardInput("bahnhof"), game)
+
+      observer.states.last.state shouldBe Buyphase
+      observer.states.last.Players.head.money shouldBe 10
+      observer.states.last.cardStacks.head.amount shouldBe 4
+    }
+
+    "not buy card when player already owns a purple card" in {
+      val (controller, observer, _, _) = newController()
+      val game = Gamestate(
+        Players = List(player(0, money = 20, cards = List(stadion))),
+        CurrentTurnPlayerId = 0,
+        cardStacks = List(cardStack(4, stadion))
+      )
+
+      controller.handleInput(BuyCardInput("stadion"), game)
+
+      observer.states.last.state shouldBe Buyphase
+      observer.states.last.Players.head.properties.count(_.cardName == "stadion") shouldBe 1
+      observer.states.last.cardStacks.head.amount shouldBe 4
+    }
+
+    "not buy purple when player already has one even with mixed properties" in {
+      val (controller, observer, _, _) = newController()
+      val game = Gamestate(
+        Players = List(player(0, money = 20, cards = List(stadion, weizenfeld))),
+        CurrentTurnPlayerId = 0,
+        cardStacks = List(cardStack(4, stadion))
+      )
+
+      controller.handleInput(BuyCardInput("stadion"), game)
+
+      observer.states.last.state shouldBe Buyphase
+      observer.states.last.Players.head.properties.count(_.cardName == "stadion") shouldBe 1
+    }
+
+    "ask for dice rejection with multiple players where only current has funkturm" in {
+      val (controller, observer, _, _) = newController()
+      val game = Gamestate(
+        Players = List(player(0, cards = List(funkturm)), player(1)),
+        CurrentTurnPlayerId = 0
+      )
+
+      controller.startTurn(game)
+
+      observer.states.last.state shouldBe AskForRejectionOfResult
+    }
+
+    "not buy card when stack is empty" in {
+      val (controller, observer, _, _) = newController()
+      val game = Gamestate(
+        Players = List(player(0, money = 10)),
+        CurrentTurnPlayerId = 0,
+        cardStacks = List(cardStack(0, bahnhof))
+      )
+
+      controller.handleInput(BuyCardInput("bahnhof"), game)
+
+      observer.states.last.state shouldBe Buyphase
+      observer.states.last.Players.head.money shouldBe 10
+      observer.states.last.cardStacks.head.amount shouldBe 0
+    }
+
+    "not buy unknown card name" in {
+      val (controller, observer, _, _) = newController()
+      val game = Gamestate(
+        Players = List(player(0, money = 10)),
+        CurrentTurnPlayerId = 0,
+        cardStacks = List(cardStack(4, bahnhof))
+      )
+
+      controller.handleInput(BuyCardInput("unknownCard"), game)
+
+      observer.states.last.state shouldBe Buyphase
+      observer.states.last.cardStacks.head.amount shouldBe 4
+    }
+
+    "buy card when player has exactly enough money" in {
+      val (controller, observer, _, _) = newController()
+      val game = Gamestate(
+        Players = List(player(0, money = 4)),
+        CurrentTurnPlayerId = 0,
+        cardStacks = List(cardStack(4, bahnhof))
+      )
+
+      controller.handleInput(BuyCardInput("bahnhof"), game)
+
+      observer.states.exists(_.Players.find(_.playerId == 0).exists(_.money == 0)) shouldBe true
+      observer.states.exists(_.Players.find(_.playerId == 0).exists(_.properties.exists(_.cardName == "Bahnhof"))) shouldBe true
+    }
+
+    "buy a purple card when player does not already own one" in {
+      val (controller, observer, _, _) = newController()
+      val game = Gamestate(
+        Players = List(player(0, money = 20)),
+        CurrentTurnPlayerId = 0,
+        cardStacks = List(cardStack(4, stadion))
+      )
+
+      controller.handleInput(BuyCardInput("stadion"), game)
+
+      observer.states.exists(_.Players.find(_.playerId == 0).exists(_.properties.exists(_.cardName == "stadion"))) shouldBe true
+    }
   }
 }

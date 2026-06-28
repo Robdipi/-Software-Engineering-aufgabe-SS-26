@@ -124,5 +124,71 @@ class AllCardsBaseGameSpec extends AnyWordSpec with Matchers {
       bahnhof.effect(state, 0) shouldBe state
       einkaufszentrum.effect(state, 0) shouldBe state
     }
+
+    "execute fernsehsender effect" in {
+      val state = stateWithPlayers()
+      val result = fernsehsender.effect(state, 0)
+      moneyOf(result, 0) shouldBe 11
+    }
+
+    "execute buerohaus effect returns unchanged state" in {
+      val state = stateWithPlayers()
+      buerohaus.effect(state, 0) shouldBe state
+    }
+
+    "handle scaled effects when player has no matching cards" in {
+      val player = Player(money = 0, playerId = 0, properties = List())
+      val state = Gamestate(Players = List(player))
+
+      molkerei.effect(state, 0).Players.head.money shouldBe 0
+      möbelfabrik.effect(state, 0).Players.head.money shouldBe 0
+      markthalle.effect(state, 0).Players.head.money shouldBe 0
+    }
+
+    "verify card definitions have expected prices" in {
+      weizenfeld.price shouldBe 1
+      starterweizenfeld.price shouldBe 0
+      bauernhof.price shouldBe 1
+      baeckerei.price shouldBe 1
+      starterbaeckerei.price shouldBe 0
+      cafe.price shouldBe 2
+      minimarkt.price shouldBe 2
+      wald.price shouldBe 3
+      buerohaus.price shouldBe 6
+      stadion.price shouldBe 6
+      fernsehsender.price shouldBe 7
+      molkerei.price shouldBe 7
+      möbelfabrik.price shouldBe 3
+      bergwerk.price shouldBe 6
+      familienRestaurant.price shouldBe 3
+      apfelgarten.price shouldBe 3
+      markthalle.price shouldBe 2
+      funkturm.price shouldBe 22
+      freizeitpark.price shouldBe 16
+      bahnhof.price shouldBe 4
+      einkaufszentrum.price shouldBe 10
+    }
+
+    "verify card definitions have expected names" in {
+      weizenfeld.cardName shouldBe "Weizenfeld"
+      bauernhof.cardName shouldBe "Bauernhof"
+      baeckerei.cardName shouldBe "Bäckerei"
+      cafe.cardName shouldBe "Cafe"
+      minimarkt.cardName shouldBe "Mini-Markt"
+      wald.cardName shouldBe "wald"
+      buerohaus.cardName shouldBe "Bürohaus"
+      stadion.cardName shouldBe "stadion"
+      fernsehsender.cardName shouldBe "Fernsehsender"
+      molkerei.cardName shouldBe "Molkerei"
+      möbelfabrik.cardName shouldBe "Möbelfabrik"
+      bergwerk.cardName shouldBe "Bergwerk"
+      familienRestaurant.cardName shouldBe "Familien-Restaurant"
+      apfelgarten.cardName shouldBe "apfelgarten"
+      markthalle.cardName shouldBe "Markthalle"
+      funkturm.cardName shouldBe "Funkturm"
+      freizeitpark.cardName shouldBe "Freizeitpark"
+      bahnhof.cardName shouldBe "Bahnhof"
+      einkaufszentrum.cardName shouldBe "Einkaufszentrum"
+    }
   }
 }

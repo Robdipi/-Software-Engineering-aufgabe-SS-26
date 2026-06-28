@@ -187,5 +187,33 @@ class PlayerSpec extends AnyWordSpec with Matchers {
       printed should include("Weizenfeld")
       printed should include("Erhalte 1 Münze aus der Bank.")
     }
+
+    "print header only when no cards owned" in {
+      val player = Player(playerId = 0)
+      player.printAllCards() shouldBe "Your Current cards:\n"
+    }
+
+    "not activate purple or yellow cards on any roll" in {
+      val player = Player(
+        money = 0, playerId = 0,
+        properties = List(
+          stadion.copy(cardOwnerId = 0),
+          funkturm.copy(cardOwnerId = 0)
+        )
+      )
+      val game = Gamestate(Players = List(player))
+      player.activateCards(6, 0, game) shouldBe game
+      player.activateCards(6, 1, game) shouldBe game
+    }
+
+    "only activate green cards when owner rolled" in {
+      val player = Player(
+        money = 0, playerId = 0,
+        properties = List(minimarkt.copy(cardOwnerId = 0))
+      )
+      val game = Gamestate(Players = List(player))
+      player.activateCards(4, 0, game).Players.head.money shouldBe 3
+      player.activateCards(4, 1, game).Players.head.money shouldBe 0
+    }
   }
 }
