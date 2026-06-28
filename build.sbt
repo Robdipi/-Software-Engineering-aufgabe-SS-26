@@ -1,8 +1,13 @@
 ThisBuild / version := "0.1.0-SNAPSHOT"
 ThisBuild / scalaVersion := "3.3.7"
 
-coverageExcludedFiles := "de.htwg.se.machikoro.remake.main"
-coverageExcludedFiles := "de.htwg.se.machikoro.remake.view.*"
+
+coverageExcludedPackages :=
+  "de\\.htwg\\.se\\.machikoro\\.remake\\.controller\\.mementoPatern\\..*;" +
+    "de\\.htwg\\.se\\.machikoro\\.remake\\.view\\..*"
+
+coverageExcludedFiles :=
+  ".*AppModule\\.scala;.*main\\.scala"
 
 Compile / run / mainClass := Some("de.htwg.se.machikoro.remake.main")
 
