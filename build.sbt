@@ -6,8 +6,11 @@ coverageExcludedPackages :=
   "de\\.htwg\\.se\\.machikoro\\.remake\\.controller\\.mementoPatern\\..*;" +
     "de\\.htwg\\.se\\.machikoro\\.remake\\.view\\..*"
 
-coverageExcludedFiles :=
-  ".*AppModule\\.scala;.*main\\.scala"
+
+coverageExcludedFiles := Seq(
+  ".*[/\\\\]AppModule\\.scala",
+  ".*[/\\\\]main\\.scala"
+).mkString(";")
 
 Compile / run / mainClass := Some("de.htwg.se.machikoro.remake.main")
 
