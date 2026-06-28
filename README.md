@@ -11,10 +11,10 @@
 ### Start Flags
 You can combine these Flags
 
-sbt "run --gui" to start with GUI instead of TUI
-sbt "run --mem" to load last gamesave on start (Doesn't work!)
-sbt "run --xml" to make savefiles use Xml instead of Json
-sbt "run --SR" to start with a diffrent wincondition
+- sbt "run --gui" to start with GUI instead of TUI
+- sbt "run --mem" to load last gamesave on start (Doesn't work!)
+- sbt "run --xml" to make savefiles use Xml instead of Json
+- sbt "run --SR" to start with a diffrent wincondition
 
 ### Run On Docker 
 I hope it works and Did not use the wrong Image
