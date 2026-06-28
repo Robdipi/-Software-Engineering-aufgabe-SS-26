@@ -27,6 +27,9 @@ class ControllerV2 @Inject() (val winCondition: WinCondition,
                               val undoManager: UndoManagerInterface,
                               val mementoCreator : MementoCareTakerInterface) extends ControllerInterface {
   private var rndManager = RandomnessManager()
+  private var runAsync: (() => Unit) => Unit = f => f()
+
+  override def setRunAsync(exec: (() => Unit) => Unit): Unit = runAsync = exec
   
 
 
@@ -58,7 +61,7 @@ class ControllerV2 @Inject() (val winCondition: WinCondition,
     if (gamestate1.Players.find(_.playerId == gamestate1.CurrentTurnPlayerId).exists(_.canChooseDyeAmount())) {
       notifyObservers(gamestate1.changeState(TurnState.ChooseDiceAmount))
     } else {
-      resultone(gamestate1.changeState(TurnState.Result1).changeDiceChosen(1))
+      runAsync(() => resultone(gamestate1.changeState(TurnState.Result1).changeDiceChosen(1)))
     }
   }
 
@@ -67,7 +70,7 @@ class ControllerV2 @Inject() (val winCondition: WinCondition,
       notifyObservers(gamestate.changeState(PlayerWins))
 
     } else {
-      startTurn(gamestate.iterateTurn().changeState(StartofTurn))
+      runAsync(() => startTurn(gamestate.iterateTurn().changeState(StartofTurn)))
     }
   }
   private def resultone(state: Gamestate): Unit = {
@@ -94,7 +97,7 @@ class ControllerV2 @Inject() (val winCondition: WinCondition,
     if (state.Players.exists(p => p.playerId == state.CurrentTurnPlayerId && p.canRejectDyeTrow())) {
       notifyObservers(newState.changeState(TurnState.AskForRejectionOfResult))
     } else {
-      activateCardsController(newState)
+      runAsync(() => activateCardsController(newState))
     }
   }
 
@@ -113,7 +116,7 @@ class ControllerV2 @Inject() (val winCondition: WinCondition,
     override def doStep(gamestate: Gamestate): Unit = {
       val gamestate2 = gamestate.changeDiceChosen(amount).changeState(Result1)
       notifyObservers(gamestate2)
-      resultone(gamestate2)
+      runAsync(() => resultone(gamestate2))
     }
     override def undoStep(gamestate: Gamestate): Unit = {
       startTurn(savedGamestate.restore().getOrElse(gamestate))
@@ -187,9 +190,9 @@ class ControllerV2 @Inject() (val winCondition: WinCondition,
           val gamestate2 = gamestate.changeDiceResult(if (gamestate.diceChoosen == 2) dicethrowA + dicethrowB else dicethrowA)
             .changeState(Result2)
 
-          activateCardsController(gamestate2)
+          runAsync(() => activateCardsController(gamestate2))
         } else {
-          activateCardsController(gamestate)
+          runAsync(() => activateCardsController(gamestate))
         }
       }
 

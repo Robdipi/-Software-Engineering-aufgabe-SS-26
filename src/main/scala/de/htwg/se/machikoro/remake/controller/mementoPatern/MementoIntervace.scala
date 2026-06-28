@@ -42,6 +42,4 @@ trait MementoCareTakerInterface() {
   def create(gamestate: Gamestate, undoManager: UndoManagerInterface): MementoIntervace
   def flushSavefiles(): Unit
   def loadGamesave(undoManager: UndoManagerInterface): Option[Gamestate]
-
-  
 }

@@ -4,7 +4,7 @@ import com.google.inject.Inject
 import de.htwg.se.machikoro.remake.controller.main.ControllerInterface
 import de.htwg.se.machikoro.remake.model.Data.Gamestate
 import de.htwg.se.machikoro.remake.view.StarterInterface
-import scalafx.application.JFXApp3
+import scalafx.application.{JFXApp3, Platform}
 import scalafx.scene.Scene
 
 class MachiKoroApp @Inject()(val controller: ControllerInterface) extends StarterInterface {
@@ -37,8 +37,7 @@ object MachiKoroFxApp extends JFXApp3 {
       minWidth = 1180
       minHeight = 760
     }
-
-    controller.add(gui)
+    controller.setRunAsync(f => Platform.runLater(f()))
     controller.startTurn(startGamestate)
   }
 }
